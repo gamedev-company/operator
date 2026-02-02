@@ -57,4 +57,44 @@ defmodule Operator.HTN.LoopTest do
     assert result.plan != nil
     assert result.actor.moved == true
   end
+
+  test "tick completes when final task finishes" do
+    facts = Facts.from_perception(%{self: %{energy: 10}})
+    actor = %{id: 1, moved: false}
+
+    first = Loop.tick(nil, actor, facts, %{}, goal: :patrol)
+    assert first.status == :continue
+
+    second = Loop.tick(first.plan, first.actor, first.facts, %{}, goal: :patrol)
+    assert second.status == :completed
+    assert second.plan == nil
+  end
+
+  test "tick returns failed when task errors" do
+    defmodule ErrorBehavior do
+      use Operator.HTN.DSL, auto_register: false
+
+      goal :explode do
+        precond fn _facts -> true end
+
+        decompose do
+          task :boom
+        end
+      end
+
+      primitive :boom do
+        run fn actor, _facts -> {:error, :boom} end
+      end
+    end
+
+    register_modules([ErrorBehavior])
+
+    facts = Facts.from_perception(%{self: %{}})
+    actor = %{id: 2}
+
+    result = Loop.tick(nil, actor, facts, %{}, goal: :explode)
+
+    assert result.status == :failed
+    assert result.reason == :boom
+  end
 end

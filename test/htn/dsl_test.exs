@@ -58,6 +58,36 @@ defmodule Operator.HTN.DSLTest do
       assert simple.cost == 2.5
     end
 
+    test "task decompose supports static and dynamic forms" do
+      defmodule TaskDecomposeDSL do
+        use Operator.HTN.DSL, auto_register: false
+
+        task :static_task do
+          decompose do
+            task(:a)
+            task(:b, 1)
+          end
+        end
+
+        task :dynamic_task do
+          decompose fn _facts ->
+            [{:move_to, [:target]}]
+          end
+
+          metadata %{kind: :dynamic}
+        end
+      end
+
+      htn = TaskDecomposeDSL.__htn__()
+
+      static_task = Enum.find(htn.tasks, &(&1.name == :static_task))
+      dynamic_task = Enum.find(htn.tasks, &(&1.name == :dynamic_task))
+
+      assert match?({:static_tasks, _}, static_task.decompose)
+      assert is_tuple(dynamic_task.decompose)
+      assert dynamic_task.metadata.kind == :dynamic
+    end
+
     test "defines primitives" do
       defmodule PrimitiveDSL do
         use Operator.HTN.DSL, auto_register: false
@@ -76,6 +106,24 @@ defmodule Operator.HTN.DSLTest do
       assert attack.name == :attack
       assert attack.type == :primitive
       assert attack.metadata[:damage] == 10
+    end
+
+    test "primitive supports map metadata and run function" do
+      defmodule PrimitiveMetaDSL do
+        use Operator.HTN.DSL, auto_register: false
+
+        primitive :heal do
+          run(fn _actor, _facts -> {:ok, :ok} end)
+          metadata %{kind: :support, amount: 5}
+        end
+      end
+
+      htn = PrimitiveMetaDSL.__htn__()
+      heal = hd(htn.primitives)
+
+      assert heal.metadata.kind == :support
+      assert heal.metadata.amount == 5
+      assert is_tuple(heal.metadata.run)
     end
 
     test "auto-registers by default" do

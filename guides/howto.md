@@ -104,6 +104,27 @@ traits = %{traits: [:aggressive, :brave]}
 # Will prefer goals matching the entity's traits
 ```
 
+## Force Goal Ordering
+
+Sometimes you want deterministic ordering instead of scoring.
+
+```elixir
+alias Operator.HTN.GoalSelector
+
+{:ok, goal} = GoalSelector.pick_goal(facts, traits,
+  goal_order: [:emergency_flee, :heal, :attack, :idle]
+)
+```
+
+## Add Plan Metadata For Diagnostics
+
+Metadata is useful for debugging and analytics.
+
+```elixir
+plan = Operator.HTN.Plan.add_metadata(plan, :source, \"goal_selector\")
+plan = Operator.HTN.Plan.add_metadata(plan, :tick, current_tick)
+```
+
 ## Set Up Test Isolation
 
 HTN Registry uses global state. Isolate tests properly:
@@ -133,6 +154,19 @@ defmodule MyBehaviorTest do
     TestHelpers.setup_htn([MyBehavior, AnotherBehavior])
     :ok
   end
+end
+```
+
+## Build Facts In One Place
+
+Keep your facts builder deterministic and side-effect free.
+
+```elixir
+def build_facts(entity, world_state) do
+  Operator.HTN.Facts.from_perception(%{
+    self: %{energy: entity.energy, position: entity.position},
+    world: %{time: world_state.time, threat: world_state.threat}
+  })
 end
 ```
 

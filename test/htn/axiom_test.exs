@@ -3,6 +3,8 @@ defmodule Operator.HTN.AxiomTest do
 
   alias Operator.HTN.{Axiom, Facts, Precondition, Registry}
 
+  doctest Operator.HTN.Axiom
+
   describe "Axiom.new/3" do
     test "creates an axiom with query function" do
       query_fn = fn facts, args ->

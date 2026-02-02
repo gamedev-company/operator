@@ -3,6 +3,8 @@ defmodule Operator.HTN.PreconditionTest do
 
   alias Operator.HTN.{Facts, Precondition}
 
+  doctest Operator.HTN.Precondition
+
   describe "simple function evaluation" do
     test "arity-1 function with facts" do
       facts = Facts.from_perception(%{self: %{ready: true}})

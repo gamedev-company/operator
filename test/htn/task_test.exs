@@ -3,6 +3,8 @@ defmodule Operator.HTN.TaskTest do
 
   alias Operator.HTN.{Effect, Facts, Task}
 
+  doctest Operator.HTN.Task
+
   describe "new/3" do
     test "creates task with name and type" do
       task = Task.new(:test_task, :primitive)

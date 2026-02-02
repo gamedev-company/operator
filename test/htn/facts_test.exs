@@ -3,6 +3,8 @@ defmodule Operator.HTN.FactsTest do
 
   alias Operator.HTN.Facts
 
+  doctest Operator.HTN.Facts
+
   describe "from_perception/1" do
     test "creates facts from perception map" do
       perception = %{

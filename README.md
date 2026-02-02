@@ -21,6 +21,90 @@ end
 
 That's it. No C dependencies. No NIFs that only compile on a full moon. Just pure Elixir.
 
+## Quick Start (5 Minutes)
+
+This is the smallest end-to-end loop that proves the library works. You can copy it
+into a scratch module and expand from there.
+
+1. Define a behavior module.
+1. Build facts.
+1. Plan.
+1. Execute one step.
+
+```elixir
+defmodule MyGame.QuickstartBehavior do
+  use Operator.HTN.DSL
+
+  goal :patrol do
+    precond fn facts ->
+      Operator.HTN.Facts.get(facts, {:self, :energy}, 0) > 10
+    end
+
+    decompose do
+      task :move_to, :waypoint_1
+      task :look_around
+      task :move_to, :waypoint_2
+      task :look_around
+    end
+
+    metadata priority: 3, domain: :routine
+  end
+
+  primitive :move_to, waypoint do
+    run fn actor, _facts ->
+      {:ok, %{actor | position: waypoint}}
+    end
+  end
+
+  primitive :look_around do
+    run fn actor, _facts ->
+      {:ok, actor}
+    end
+  end
+end
+
+alias Operator.HTN.{Executor, Facts, Planner}
+
+facts = Facts.from_perception(%{self: %{energy: 50}})
+traits = %{archetype: :guard}
+actor = %{id: 1, position: :start}
+
+{:ok, plan} = Planner.run(:patrol, facts, traits)
+{:ok, :continue, actor, facts, remaining} = Executor.step(plan, actor, facts)
+```
+
+If that runs, you are up and planning. Everything else is just richer behaviors.
+
+## Guides And References
+
+For fast adoption, start here:
+
+- `guides/getting_started.md` for the full walkthrough.
+- `guides/howto.md` for practical recipes.
+- `guides/cheatsheet.md` for a quick API map.
+- `guides/testing.md` for safe Registry usage and isolation.
+- `guides/debugging.md` for tracing and plan introspection.
+- `guides/dsl_reference.md` for a full HTN DSL reference.
+- `guides/architecture.md` for system-level flow and scaling.
+- `guides/director.md` for narrative pacing and events.
+- `guides/best_practices.md` for pragmatic, production-oriented guidance.
+- `guides/anti_patterns.md` for common failure modes and fixes.
+
+The generated API docs live in `doc/` after `mix docs`.
+
+## Adoption Checklist
+
+Treat this as a ruthless, practical path to production.
+
+1. Define one behavior module with one goal, one task, one primitive.
+1. Hook `Planner.run/3` into a single entity.
+1. Use `Executor.step/3` in your game loop.
+1. Add a facts builder and keep it deterministic.
+1. Add tests with `Operator.HTN.TestHelpers` and `async: false`.
+1. Add tracing while you tune behaviors, then disable it.
+1. Add storage only if your plans span multiple ticks.
+1. Add the Director only when you want global pacing.
+
 ## HTN Planning (or: Teaching Rocks to Think)
 
 HTN stands for Hierarchical Task Network. The idea came from some very smart people who got tired of writing behavior trees that looked like spaghetti painted by Jackson Pollock.
@@ -217,6 +301,15 @@ case GoalSelector.pick_goal(facts, traits) do
 end
 ```
 
+## Common Gotchas (Read This)
+
+- Use full module paths inside `precond` and `decompose` functions. Aliases do not work there.
+- The Registry is global state. Use `async: false` for tests that touch it.
+- Facts are immutable. Always use the returned facts after `Effect` or `Facts.put/3`.
+- Plans are data. If you mutate the actor, keep facts in sync.
+- Do not run `Planner.run/3` inside tight loops without caching if the world state is stable.
+- Use `Planner.needs_replan?/2` before throwing away a plan.
+
 ## The Director (or: Playing God, Responsibly)
 
 Ever play a game where nothing happens for twenty minutes and then everything happens at once? That's bad directing. The Director system lets you control the *pacing* of your simulation.
@@ -392,7 +485,14 @@ Key points:
 mix test
 ```
 
-141 tests. All green. We checked.
+Run it. Keep it green.
+
+## Performance Notes
+
+The planner is optimized for many reads and few writes. Registry reads are
+`persistent_term` lookups and are effectively free. Planning cost scales with
+the breadth of your decomposition and the number of preconditions. Keep your
+facts small, avoid heavy IO inside tasks, and use tracing only while debugging.
 
 ## Configuration
 

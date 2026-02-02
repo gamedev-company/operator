@@ -24,32 +24,38 @@ defmodule Operator.HTN.Precondition do
 
   ## Examples
 
-      # OR: Player has weapon OR is near weapon pickup
-      {:any, [
-        fn facts -> Facts.has?(facts, {:self, :has_weapon}) end,
-        fn facts -> Facts.has?(facts, {:world, :weapon_nearby}) end
-      ]}
+      iex> alias Operator.HTN.{Facts, Precondition}
+      iex> facts = Facts.from_perception(%{self: %{has_weapon: true}})
+      iex> cond = {:any, [
+      ...>   fn facts -> Facts.has?(facts, {:self, :has_weapon}) end,
+      ...>   fn facts -> Facts.has?(facts, {:world, :weapon_nearby}) end
+      ...> ]}
+      iex> Precondition.satisfied?(cond, facts, %{})
+      true
 
-      # ALT: Prefer ranged attack, fallback to melee
-      {:first, [
-        fn facts -> Facts.has?(facts, {:self, :has_ranged_weapon}) end,
-        fn facts -> Facts.has?(facts, {:self, :has_melee_weapon}) end
-      ]}
+      iex> facts = Facts.from_perception(%{self: %{has_melee_weapon: true}})
+      iex> cond = {:first, [
+      ...>   fn facts -> Facts.has?(facts, {:self, :has_ranged_weapon}) end,
+      ...>   fn facts -> Facts.has?(facts, {:self, :has_melee_weapon}) end
+      ...> ]}
+      iex> Precondition.satisfied?(cond, facts, %{})
+      true
 
-      # Negation: Not in combat
-      {:not, fn facts -> Facts.get(facts, {:self, :in_combat}, false) end}
+      iex> facts = Facts.from_perception(%{self: %{in_combat: false}})
+      iex> cond = {:not, fn facts -> Facts.get(facts, {:self, :in_combat}, false) end}
+      iex> Precondition.satisfied?(cond, facts, %{})
+      true
 
-      # Axiom reference with arguments
-      {:axiom, :nearby_enemy, max_distance: 10.0}
-
-      # Nested: Has cover AND (has weapon OR has grenade)
-      {:all, [
-        fn facts -> Facts.has?(facts, {:self, :has_cover}) end,
-        {:any, [
-          fn facts -> Facts.has?(facts, {:self, :has_weapon}) end,
-          fn facts -> Facts.has?(facts, {:self, :has_grenade}) end
-        ]}
-      ]}
+      iex> facts = Facts.from_perception(%{self: %{has_cover: true, has_grenade: true}})
+      iex> cond = {:all, [
+      ...>   fn facts -> Facts.has?(facts, {:self, :has_cover}) end,
+      ...>   {:any, [
+      ...>     fn facts -> Facts.has?(facts, {:self, :has_weapon}) end,
+      ...>     fn facts -> Facts.has?(facts, {:self, :has_grenade}) end
+      ...>   ]}
+      ...> ]}
+      iex> Precondition.satisfied?(cond, facts, %{})
+      true
 
   """
 

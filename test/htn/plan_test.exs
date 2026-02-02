@@ -3,6 +3,8 @@ defmodule Operator.HTN.PlanTest do
 
   alias Operator.HTN.Plan
 
+  doctest Operator.HTN.Plan
+
   describe "new/3" do
     test "creates plan with goal and tasks" do
       plan = Plan.new(:infiltrate, [{:move_to, [:lobby]}, {:hack, [:terminal]}])

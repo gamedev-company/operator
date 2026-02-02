@@ -43,8 +43,15 @@ defmodule Operator.MixProject do
       extras: [
         "README.md",
         "CHANGELOG.md",
+        "guides/architecture.md",
+        "guides/best_practices.md",
+        "guides/anti_patterns.md",
+        "guides/debugging.md",
+        "guides/dsl_reference.md",
+        "guides/director.md",
         "guides/getting_started.md",
         "guides/howto.md",
+        "guides/testing.md",
         "guides/cheatsheet.md"
       ],
       groups_for_extras: [

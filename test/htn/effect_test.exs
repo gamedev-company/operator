@@ -3,6 +3,8 @@ defmodule Operator.HTN.EffectTest do
 
   alias Operator.HTN.{Effect, Facts}
 
+  doctest Operator.HTN.Effect
+
   describe "new/3" do
     test "creates plan_only effect" do
       effect = Effect.new(:plan_only, {:self, :temp_flag}, true)

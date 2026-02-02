@@ -241,6 +241,7 @@ defmodule Operator.HTN.Plan do
       iex> Plan.valid?(plan)
       true
 
+      iex> plan = Plan.new(:test, [])
       iex> invalid = Plan.invalidate(plan)
       iex> Plan.valid?(invalid)
       false
@@ -288,6 +289,7 @@ defmodule Operator.HTN.Plan do
       iex> Plan.get_metadata(plan, :priority)
       5
 
+      iex> plan = Plan.new(:test, [], metadata: %{priority: 5})
       iex> Plan.get_metadata(plan, :missing, :default)
       :default
 

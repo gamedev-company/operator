@@ -85,6 +85,13 @@ defmodule Operator.HTN.Axiom do
   - `opts` - Options:
     - `:metadata` - Arbitrary metadata map
 
+  ## Examples
+
+      iex> alias Operator.HTN.Axiom
+      iex> axiom = Axiom.new(:has_energy, fn _facts, _args -> true end)
+      iex> axiom.name
+      :has_energy
+
   """
   @spec new(atom(), function(), keyword()) :: t()
   def new(name, query_fn, opts \\ []) when is_atom(name) and is_function(query_fn, 2) do
@@ -97,6 +104,15 @@ defmodule Operator.HTN.Axiom do
 
   @doc """
   Evaluate an axiom against facts with the given arguments.
+
+  ## Examples
+
+      iex> alias Operator.HTN.{Axiom, Facts}
+      iex> axiom = Axiom.new(:energized?, fn facts, _args -> Facts.get(facts, {:self, :energy}, 0) > 0 end)
+      iex> facts = Facts.from_perception(%{self: %{energy: 10}})
+      iex> Axiom.evaluate(axiom, facts, [])
+      true
+
   """
   @spec evaluate(t(), Operator.HTN.Facts.t(), keyword()) :: boolean()
   def evaluate(%__MODULE__{query_fn: query_fn}, facts, args) do

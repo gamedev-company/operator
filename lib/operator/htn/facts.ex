@@ -188,9 +188,10 @@ defmodule Operator.HTN.Facts do
       iex> Facts.has?(facts, {:self, :weapon})
       true
 
+      # Key exists, even though value is nil
       iex> facts = Facts.from_perception(%{self: %{weapon: nil}})
       iex> Facts.has?(facts, {:self, :weapon})
-      true  # Key exists, even though value is nil
+      true
 
       iex> facts = Facts.from_perception(%{self: %{}})
       iex> Facts.has?(facts, {:self, :weapon})
@@ -252,8 +253,6 @@ defmodule Operator.HTN.Facts do
       iex> updated = Facts.put(facts, {:self, :health}, 80)
       iex> Facts.get(updated, {:self, :health})
       80
-
-      # Original is unchanged (immutable)
       iex> Facts.get(facts, {:self, :health})
       100
 

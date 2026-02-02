@@ -4,6 +4,17 @@ This guide walks you through building your first HTN (Hierarchical Task Network)
 planning system with Operator. By the end, you'll have an NPC that can plan and
 execute behaviors based on world state.
 
+## What You'll Build
+
+You will build a single NPC behavior module, generate a plan, and execute it
+step-by-step. The focus is clarity, not scale.
+
+## Prerequisites
+
+- Elixir 1.15 or later.
+- A Mix project where you can add a dependency.
+- A willingness to keep facts deterministic.
+
 ## Installation
 
 Add Operator to your `mix.exs` dependencies:
@@ -21,6 +32,16 @@ Then fetch dependencies:
 ```bash
 mix deps.get
 ```
+
+## A Minimal Mental Model
+
+HTN is a hierarchy:
+
+- Goals define intent.
+- Tasks define how to achieve goals.
+- Primitives define real actions.
+
+Facts are the world snapshot. Plans are sequences of primitives.
 
 ## Core Concepts
 
@@ -78,6 +99,12 @@ defmodule MyGame.GuardBehavior do
 end
 ```
 
+## Why Full Module Names Matter
+
+Functions inside `precond` and `decompose` run at runtime in a different scope.
+That means module aliases do not work. Always use fully qualified names inside
+those functions.
+
 ## Understanding Facts
 
 Facts represent the agent's knowledge about the world:
@@ -106,6 +133,11 @@ Facts.has?(facts, {:self, :health})      # => true
 Facts.get(facts, {:self, :health})       # => 100
 Facts.get(facts, {:self, :ammo}, 0)      # => 0 (default)
 ```
+
+## Keep Facts Small
+
+Facts are meant to be lightweight snapshots. If you have very large data, keep a
+compact summary in facts and leave the heavy data elsewhere.
 
 ## Generating Plans
 
@@ -136,6 +168,11 @@ case Planner.run(:patrol, facts, traits) do
 end
 ```
 
+## Handling Errors Cleanly
+
+Always handle the planner's error tuples. They are your signal that either the
+goal does not exist or the world state does not qualify.
+
 ## Executing Plans
 
 Execute plans step-by-step or all at once:
@@ -163,6 +200,12 @@ end
 # Or execute entire plan at once
 {:ok, final_actor, final_facts} = Executor.run_plan(plan, actor, facts)
 ```
+
+## Plan Lifecycles
+
+- `:active` means it can run.
+- `:invalid` means the world changed.
+- `:completed` means it finished.
 
 ## Game Loop Integration
 
@@ -217,6 +260,11 @@ defmodule MyGame.AISystem do
   end
 end
 ```
+
+## Replanning Strategy
+
+If your world changes often, do not discard plans too aggressively. Use
+`Planner.needs_replan?/2` to decide when to regenerate.
 
 ## Adding Preconditions
 
@@ -281,3 +329,5 @@ Effect types:
 - Check the [Cheatsheet](cheatsheet.html) for quick reference
 - Explore the [API Reference](api-reference.html) for details
 - See the `examples/` directory for complete implementations
+- Read `guides/testing.md` for Registry-safe testing
+- Read `guides/debugging.md` for tracing and diagnostics

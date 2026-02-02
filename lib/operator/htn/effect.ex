@@ -156,14 +156,15 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      # Standard effect - door unlocked after picking lock
-      Effect.new(:plan_and_execute, {:world, :door_locked}, false)
+      iex> alias Operator.HTN.Effect
+      iex> # Standard effect - door unlocked after picking lock
+      iex> Effect.new(:plan_and_execute, {:world, :door_locked}, false)
 
-      # Planning assumption - assume we'll find resources
-      Effect.new(:plan_only, {:self, :has_keycard}, true)
+      iex> # Planning assumption - assume we'll find resources
+      iex> Effect.new(:plan_only, {:self, :has_keycard}, true)
 
-      # Permanent - alert can't be un-triggered
-      Effect.new(:permanent, {:world, :security_alerted}, true)
+      iex> # Permanent - alert can't be un-triggered
+      iex> Effect.new(:permanent, {:world, :security_alerted}, true)
 
   """
   @spec new(effect_type(), Facts.fact_key(), any()) :: t()
@@ -192,10 +193,12 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      effect = Effect.new(:plan_and_execute, {:self, :armed}, true)
-      updated_facts = Effect.apply_effect(effect, facts)
-      Facts.get(updated_facts, {:self, :armed})
-      #=> true
+      iex> alias Operator.HTN.{Effect, Facts}
+      iex> facts = Facts.from_perception(%{self: %{armed: false}})
+      iex> effect = Effect.new(:plan_and_execute, {:self, :armed}, true)
+      iex> updated_facts = Effect.apply_effect(effect, facts)
+      iex> Facts.get(updated_facts, {:self, :armed})
+      true
 
   """
   @spec apply_effect(t(), Facts.t()) :: Facts.t()
@@ -220,11 +223,14 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      effects = [
-        Effect.new(:plan_and_execute, {:self, :armed}, true),
-        Effect.new(:plan_and_execute, {:self, :in_combat}, true)
-      ]
-      updated_facts = Effect.apply_all(effects, facts)
+      iex> alias Operator.HTN.{Effect, Facts}
+      iex> effects = [
+      ...>   Effect.new(:plan_and_execute, {:self, :armed}, true),
+      ...>   Effect.new(:plan_and_execute, {:self, :in_combat}, true)
+      ...> ]
+      iex> updated_facts = Effect.apply_all(effects, Facts.new())
+      iex> Facts.get(updated_facts, {:self, :armed})
+      true
 
   """
   @spec apply_all([t()], Facts.t()) :: Facts.t()
@@ -248,14 +254,14 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      effects = [
-        Effect.new(:plan_only, {:self, :assumed_safe}, true),
-        Effect.new(:plan_and_execute, {:self, :armed}, true),
-        Effect.new(:permanent, {:world, :alerted}, true)
-      ]
-
-      Effect.filter_by_type(effects, :plan_only)
-      #=> [%Effect{type: :plan_only, ...}]
+      iex> alias Operator.HTN.Effect
+      iex> effects = [
+      ...>   Effect.new(:plan_only, {:self, :assumed_safe}, true),
+      ...>   Effect.new(:plan_and_execute, {:self, :armed}, true),
+      ...>   Effect.new(:permanent, {:world, :alerted}, true)
+      ...> ]
+      iex> length(Effect.filter_by_type(effects, :plan_only))
+      1
 
   """
   @spec filter_by_type([t()], effect_type()) :: [t()]
@@ -279,13 +285,13 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      effects = [
-        Effect.new(:plan_only, {:self, :optimistic_assumption}, true),
-        Effect.new(:plan_and_execute, {:self, :armed}, true)
-      ]
-
-      Effect.execution_effects(effects)
-      #=> [%Effect{type: :plan_and_execute, key: {:self, :armed}, value: true}]
+      iex> alias Operator.HTN.Effect
+      iex> effects = [
+      ...>   Effect.new(:plan_only, {:self, :optimistic_assumption}, true),
+      ...>   Effect.new(:plan_and_execute, {:self, :armed}, true)
+      ...> ]
+      iex> Enum.map(Effect.execution_effects(effects), & &1.type)
+      [:plan_and_execute]
 
   """
   @spec execution_effects([t()]) :: [t()]
@@ -309,13 +315,13 @@ defmodule Operator.HTN.Effect do
 
   ## Examples
 
-      effects = [
-        Effect.new(:plan_only, {:self, :assumed}, true),
-        Effect.new(:plan_and_execute, {:self, :real}, true)
-      ]
-
-      Effect.planning_effects(effects) == effects
-      #=> true
+      iex> alias Operator.HTN.Effect
+      iex> effects = [
+      ...>   Effect.new(:plan_only, {:self, :assumed}, true),
+      ...>   Effect.new(:plan_and_execute, {:self, :real}, true)
+      ...> ]
+      iex> Effect.planning_effects(effects) == effects
+      true
 
   """
   @spec planning_effects([t()]) :: [t()]

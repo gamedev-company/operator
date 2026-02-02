@@ -119,6 +119,9 @@ alias Operator.HTN.{Planner, GoalSelector}
 {:error, :preconditions_not_met}
 {:error, :goal_not_found}
 
+# Replan decision
+Planner.needs_replan?(plan, facts)
+
 # Auto-select best goal
 {:ok, goal} = GoalSelector.pick_goal(facts, traits)
 :none  # No valid goals
@@ -129,6 +132,9 @@ GoalSelector.pick_goal(facts, traits,
   goal_order: [:preferred, :fallback],
   priority_bonus: 5
 )
+
+# Score a goal without selecting it
+GoalSelector.score_goal(:goal_name, facts, traits)
 ```
 
 ## Execution
@@ -167,6 +173,8 @@ Plan.task_count(plan)
 Plan.has_tasks?(plan)
 Plan.valid?(plan)
 Plan.next_task(plan)  # {task_tuple, remaining_plan}
+Plan.add_metadata(plan, :source, "manual")
+Plan.get_metadata(plan, :source)
 ```
 
 ## Registry

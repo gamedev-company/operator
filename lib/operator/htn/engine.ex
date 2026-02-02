@@ -213,6 +213,23 @@ defmodule Operator.HTN.Engine do
           {:error, reason} ->
             {:error, reason}
         end
+
+      {:fn, _, _} = quoted ->
+        case eval_decompose_function(quoted, task, args) do
+          {:ok, decompose_fun} ->
+            subtasks = decompose_fun.(facts)
+            case expand_subtasks(subtasks, facts, traits, htn_registry, budget, depth + 1) do
+              {:ok, result_tasks, final_facts, new_budget} ->
+                Trace.task_complete(task_name, result_tasks, :success)
+                {:ok, result_tasks, final_facts, new_budget}
+
+              {:error, reason} ->
+                {:error, reason}
+            end
+
+          :error ->
+            {:error, {:invalid_decompose, task_name}}
+        end
     end
   end
 
@@ -312,5 +329,47 @@ defmodule Operator.HTN.Engine do
     budget
     |> Map.update!(:tasks, &(&1 + 1))
     |> then(&budget_check(&1, 0))
+  end
+
+  defp eval_decompose_function(quoted, task, args) do
+    arg_names =
+      task
+      |> Map.get(:metadata, %{})
+      |> Map.get(:args, [])
+      |> Enum.flat_map(fn
+        {name, _, _} when is_atom(name) -> [name]
+        _ -> []
+      end)
+
+    bindings =
+      task
+      |> Map.get(:metadata, %{})
+      |> Map.get(:args, [])
+      |> Enum.zip(args)
+      |> Enum.reduce([], fn
+        {{name, _, _}, value}, acc when is_atom(name) -> [{name, value} | acc]
+        _, acc -> acc
+      end)
+
+    normalized =
+      Macro.prewalk(quoted, fn
+        {name, meta, _context} = var when is_atom(name) and is_list(meta) ->
+          if name in arg_names, do: {name, meta, nil}, else: var
+
+        other ->
+          other
+      end)
+
+    {result, _bindings} = Code.eval_quoted(normalized, bindings)
+
+    if is_function(result, 1) do
+      {:ok, result}
+    else
+      :error
+    end
+  rescue
+    _ -> :error
+  catch
+    _, _ -> :error
   end
 end

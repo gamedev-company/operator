@@ -1,7 +1,7 @@
 defmodule Operator.HTN.DSLTest do
   use ExUnit.Case, async: false
 
-  alias Operator.HTN.{Effect, Facts, Precondition, Registry, Task}
+  alias Operator.HTN.{Effect, Facts, Planner, Precondition, Registry, Task}
 
   setup do
     Registry.reset()
@@ -300,6 +300,80 @@ defmodule Operator.HTN.DSLTest do
       assert goal != nil
       assert goal.name == :registry_goal
       assert goal.metadata == %{domain: :test}
+    end
+  end
+
+  describe "goal preconditions via Planner" do
+    test "goal preconditions with logical operators and axioms are enforced" do
+      defmodule PrecondGoalDSL do
+        use Operator.HTN.DSL, auto_register: false
+
+        axiom :is_hungry do
+          fn facts, args ->
+            threshold = Keyword.get(args, :threshold, 0)
+            Operator.HTN.Facts.get(facts, {:self, :hunger}, 0) >= threshold
+          end
+        end
+
+        axiom :prey_visible do
+          fn facts, _args ->
+            Operator.HTN.Facts.get(facts, {:world, :prey_nearby}, false)
+          end
+        end
+
+        goal :hunt_prey do
+          precond {:all,
+            [
+              fn facts ->
+                Operator.HTN.Facts.get(facts, {:self, :is_predator}, false)
+              end,
+              {:axiom, :is_hungry, threshold: 40},
+              {:axiom, :prey_visible}
+            ]
+          }
+
+          decompose do
+            task :move_stealthily
+            task :pounce_attack
+          end
+        end
+
+        primitive :move_stealthily do
+          run fn actor, _facts -> {:ok, actor} end
+        end
+
+        primitive :pounce_attack do
+          run fn actor, _facts -> {:ok, actor} end
+        end
+      end
+
+      Code.ensure_compiled!(PrecondGoalDSL)
+      Registry.register(PrecondGoalDSL)
+      assert Registry.get_axiom(:is_hungry) != nil
+      assert Registry.get_axiom(:prey_visible) != nil
+      goal = Registry.get_goal(:hunt_prey)
+      assert is_list(goal.precond)
+      assert [{:all, [cond1 | _rest]}] = goal.precond
+      assert is_function(cond1, 1)
+      assert Operator.HTN.Axiom.evaluate(Registry.get_axiom(:is_hungry), Facts.from_perception(%{self: %{hunger: 80}}), threshold: 40)
+      assert Operator.HTN.Axiom.evaluate(Registry.get_axiom(:prey_visible), Facts.from_perception(%{world: %{prey_nearby: true}}), []) == true
+      assert Operator.HTN.Precondition.all_satisfied?(goal.precond, Facts.from_perception(%{self: %{is_predator: true, hunger: 80}, world: %{prey_nearby: true}}), %{})
+
+      failing_facts =
+        Facts.from_perception(%{
+          self: %{is_predator: false, hunger: 80},
+          world: %{prey_nearby: true}
+        })
+
+      assert {:error, :preconditions_not_met} = Planner.run(:hunt_prey, failing_facts, %{})
+
+      passing_facts =
+        Facts.from_perception(%{
+          self: %{is_predator: true, hunger: 80},
+          world: %{prey_nearby: true}
+        })
+
+      assert {:ok, _plan} = Planner.run(:hunt_prey, passing_facts, %{})
     end
   end
 end

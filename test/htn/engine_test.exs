@@ -305,6 +305,47 @@ defmodule Operator.HTN.EngineTest do
       assert plan.tasks == [{:no_decompose_task, [:arg]}]
     end
 
+    test "evaluates quoted decompose with task argument bindings" do
+      registry = %{
+        goals: %{
+          test_goal: %{
+            name: :test_goal,
+            precond: nil,
+            decompose: fn _facts -> [{:move_to, [:door]}] end
+          }
+        },
+        tasks: %{
+          move_to: %Operator.HTN.Task{
+            name: :move_to,
+            type: :abstract,
+            preconditions: [],
+            decompose:
+              quote do
+                fn _facts -> [{:walk, [destination]}] end
+              end,
+            cost: 1.0,
+            metadata: %{args: [{:destination, [], nil}]}
+          }
+        },
+        primitives: %{
+          walk: %Operator.HTN.Task{
+            name: :walk,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        }
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:test_goal, facts, %{}, registry)
+
+      assert plan.tasks == [{:walk, [:door]}]
+    end
+
     test "handles unknown tasks by skipping them" do
       registry = %{
         goals: %{

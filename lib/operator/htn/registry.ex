@@ -597,6 +597,12 @@ defmodule Operator.HTN.Registry do
   defp normalize_conditions(condition), do: normalize_condition(condition)
 
   defp normalize_condition({:fn, _, _} = quoted), do: safe_eval_function(quoted)
+  defp normalize_condition({:{}, _, _} = quoted) do
+    case safe_eval_literal(quoted) do
+      ^quoted -> quoted
+      value -> normalize_condition(value)
+    end
+  end
   defp normalize_condition(fun) when is_function(fun), do: fun
 
   defp normalize_condition({op, conditions})

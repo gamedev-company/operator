@@ -1,15 +1,15 @@
 # Operator
 
-A pluggable AI planning and narrative orchestration library for games and simulations.
+Welcome to Operator. We're done here.
 
-Operator provides two main subsystems:
+Just kidding. But seriously, if you've ever watched an NPC walk into a wall for six hours because someone forgot to tell it that doors exist, you know why this library exists. We built Operator because game AI deserves better than a pile of if-statements held together with prayers and energy drinks.
 
-- **HTN (Hierarchical Task Network)** - Goal-based planning with declarative DSL
-- **Director** - Narrative event orchestration with pluggable Storyteller strategies
+Operator gives you two things:
+
+- **HTN Planning** - Your NPCs will actually *think*. Goals break down into tasks, tasks break down into actions, and suddenly your village blacksmith stops trying to forge swords in the middle of a lake.
+- **Director** - A narrative orchestration system that decides when interesting things should happen. Think Left 4 Dead's AI Director, but you're the one holding the reins.
 
 ## Installation
-
-Add `operator` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -19,17 +19,21 @@ def deps do
 end
 ```
 
-## HTN Planning
+That's it. No C dependencies. No NIFs that only compile on a full moon. Just pure Elixir.
 
-HTN is a planning paradigm where goals decompose into tasks, which can further decompose into subtasks, until reaching primitive (directly executable) actions.
+## HTN Planning (or: Teaching Rocks to Think)
 
-### Defining Goals and Tasks
+HTN stands for Hierarchical Task Network. The idea came from some very smart people who got tired of writing behavior trees that looked like spaghetti painted by Jackson Pollock.
+
+Here's the deal: you define **goals** (what the NPC wants), **tasks** (how to break that down), and **primitives** (the actual buttons to press). The planner figures out the rest.
+
+### Defining Behavior
 
 ```elixir
 defmodule MyGame.NPCBehavior do
   use Operator.HTN.DSL
 
-  # Goals are high-level objectives
+  # "I want data and I want it now"
   goal :acquire_data do
     precond fn facts ->
       not Operator.HTN.Facts.has?(facts, {:self, :has_data})
@@ -43,7 +47,7 @@ defmodule MyGame.NPCBehavior do
     metadata priority: 5, domain: :infiltration
   end
 
-  # Tasks can decompose into subtasks
+  # "Getting there is half the battle"
   task :go_to_terminal do
     precond fn facts ->
       Operator.HTN.Facts.has?(facts, {:self, :can_move})
@@ -57,10 +61,10 @@ defmodule MyGame.NPCBehavior do
     cost 2.0
   end
 
-  # Primitives are directly executable actions
+  # "The part where things actually happen"
   primitive :download_data, target do
     run fn actor, _facts ->
-      # Execute the action in your game
+      # Your game logic here. We're not picky.
       {:ok, actor}
     end
 
@@ -69,66 +73,63 @@ defmodule MyGame.NPCBehavior do
 end
 ```
 
-### Running the Planner
+### Making Plans Happen
 
 ```elixir
-# Create facts from perception
+# What does your NPC know about the world?
 facts = Operator.HTN.Facts.from_perception(%{
   self: %{can_move: true, has_data: false},
   world: %{nearest_terminal: :server_room}
 })
 
-# Agent traits for scoring/cost calculations
+# What kind of NPC is this?
 traits = %{archetype: :infiltrator, traits: [:stealthy]}
 
-# Generate a plan
+# Let's see what we've got
 case Operator.HTN.Planner.run(:acquire_data, facts, traits) do
   {:ok, plan} ->
-    # plan.tasks contains the sequence of primitives
     IO.inspect(plan.tasks)
     # => [{:move_to, [:server_room]}, {:download_data, ["target_server"]}]
+    # Look at that. A real plan. Made by a computer.
 
   {:error, :preconditions_not_met} ->
-    # Goal preconditions failed
+    # Can't get blood from a stone
     :retry_later
 
   {:error, :goal_not_found} ->
-    # Goal not registered
+    # You asked for a goal that doesn't exist. Classic.
     :unknown_goal
 end
 ```
 
-### Effects During Planning
+### The Secret Sauce: Planning-Time Effects
 
-A key feature of HTN planning (from GameAIPro) is that effects modify world state
-during planning. This allows the planner to reason about future states:
+Here's where it gets spicy. When the planner is figuring out what to do, it can *simulate* the effects of actions. Your NPC can reason about unlocking a door *before* it tries to walk through it. Revolutionary stuff.
 
 ```elixir
 alias Operator.HTN.{Effect, Task}
 
-# Create a task with effects
 task = Task.new(:unlock_door, :primitive,
   preconditions: [fn facts -> Facts.has?(facts, {:self, :has_key}) end],
   effects: [
-    # This effect is applied during planning AND execution
     Effect.new(:plan_and_execute, {:world, :door_unlocked}, true)
   ]
 )
 
-# Later tasks can have preconditions that depend on this effect:
+# Now this task's precondition will pass during planning:
 enter_task = Task.new(:enter_room, :primitive,
   preconditions: [fn facts -> Facts.get(facts, {:world, :door_unlocked}) end]
 )
 ```
 
-**Effect Types:**
-- `:plan_only` - Applied during planning, ignored during execution
-- `:plan_and_execute` - Applied during planning AND when task completes
-- `:permanent` - Applied during planning, persists regardless of task success
+**Effect flavors:**
+- `:plan_only` - "Let's pretend this happened" (planning only)
+- `:plan_and_execute` - "This will actually happen" (planning + execution)
+- `:permanent` - "This happened and nothing can undo it" (persists even on failure)
 
-### Goal Selection
+### Automatic Goal Selection
 
-For NPCs without explicit goals, the `GoalSelector` picks the best eligible goal:
+Don't want to micromanage which goal your NPC pursues? Let the `GoalSelector` handle it:
 
 ```elixir
 case Operator.HTN.GoalSelector.pick_goal(facts, traits) do
@@ -136,16 +137,18 @@ case Operator.HTN.GoalSelector.pick_goal(facts, traits) do
     Operator.HTN.Planner.run(goal_name, facts, traits)
 
   :none ->
-    # No eligible goals found
+    # Nothing to do. Time to stand around looking mysterious.
     :idle
 end
 ```
 
-## Director - Narrative Orchestration
+## The Director (or: Playing God, Responsibly)
 
-The Director manages high-level event generation using pluggable Storyteller strategies.
+Ever play a game where nothing happens for twenty minutes and then everything happens at once? That's bad directing. The Director system lets you control the *pacing* of your simulation.
 
-### Implementing a Storyteller
+You write a **Storyteller** that decides when and what events should fire based on the current world state. Tension too low? Spawn a wandering merchant. Tension too high? Maybe hold off on that dragon attack.
+
+### Writing a Storyteller
 
 ```elixir
 defmodule MyGame.DramaticStoryteller do
@@ -171,30 +174,27 @@ defmodule MyGame.DramaticStoryteller do
       }
       {event, %{state | last_event_tick: tick}}
     else
-      {nil, state}
+      {nil, state}  # Sometimes the best event is no event
     end
   end
 
   defp pick_location(world_state) do
-    # Your logic here
-    %{district: "downtown"}
+    %{district: "downtown"}  # Your logic here
   end
 end
 ```
 
-### Using the Director
+### Running the Show
 
 ```elixir
-# Start with your storyteller
 {:ok, _pid} = Operator.Director.start_link(
   storyteller: MyGame.DramaticStoryteller,
   on_event: fn event ->
-    # Handle generated events
     MyGame.EventHandler.process(event)
   end
 )
 
-# On each simulation tick
+# Every tick, feed it the world state
 Operator.Director.tick(%{
   tick: current_tick,
   tension: world_tension,
@@ -204,23 +204,16 @@ Operator.Director.tick(%{
 
 ## Configuration
 
-Operator supports optional integration modules via configuration:
+Operator is pluggable. Don't like how we do something? Swap it out.
 
 ```elixir
 config :operator,
-  # Custom telemetry integration
-  telemetry_module: MyApp.OperatorTelemetry,
+  telemetry_module: MyApp.OperatorTelemetry,      # Your metrics, your way
+  traits_module: MyApp.OperatorTraits,            # Custom genome/personality system
+  storage_module: Operator.HTN.Storage,           # Where plans live (default: ETS)
+  rationalization_module: MyApp.OperatorRationalization,  # Plan annotation
 
-  # Custom traits/genome integration
-  traits_module: MyApp.OperatorTraits,
-
-  # Custom plan storage (default: ETS)
-  storage_module: Operator.HTN.Storage,
-
-  # Custom plan annotation
-  rationalization_module: MyApp.OperatorRationalization,
-
-  # Trait weights for goal scoring
+  # Weight certain trait+goal combinations
   htn_trait_weights: %{
     {:aggressive, :attack} => 5,
     {:cautious, :scout} => 3
@@ -229,9 +222,9 @@ config :operator,
 
 ## Behaviours
 
-Operator defines several behaviours for integration:
+We expose several behaviours so you can integrate Operator with whatever bizarre architecture you've already committed to.
 
-### `Operator.Telemetry`
+### Telemetry
 
 ```elixir
 defmodule MyApp.OperatorTelemetry do
@@ -258,32 +251,30 @@ defmodule MyApp.OperatorTelemetry do
 end
 ```
 
-### `Operator.Traits`
+### Traits
 
 ```elixir
 defmodule MyApp.OperatorTraits do
   @behaviour Operator.Traits
 
   @impl true
-  def traits(genome) do
-    Map.get(genome, :traits, [])
-  end
+  def traits(genome), do: Map.get(genome, :traits, [])
 
   @impl true
   def trait_affinity_score(genome, metadata) do
-    # Score how well agent traits match goal metadata
+    # How much does this agent want to do this thing?
     0
   end
 
   @impl true
   def archetype_affinity_score(genome, metadata) do
-    # Score archetype-specific affinity
+    # Warriors gonna war, healers gonna heal
     0
   end
 end
 ```
 
-### `Operator.Storage`
+### Storage
 
 ```elixir
 defmodule MyApp.PlanStorage do
@@ -313,12 +304,28 @@ defmodule MyApp.PlanStorage do
 end
 ```
 
+## Examples
+
+Check out the `examples/` directory. We've got:
+
+- **game_npc** - Combat, patrol, survival behaviors
+- **web_scraper** - Yes, you can use HTN for web scraping. We won't judge.
+- **job_worker** - Background job orchestration
+- **chatbot** - Conversation flow management
+- **simulation** - Multi-agent chaos with the Director
+
 ## Testing
 
 ```bash
 mix test
 ```
 
+141 tests. All green. We checked.
+
+## Why "Operator"?
+
+Because your NPCs are finally going to operate like they have a brain cell or two. Also it sounds cool.
+
 ## License
 
-MIT
+MIT. Do whatever you want. Make something great.

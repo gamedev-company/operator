@@ -1,8 +1,8 @@
 defmodule Operator.RationalizationTest do
   use ExUnit.Case, async: false
 
-  alias Operator.Rationalization
   alias Operator.HTN.Plan
+  alias Operator.Rationalization
 
   defmodule MockRationalization do
     @behaviour Operator.Rationalization

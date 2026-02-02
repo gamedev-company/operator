@@ -83,7 +83,7 @@ defmodule Operator.HTN.LoopTest do
       end
 
       primitive :boom do
-        run fn actor, _facts -> {:error, :boom} end
+        run fn _actor, _facts -> {:error, :boom} end
       end
     end
 

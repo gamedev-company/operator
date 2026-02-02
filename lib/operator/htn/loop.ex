@@ -25,7 +25,7 @@ defmodule Operator.HTN.Loop do
 
   """
 
-  alias Operator.HTN.{Executor, GoalSelector, Planner, Plan, Facts}
+  alias Operator.HTN.{Executor, Facts, GoalSelector, Plan, Planner}
 
   @type status :: :idle | :continue | :completed | :failed
 
@@ -58,44 +58,41 @@ defmodule Operator.HTN.Loop do
     select_goal = Keyword.get(opts, :select_goal, &GoalSelector.pick_goal/2)
     goal_opt = Keyword.get(opts, :goal)
 
-    plan =
-      cond do
-        plan == nil or Planner.needs_replan?(plan, facts) ->
-          goal = resolve_goal(goal_opt, select_goal, facts, traits)
+    plan = ensure_plan(plan, facts, traits, goal_opt, select_goal, planner_opts)
+    execute_plan(plan, actor, facts)
+  end
 
-          case goal do
-            {:ok, goal_name} ->
-              case Planner.run(goal_name, facts, traits, planner_opts) do
-                {:ok, new_plan} -> new_plan
-                {:error, _} -> nil
-              end
-
-            :none ->
-              nil
-
-            nil ->
-              nil
+  defp ensure_plan(plan, facts, traits, goal_opt, select_goal, planner_opts) do
+    if plan == nil or Planner.needs_replan?(plan, facts) do
+      case resolve_goal(goal_opt, select_goal, facts, traits) do
+        {:ok, goal_name} ->
+          case Planner.run(goal_name, facts, traits, planner_opts) do
+            {:ok, new_plan} -> new_plan
+            {:error, _} -> nil
           end
 
-        true ->
-          plan
+        _ ->
+          nil
       end
+    else
+      plan
+    end
+  end
 
-    case plan do
-      nil ->
-        %{status: :idle, actor: actor, facts: facts, plan: nil, goal: nil, reason: nil}
+  defp execute_plan(nil, actor, facts) do
+    %{status: :idle, actor: actor, facts: facts, plan: nil, goal: nil, reason: nil}
+  end
 
-      %Plan{} = plan ->
-        case Executor.step(plan, actor, facts) do
-          {:ok, :continue, actor, facts, remaining} ->
-            %{status: :continue, actor: actor, facts: facts, plan: remaining, goal: plan.goal, reason: nil}
+  defp execute_plan(%Plan{} = plan, actor, facts) do
+    case Executor.step(plan, actor, facts) do
+      {:ok, :continue, actor, facts, remaining} ->
+        %{status: :continue, actor: actor, facts: facts, plan: remaining, goal: plan.goal, reason: nil}
 
-          {:ok, :completed, actor, facts, _plan} ->
-            %{status: :completed, actor: actor, facts: facts, plan: nil, goal: plan.goal, reason: nil}
+      {:ok, :completed, actor, facts, _plan} ->
+        %{status: :completed, actor: actor, facts: facts, plan: nil, goal: plan.goal, reason: nil}
 
-          {:error, reason, actor, facts, _plan} ->
-            %{status: :failed, actor: actor, facts: facts, plan: nil, goal: plan.goal, reason: reason}
-        end
+      {:error, reason, actor, facts, _plan} ->
+        %{status: :failed, actor: actor, facts: facts, plan: nil, goal: plan.goal, reason: reason}
     end
   end
 

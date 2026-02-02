@@ -275,22 +275,18 @@ defmodule Operator.HTN.Engine do
   defp budget_check(%{enabled: false} = budget, _depth), do: {:ok, budget}
 
   defp budget_check(budget, depth) do
-    cond do
-      budget.max_depth && depth > budget.max_depth ->
-        {:error, {:budget_exceeded, :max_depth}}
+    elapsed = System.monotonic_time(:millisecond) - budget.started_at
 
-      budget.timeout_ms &&
-          System.monotonic_time(:millisecond) - budget.started_at > budget.timeout_ms ->
-        {:error, {:budget_exceeded, :timeout_ms}}
+    checks = [
+      {budget.max_depth && depth > budget.max_depth, :max_depth},
+      {budget.timeout_ms && elapsed > budget.timeout_ms, :timeout_ms},
+      {budget.max_expansions && budget.expansions >= budget.max_expansions, :max_expansions},
+      {budget.max_tasks && budget.tasks >= budget.max_tasks, :max_tasks}
+    ]
 
-      budget.max_expansions && budget.expansions >= budget.max_expansions ->
-        {:error, {:budget_exceeded, :max_expansions}}
-
-      budget.max_tasks && budget.tasks >= budget.max_tasks ->
-        {:error, {:budget_exceeded, :max_tasks}}
-
-      true ->
-        {:ok, budget}
+    case Enum.find(checks, fn {exceeded, _} -> exceeded end) do
+      {true, reason} -> {:error, {:budget_exceeded, reason}}
+      nil -> {:ok, budget}
     end
   end
 

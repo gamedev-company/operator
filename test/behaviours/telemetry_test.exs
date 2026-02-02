@@ -12,11 +12,9 @@ defmodule Operator.TelemetryTest do
     end
 
     def stop do
-      try do
-        Agent.stop(__MODULE__)
-      catch
-        :exit, _ -> :ok
-      end
+      Agent.stop(__MODULE__)
+    catch
+      :exit, _ -> :ok
     end
 
     def get_events do

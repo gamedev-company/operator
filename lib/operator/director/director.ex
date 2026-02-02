@@ -1,53 +1,120 @@
 defmodule Operator.Director do
   @moduledoc """
-  Central director orchestrating event generation via pluggable Storytellers.
+  Narrative orchestration system for dynamic event generation.
 
-  The Director is a GenServer that runs on simulation ticks and uses
-  storyteller modules to decide what events to inject into the world.
+  The Director is a GenServer that acts as your game's "AI Director" (inspired
+  by Left 4 Dead's famous system). It monitors world state and decides when
+  interesting events should occur, controlling narrative pacing and dramatic
+  tension.
 
-  ## Usage
+  ## The Director Pattern
 
-      # Start with default storyteller
-      {:ok, _pid} = Operator.Director.start_link([])
+  ```
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                        Game Loop                                 │
+  │   ┌─────────────┐     ┌─────────────┐     ┌─────────────┐       │
+  │   │ Update NPCs │ --> │ Physics/AI  │ --> │ Render      │       │
+  │   └─────────────┘     └─────────────┘     └─────────────┘       │
+  │         │                                                        │
+  │         │ world_state                                            │
+  │         ▼                                                        │
+  │   ┌─────────────────────────────────────┐                       │
+  │   │           Director                  │                       │
+  │   │  ┌─────────────────────────────┐    │                       │
+  │   │  │      Storyteller            │    │     ┌──────────────┐  │
+  │   │  │  - monitors tension         │----│---> │ Game Events  │  │
+  │   │  │  - picks event timing       │    │     │ (spawn enemy,│  │
+  │   │  │  - controls pacing          │    │     │  trigger     │  │
+  │   │  └─────────────────────────────┘    │     │  dialogue)   │  │
+  │   └─────────────────────────────────────┘     └──────────────┘  │
+  └─────────────────────────────────────────────────────────────────┘
+  ```
 
-      # Start with custom storyteller
+  ## Quick Start
+
+      # 1. Define your storyteller
+      defmodule MyGame.TensionStoryteller do
+        @behaviour Operator.Storyteller
+
+        @impl true
+        def init(_opts), do: %{last_event_tick: 0}
+
+        @impl true
+        def pick_event(tick, world_state, state) do
+          tension = Map.get(world_state, :tension, 0.0)
+
+          if tension > 0.7 and tick - state.last_event_tick > 100 do
+            event = %{type: :ambush, location: pick_location(world_state)}
+            {event, %{state | last_event_tick: tick}}
+          else
+            {nil, state}
+          end
+        end
+      end
+
+      # 2. Start the Director
       {:ok, _pid} = Operator.Director.start_link(
-        storyteller: MyApp.DramaticStoryteller,
-        name: {:global, :director}
+        storyteller: MyGame.TensionStoryteller,
+        on_event: &MyGame.EventHandler.process/1
       )
 
-      # Change storyteller at runtime
-      Operator.Director.change_storyteller(MyApp.CalmStoryteller)
+      # 3. Feed it world state each tick
+      def game_tick(world_state) do
+        Operator.Director.tick(world_state)
+        # ... rest of game loop
+      end
 
-      # Trigger a tick
-      Operator.Director.tick(world_state)
+  ## Startup Options
 
-  ## Configuration
-
-  The Director can be configured with:
-
-  - `:storyteller` - Module implementing `Operator.Storyteller` (default: NullStoryteller)
-  - `:name` - GenServer name (default: `Operator.Director`)
-  - `:on_event` - Callback function `fn event -> :ok end`
+  * `:storyteller` - Module implementing `Operator.Storyteller`
+    (default: `NullStoryteller`)
+  * `:name` - GenServer name (default: `Operator.Director`)
+  * `:on_event` - Callback `fn event -> :ok end` for generated events
 
   ## Event Flow
 
-      1. Host app calls Director.tick(world_state)
-      2. Director calls storyteller.pick_event(tick, world_state, st_state)
-      3. If event returned, Director rationalizes and broadcasts
-      4. Host app receives event via on_event callback or PubSub
+  1. Your game calls `Director.tick(world_state)` each simulation tick
+  2. Director invokes `storyteller.pick_event(tick, world_state, state)`
+  3. If the storyteller returns an event, Director:
+     - Rationalizes it via `Operator.Rationalization`
+     - Emits telemetry via `Operator.Telemetry`
+     - Calls your `:on_event` callback
+  4. Your game reacts to the event (spawn enemies, trigger dialogue, etc.)
 
-  ## Integration
+  ## Runtime Control
 
-  The Director is designed to be lightweight and host-agnostic. It does NOT:
+      # Change storytellers based on game phase
+      Operator.Director.change_storyteller(MyGame.BossFightStoryteller)
 
-  - Subscribe to any PubSub topics automatically
-  - Persist events to any timeline
-  - Handle clustering concerns
+      # Get current tick for synchronization
+      current_tick = Operator.Director.current_tick()
 
-  These responsibilities belong to the host application. You can integrate
-  by providing an `:on_event` callback or by subscribing to the Director's
-  process and handling `{:director_event, event}` messages.
+      # Debug storyteller state
+      state = Operator.Director.get_state()
+
+  ## Integration Philosophy
+
+  The Director is intentionally lightweight. It does NOT:
+
+  * Subscribe to PubSub topics
+  * Persist events to timelines
+  * Handle clustering
+
+  These concerns belong to your host application. The Director's job is
+  purely to decide **when** and **what** events to generate.
+
+  ## Synchronous Testing
+
+  For tests, use `tick_sync/2` to get immediate results:
+
+      event = Operator.Director.tick_sync(world_state)
+      assert event.type == :ambush
+
+  ## See Also
+
+  * `Operator.Storyteller` - Behaviour for storyteller modules
+  * `Operator.Director.NullStoryteller` - No-op storyteller for testing
+  * `Operator.Rationalization` - Event annotation
 
   """
 

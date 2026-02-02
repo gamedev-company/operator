@@ -320,4 +320,50 @@ defmodule Operator.HTN.PreconditionTest do
       assert Precondition.all_satisfied?(conditions, facts, %{})
     end
   end
+
+  describe "evaluate/3" do
+    test "returns {true, %{}} when condition satisfied" do
+      facts = Facts.from_perception(%{self: %{ready: true}})
+      condition = fn facts -> Facts.has?(facts, {:self, :ready}) end
+
+      assert {true, %{}} = Precondition.evaluate(condition, facts, %{})
+    end
+
+    test "returns {false, nil} when condition not satisfied" do
+      facts = Facts.from_perception(%{self: %{}})
+      condition = fn facts -> Facts.has?(facts, {:self, :ready}) end
+
+      assert {false, nil} = Precondition.evaluate(condition, facts, %{})
+    end
+  end
+
+  describe "unknown condition types" do
+    test "returns false for unknown condition format" do
+      facts = Facts.from_perception(%{})
+
+      # A condition that's not a function or recognized tuple
+      refute Precondition.satisfied?(:unknown_atom, facts, %{})
+      refute Precondition.satisfied?("string", facts, %{})
+      refute Precondition.satisfied?(123, facts, %{})
+      refute Precondition.satisfied?({:unknown_op, []}, facts, %{})
+    end
+  end
+
+  describe ":axiom operator" do
+    test "returns false for non-existent axiom" do
+      facts = Facts.from_perception(%{})
+
+      # Axiom that doesn't exist
+      condition = {:axiom, :nonexistent_axiom}
+      refute Precondition.satisfied?(condition, facts, %{})
+    end
+
+    test "returns false for non-existent axiom with args" do
+      facts = Facts.from_perception(%{})
+
+      # Axiom with args that doesn't exist
+      condition = {:axiom, :nonexistent_axiom, [range: 10]}
+      refute Precondition.satisfied?(condition, facts, %{})
+    end
+  end
 end

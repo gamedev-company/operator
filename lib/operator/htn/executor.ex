@@ -267,6 +267,14 @@ defmodule Operator.HTN.Executor do
   defp do_run_plan(plan, actor, facts, opts, on_complete, steps, max_steps) do
     case step(plan, actor, facts, opts) do
       {:ok, :completed, final_actor, final_facts, _plan} ->
+        # Call callback for the final completed task
+        if on_complete do
+          case Plan.next_task(plan) do
+            {completed_task, _} -> on_complete.(completed_task, final_actor, final_facts)
+            :empty -> :ok
+          end
+        end
+
         {:ok, final_actor, final_facts}
 
       {:ok, :continue, updated_actor, updated_facts, remaining_plan} ->

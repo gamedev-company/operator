@@ -1,9 +1,15 @@
 defmodule Operator.Rationalization do
   @moduledoc """
-  Behaviour for plan annotation and event rationalization.
+  Behaviour for narrative annotation of plans and events.
 
-  Implement this behaviour to add narrative explanations to HTN plans
-  and transform raw events into rationalized events with context.
+  The Rationalization system transforms cold, mechanical HTN outputs into
+  rich narrative content. Instead of "NPC executed :attack", you get
+  "The guard spotted the intruder and drew his weapon."
+
+  ## Two Responsibilities
+
+  1. **Plan Annotation** - Add narrative context to generated plans
+  2. **Event Rationalization** - Transform raw Director events into full narratives
 
   ## Configuration
 
@@ -16,38 +22,88 @@ defmodule Operator.Rationalization do
         @behaviour Operator.Rationalization
 
         @impl true
-        def annotate_plan(p) do
+        def annotate_plan(plan) do
           %{
-            plan_id: p.goal,
-            explanation: "NPC decided to pursue goal based on current situation",
-            task_count: length(p.tasks),
-            narrative_tags: infer_narrative_tags(p)
+            plan_id: plan.goal,
+            explanation: explain_goal(plan.goal),
+            narrative_tags: infer_tags(plan),
+            mood: infer_mood(plan)
           }
         end
 
         @impl true
         def apply(event) do
-          # Transform raw event into rationalized event with explanation
-          %{
-            event
-            | explanation: generate_explanation(event),
-              effects: generate_effects(event)
-          }
+          Map.merge(event, %{
+            explanation: generate_explanation(event),
+            effects: generate_effects(event),
+            dialogue: generate_dialogue(event)
+          })
         end
 
-        defp infer_narrative_tags(plan) do
-          case plan.goal do
-            :acquire_data -> [:intrigue, :technology]
-            :patrol_area -> [:routine, :security]
-            _ -> [:general]
-          end
+        defp explain_goal(:patrol), do: "The guard begins their routine patrol."
+        defp explain_goal(:attack), do: "Aggression surges as combat instincts take over."
+        defp explain_goal(:flee), do: "Self-preservation kicks in. Time to run."
+        defp explain_goal(goal), do: "Pursuing objective: \#{goal}"
+
+        defp infer_tags(%{goal: :attack}), do: [:combat, :action]
+        defp infer_tags(%{goal: :patrol}), do: [:routine, :ambient]
+        defp infer_tags(_), do: [:general]
+
+        defp infer_mood(%{goal: :flee}), do: :fearful
+        defp infer_mood(%{goal: :attack}), do: :aggressive
+        defp infer_mood(_), do: :neutral
+
+        defp generate_explanation(%{type: :ambush, severity: s}) when s >= 4 do
+          "A devastating ambush springs from the shadows!"
+        end
+        defp generate_explanation(%{type: :ambush}) do
+          "Enemies emerge from hiding."
+        end
+        defp generate_explanation(%{type: type}) do
+          "An event of type \#{type} occurs."
         end
       end
+
+  ## Use Cases
+
+  ### Debug Logging
+
+  Add explanations for development debugging:
+
+      Logger.debug("Plan: \#{plan.metadata.explanation}")
+      # => "Plan: The guard spotted movement and is investigating."
+
+  ### UI/UX Integration
+
+  Feed rationalized events to your UI:
+
+      def handle_event(event) do
+        Toast.show(event.explanation)
+        play_sound(event.mood)
+      end
+
+  ### Narrative Generation
+
+  Build emergent storytelling from plan sequences:
+
+      def chronicle_day(entity, plans) do
+        plans
+        |> Enum.map(& &1.metadata.explanation)
+        |> Enum.join(" ")
+      end
+      # => "The merchant opened shop. A customer arrived. They haggled fiercely."
 
   ## Default Implementation
 
   If no rationalization module is configured, Operator provides minimal
-  default implementations that pass through data with basic annotations.
+  defaults that pass through data with basic annotations like
+  "Agent pursuing goal: :patrol".
+
+  ## See Also
+
+  * `Operator.HTN.Plan` - Plans that get annotated
+  * `Operator.Director` - Generates events that get rationalized
+
   """
 
   alias Operator.HTN.Plan

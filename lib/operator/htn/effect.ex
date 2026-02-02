@@ -2,38 +2,113 @@ defmodule Operator.HTN.Effect do
   @moduledoc """
   Effects represent world state changes that result from task execution.
 
-  HTN planners use effects in two key ways:
+  Effects are the bridge between planning and reality. They let the planner
+  reason about future states, enabling complex plans where early actions
+  create conditions needed by later actions.
 
-  1. **During planning** - Effects are applied to a working copy of world state
-     so the planner can reason about future states and validate downstream
-     preconditions.
+  ## Why Effects Matter
 
-  2. **During execution** - Effects are re-applied to actual world state when
-     tasks complete successfully.
+  Consider an NPC that needs to enter a locked room:
+
+  1. Without effects, the planner checks `:enter_room`'s precondition
+     (`door_unlocked == true`), finds it false, and gives up.
+
+  2. With effects, the planner:
+     - Plans `:unlock_door` first
+     - Applies its effect (`door_unlocked = true`) to a working copy of facts
+     - Now `:enter_room`'s precondition passes against the projected state
+     - Generates plan: `[{:unlock_door, []}, {:enter_room, []}]`
+
+  This is the essence of HTN planning - reasoning about sequences of actions
+  and their cumulative effects on world state.
 
   ## Effect Types
 
-  Based on the GameAIPro HTN patterns, there are three effect types:
+  Based on GameAIPro HTN patterns, there are three effect types:
 
-  - `:plan_only` - Applied during planning, removed before execution. Used for
-    temporary planning assumptions that the execution system will handle differently.
+  | Type               | Planning | Execution | Use Case                           |
+  |--------------------|----------|-----------|-----------------------------------|
+  | `:plan_only`       | ✓        | ✗         | Temporary planning assumptions     |
+  | `:plan_and_execute`| ✓        | ✓         | Standard effects (most common)     |
+  | `:permanent`       | ✓        | ✓*        | Effects that persist on failure    |
 
-  - `:plan_and_execute` - Applied during planning AND re-applied when task completes.
-    The standard effect type for most actions.
+  *Permanent effects are applied even if subsequent tasks fail.
 
-  - `:permanent` - Applied during planning and persists regardless of task success.
-    Use sparingly for effects that can't be undone.
+  ### `:plan_only`
 
-  ## Example
+  Applied during planning but NOT during execution. Use when:
+  - The execution system handles the effect differently
+  - You need to "pretend" something is true for planning purposes
+  - Simulating optimistic assumptions
 
-      # Effect that sets a fact during planning and execution
-      effect = Effect.new(:plan_and_execute, {:self, :has_data}, true)
+      # Assume we'll find ammo during the mission (planning only)
+      Effect.new(:plan_only, {:self, :has_ammo}, true)
 
-      # Apply effect to facts
-      updated_facts = Effect.apply(effect, facts)
+  ### `:plan_and_execute`
 
-      # Apply multiple effects
+  Applied during both planning AND execution. This is the standard type for
+  most game actions.
+
+      # Door is unlocked after picking the lock
+      Effect.new(:plan_and_execute, {:world, :door_unlocked}, true)
+
+      # Health consumed after healing
+      Effect.new(:plan_and_execute, {:self, :health_potion_count}, 0)
+
+  ### `:permanent`
+
+  Applied during planning and persists regardless of task success/failure.
+  Use sparingly - these represent irreversible actions.
+
+      # Alert triggered - can't un-ring that bell
+      Effect.new(:permanent, {:world, :alarm_triggered}, true)
+
+      # Resource consumed even if subsequent actions fail
+      Effect.new(:permanent, {:self, :grenade_count}, :decrement)
+
+  ## Working with Effects
+
+  ### Creating Effects
+
+      effect = Effect.new(:plan_and_execute, {:self, :armed}, true)
+
+  ### Applying Effects
+
+      # Single effect
+      updated_facts = Effect.apply_effect(effect, facts)
+
+      # Multiple effects
       updated_facts = Effect.apply_all(effects, facts)
+
+  ### Filtering Effects
+
+      # Get effects for execution (excludes :plan_only)
+      execution_effects = Effect.execution_effects(task.effects)
+
+      # Get effects by specific type
+      permanent_only = Effect.filter_by_type(effects, :permanent)
+
+  ## Integration with Tasks
+
+  Effects are typically defined on primitives in the DSL:
+
+      primitive :unlock_door do
+        run fn actor, _facts ->
+          {:ok, %{actor | picked_lock: true}}
+        end
+
+        effect Effect.new(:plan_and_execute, {:world, :door_unlocked}, true)
+      end
+
+  The `Executor` automatically applies execution effects after successful
+  primitive completion.
+
+  ## See Also
+
+  * `Operator.HTN.Task` - Where effects are attached
+  * `Operator.HTN.Engine` - Applies effects during planning
+  * `Operator.HTN.Executor` - Applies effects during execution
+  * `Operator.HTN.Facts` - The world state effects modify
 
   """
 
@@ -41,8 +116,26 @@ defmodule Operator.HTN.Effect do
 
   defstruct [:type, :key, :value]
 
+  @typedoc """
+  The effect type determining when the effect is applied.
+
+  * `:plan_only` - Planning phase only
+  * `:plan_and_execute` - Both planning and execution
+  * `:permanent` - Persists even on task failure
+
+  """
   @type effect_type :: :plan_only | :plan_and_execute | :permanent
 
+  @typedoc """
+  The Effect struct.
+
+  ## Fields
+
+  * `:type` - When the effect is applied
+  * `:key` - The fact key to modify (e.g., `{:self, :armed}`)
+  * `:value` - The new value to set
+
+  """
   @type t :: %__MODULE__{
           type: effect_type(),
           key: Facts.fact_key(),
@@ -52,11 +145,25 @@ defmodule Operator.HTN.Effect do
   @doc """
   Create a new effect.
 
-  ## Arguments
+  ## Parameters
 
-  - `type` - One of `:plan_only`, `:plan_and_execute`, `:permanent`
-  - `key` - The fact key to modify, e.g. `{:self, :has_weapon}`
-  - `value` - The new value to set
+  * `type` - When the effect is applied:
+    * `:plan_only` - Planning phase only
+    * `:plan_and_execute` - Both planning and execution (most common)
+    * `:permanent` - Persists even on task failure
+  * `key` - The fact key to modify (e.g., `{:self, :has_weapon}`)
+  * `value` - The new value to set
+
+  ## Examples
+
+      # Standard effect - door unlocked after picking lock
+      Effect.new(:plan_and_execute, {:world, :door_locked}, false)
+
+      # Planning assumption - assume we'll find resources
+      Effect.new(:plan_only, {:self, :has_keycard}, true)
+
+      # Permanent - alert can't be un-triggered
+      Effect.new(:permanent, {:world, :security_alerted}, true)
 
   """
   @spec new(effect_type(), Facts.fact_key(), any()) :: t()
@@ -70,15 +177,55 @@ defmodule Operator.HTN.Effect do
 
   @doc """
   Apply an effect to facts, updating the world state.
+
+  This function modifies the facts by setting the effect's key to its value.
+  Named `apply_effect` to avoid conflict with `Kernel.apply/2`.
+
+  ## Parameters
+
+  * `effect` - The Effect struct to apply
+  * `facts` - The current Facts struct
+
+  ## Returns
+
+  A new Facts struct with the effect applied.
+
+  ## Examples
+
+      effect = Effect.new(:plan_and_execute, {:self, :armed}, true)
+      updated_facts = Effect.apply_effect(effect, facts)
+      Facts.get(updated_facts, {:self, :armed})
+      #=> true
+
   """
-  # Named apply_effect to avoid conflict with Kernel.apply/2
   @spec apply_effect(t(), Facts.t()) :: Facts.t()
   def apply_effect(%__MODULE__{key: key, value: value}, facts) do
     Facts.put(facts, key, value)
   end
 
   @doc """
-  Apply multiple effects to facts.
+  Apply multiple effects to facts in sequence.
+
+  Effects are applied in list order, so later effects can override earlier ones
+  if they modify the same key.
+
+  ## Parameters
+
+  * `effects` - List of Effect structs
+  * `facts` - The current Facts struct
+
+  ## Returns
+
+  A new Facts struct with all effects applied.
+
+  ## Examples
+
+      effects = [
+        Effect.new(:plan_and_execute, {:self, :armed}, true),
+        Effect.new(:plan_and_execute, {:self, :in_combat}, true)
+      ]
+      updated_facts = Effect.apply_all(effects, facts)
+
   """
   @spec apply_all([t()], Facts.t()) :: Facts.t()
   def apply_all(effects, facts) do
@@ -89,6 +236,27 @@ defmodule Operator.HTN.Effect do
 
   @doc """
   Filter effects by type.
+
+  ## Parameters
+
+  * `effects` - List of Effect structs
+  * `type` - The effect type to filter for
+
+  ## Returns
+
+  List of effects matching the specified type.
+
+  ## Examples
+
+      effects = [
+        Effect.new(:plan_only, {:self, :assumed_safe}, true),
+        Effect.new(:plan_and_execute, {:self, :armed}, true),
+        Effect.new(:permanent, {:world, :alerted}, true)
+      ]
+
+      Effect.filter_by_type(effects, :plan_only)
+      #=> [%Effect{type: :plan_only, ...}]
+
   """
   @spec filter_by_type([t()], effect_type()) :: [t()]
   def filter_by_type(effects, type) do
@@ -98,7 +266,27 @@ defmodule Operator.HTN.Effect do
   @doc """
   Get only effects that should be applied during execution.
 
-  Excludes `:plan_only` effects.
+  Excludes `:plan_only` effects, which are only used during planning.
+  Returns both `:plan_and_execute` and `:permanent` effects.
+
+  ## Parameters
+
+  * `effects` - List of Effect structs
+
+  ## Returns
+
+  List of effects suitable for execution (excludes `:plan_only`).
+
+  ## Examples
+
+      effects = [
+        Effect.new(:plan_only, {:self, :optimistic_assumption}, true),
+        Effect.new(:plan_and_execute, {:self, :armed}, true)
+      ]
+
+      Effect.execution_effects(effects)
+      #=> [%Effect{type: :plan_and_execute, key: {:self, :armed}, value: true}]
+
   """
   @spec execution_effects([t()]) :: [t()]
   def execution_effects(effects) do
@@ -108,7 +296,27 @@ defmodule Operator.HTN.Effect do
   @doc """
   Get only effects applied during planning.
 
-  All effect types are applied during planning.
+  All effect types are applied during planning, so this returns the full list.
+  This function exists for API symmetry with `execution_effects/1`.
+
+  ## Parameters
+
+  * `effects` - List of Effect structs
+
+  ## Returns
+
+  The input list unchanged (all effects apply during planning).
+
+  ## Examples
+
+      effects = [
+        Effect.new(:plan_only, {:self, :assumed}, true),
+        Effect.new(:plan_and_execute, {:self, :real}, true)
+      ]
+
+      Effect.planning_effects(effects) == effects
+      #=> true
+
   """
   @spec planning_effects([t()]) :: [t()]
   def planning_effects(effects), do: effects

@@ -12,8 +12,10 @@ defmodule Operator.HTN.TraceTest do
     end
 
     def stop do
-      if Process.whereis(__MODULE__) do
+      try do
         Agent.stop(__MODULE__)
+      catch
+        :exit, _ -> :ok
       end
     end
 

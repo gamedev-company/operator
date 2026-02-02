@@ -1,13 +1,16 @@
 defmodule Operator.HTN.Planner do
   @moduledoc """
-  HTN planner that orchestrates goal expansion and plan generation.
+  High-level API for HTN plan generation.
 
-  The Planner integrates the HTN Engine with optional telemetry and
-  rationalization callbacks.
+  The Planner is your primary interface for generating plans. It wraps the
+  Engine with telemetry, rationalization, and convenience functions for
+  tick-based game loops.
 
-  ## Usage
+  ## Basic Usage
 
-      facts = Operator.HTN.Facts.from_perception(%{
+      alias Operator.HTN.{Facts, Planner}
+
+      facts = Facts.from_perception(%{
         self: %{location: :lobby, has_keycard: true},
         world: %{target: :server_room, threat_level: :low}
       })
@@ -16,24 +19,80 @@ defmodule Operator.HTN.Planner do
 
       case Planner.run(:infiltrate_building, facts, traits) do
         {:ok, plan} ->
-          # Execute plan tasks
-          execute_plan(plan)
+          IO.inspect(plan.tasks)
+          # => [{:move_to, [:server_room]}, {:hack_terminal, []}, {:download_data, []}]
 
         {:error, :preconditions_not_met} ->
-          # Wait for conditions to change
+          # Goal preconditions not satisfied - wait or choose different goal
           :retry_later
 
         {:error, :goal_not_found} ->
-          # Unknown goal
+          # Goal not registered - check your DSL module
           :unknown_goal
       end
 
-  ## Tick-Based Planning
+  ## Integration with Game Loops
 
-  For continuous simulations, use `tick/4` to update plans:
+  For continuous simulations, the Planner provides tick-based helpers:
 
-      # On each planning tick
-      new_plan = Planner.tick(current_plan, facts, traits, :default_goal)
+      defmodule MyGame.AISystem do
+        alias Operator.HTN.{Executor, Facts, Planner}
+
+        def update(entity, world) do
+          facts = build_facts(entity, world)
+          traits = entity.genome
+
+          case entity.plan do
+            nil ->
+              # No plan - generate one
+              plan = Planner.tick(nil, facts, traits, :default_goal)
+              %{entity | plan: plan}
+
+            plan ->
+              # Have plan - check if still valid, execute or replan
+              if Planner.needs_replan?(plan, facts) do
+                new_plan = Planner.tick(plan, facts, traits, :default_goal)
+                %{entity | plan: new_plan}
+              else
+                # Execute current plan
+                case Executor.step(plan, entity, facts) do
+                  {:ok, :completed, entity, _facts, _plan} ->
+                    %{entity | plan: nil}
+
+                  {:ok, :continue, entity, _facts, remaining} ->
+                    %{entity | plan: remaining}
+
+                  {:error, _reason, entity, _facts, _plan} ->
+                    %{entity | plan: nil}  # Will replan next tick
+                end
+              end
+          end
+        end
+      end
+
+  ## What Happens During Planning
+
+  1. **Goal lookup** - Find the goal in the Registry
+  2. **Precondition check** - Verify goal preconditions pass
+  3. **Decomposition** - Expand goal into task sequence
+  4. **Recursive expansion** - Expand abstract tasks into primitives
+  5. **Effect simulation** - Apply effects to working facts copy
+  6. **Annotation** - Add narrative metadata via Rationalization
+  7. **Telemetry** - Emit planning metrics
+
+  ## Telemetry Events
+
+  Each successful `run/3` emits `Telemetry.emit_htn_plan_generated/3` with:
+  - Goal name
+  - Task count
+  - Planning duration (ms)
+
+  ## See Also
+
+  * `Operator.HTN.Engine` - Low-level expansion logic
+  * `Operator.HTN.Executor` - Running generated plans
+  * `Operator.HTN.GoalSelector` - Automatic goal selection
+  * `Operator.HTN.Plan` - The plan data structure
 
   """
 
@@ -41,21 +100,37 @@ defmodule Operator.HTN.Planner do
   alias Operator.{Rationalization, Telemetry}
 
   @doc """
-  Run the planner for a goal.
+  Generate a plan for a goal.
 
-  Generates a plan by expanding the goal, optionally annotating it
-  with rationalization metadata and emitting telemetry.
+  This is the primary planning function. It expands the goal into a sequence
+  of primitive tasks, annotates the plan with narrative metadata, and emits
+  telemetry.
 
-  ## Arguments
+  ## Parameters
 
-  - `goal_name` - The goal to plan for
-  - `facts` - Current world state
-  - `traits` - Agent traits/genome for heuristics
+  * `goal_name` - The goal atom to plan for (must be registered)
+  * `facts` - Current world state (`Facts.t()`)
+  * `traits` - Agent traits/genome map for cost heuristics
 
   ## Returns
 
-  - `{:ok, plan}` - Successfully generated plan
-  - `{:error, reason}` - Planning failed
+  * `{:ok, plan}` - Successfully generated plan with tasks
+  * `{:error, :goal_not_found}` - Goal not in Registry
+  * `{:error, :preconditions_not_met}` - Goal preconditions failed
+
+  ## Examples
+
+      # Successful planning
+      {:ok, plan} = Planner.run(:patrol, facts, traits)
+      plan.tasks
+      #=> [{:walk_to, [:waypoint_1]}, {:scan, []}, {:walk_to, [:waypoint_2]}]
+
+      # Goal doesn't exist
+      {:error, :goal_not_found} = Planner.run(:nonexistent, facts, traits)
+
+      # Preconditions failed (e.g., attack requires weapon)
+      facts_unarmed = Facts.from_perception(%{self: %{armed: false}})
+      {:error, :preconditions_not_met} = Planner.run(:attack, facts_unarmed, traits)
 
   """
   @spec run(atom(), Facts.t(), map()) :: {:ok, Plan.t()} | {:error, term()}
@@ -64,21 +139,39 @@ defmodule Operator.HTN.Planner do
   end
 
   @doc """
-  Called on planning tick to update or create a plan.
+  Update or create a plan on each game tick.
 
-  If no plan exists, attempts to create one for the given goal.
-  If a plan exists but is no longer active, attempts to replan.
+  Convenience function for tick-based game loops. Handles the common pattern
+  of "create plan if none exists, replan if invalid, keep if valid".
 
-  ## Arguments
+  ## Parameters
 
-  - `plan` - Current plan (or nil)
-  - `facts` - Current world state
-  - `traits` - Agent traits/genome
-  - `goal_name` - Default goal to plan for
+  * `plan` - Current plan (or `nil` if none)
+  * `facts` - Current world state
+  * `traits` - Agent traits/genome
+  * `goal_name` - Goal to plan for if replanning needed
 
   ## Returns
 
-  The updated plan, or nil if planning fails.
+  * `%Plan{}` - The current or newly generated plan
+  * `nil` - Planning failed and no valid plan exists
+
+  ## Behavior
+
+  | Current Plan | Plan Valid? | Result                    |
+  |--------------|-------------|---------------------------|
+  | `nil`        | N/A         | Generate new plan         |
+  | `%Plan{}`    | Yes         | Return existing plan      |
+  | `%Plan{}`    | No          | Generate new plan         |
+
+  ## Examples
+
+      # In your game loop
+      def update_ai(entity, world) do
+        facts = build_facts(entity, world)
+        plan = Planner.tick(entity.plan, facts, entity.traits, :default_goal)
+        %{entity | plan: plan}
+      end
 
   """
   @spec tick(Plan.t() | nil, Facts.t(), map(), atom()) :: Plan.t() | nil
@@ -101,11 +194,34 @@ defmodule Operator.HTN.Planner do
   end
 
   @doc """
-  Check if plan needs replanning based on validity.
+  Check if a plan needs replanning.
 
-  Returns true if:
-  - Plan is nil
-  - Plan is not active (invalid or completed)
+  Returns `true` if the plan is missing, invalid, or completed.
+  Use this to decide whether to call `run/3` or continue with
+  the current plan.
+
+  ## Parameters
+
+  * `plan` - Current plan (or `nil`)
+  * `facts` - Current world state (reserved for future validation)
+
+  ## Returns
+
+  * `true` - Plan is `nil`, `:invalid`, or `:completed`
+  * `false` - Plan is `:active` and ready for execution
+
+  ## Examples
+
+      Planner.needs_replan?(nil, facts)
+      #=> true
+
+      active_plan = Plan.new(:goal, [{:task, []}])
+      Planner.needs_replan?(active_plan, facts)
+      #=> false
+
+      completed = Plan.complete(active_plan)
+      Planner.needs_replan?(completed, facts)
+      #=> true
 
   """
   @spec needs_replan?(Plan.t() | nil, Facts.t()) :: boolean()
@@ -116,9 +232,37 @@ defmodule Operator.HTN.Planner do
   def needs_replan?(_plan, _facts), do: true
 
   @doc """
-  Run the planner with a specific registry.
+  Generate a plan using a specific registry.
 
-  Useful for testing or when using isolated registries.
+  Primarily useful for testing with isolated registries or when you need
+  to plan against a subset of behaviors.
+
+  ## Parameters
+
+  * `goal_name` - The goal atom to plan for
+  * `facts` - Current world state
+  * `traits` - Agent traits/genome
+  * `htn_registry` - Registry map (from `Registry.all()` or custom)
+
+  ## Returns
+
+  Same as `run/3`.
+
+  ## Examples
+
+      # Testing with isolated registry
+      test "my goal generates correct plan" do
+        registry = %{
+          goals: %{test_goal: %{name: :test_goal, decompose: ...}},
+          tasks: %{},
+          primitives: %{test_action: %Task{...}},
+          axioms: %{}
+        }
+
+        {:ok, plan} = Planner.run_with_registry(:test_goal, facts, %{}, registry)
+        assert [{:test_action, []}] = plan.tasks
+      end
+
   """
   @spec run_with_registry(atom(), Facts.t(), map(), map()) ::
           {:ok, Plan.t()} | {:error, term()}

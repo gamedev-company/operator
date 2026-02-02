@@ -195,6 +195,174 @@ defmodule Operator.HTN.EngineTest do
       # guarded_task should be skipped due to failed precondition
       assert plan.tasks == [{:always_task, []}]
     end
+
+    test "handles goal with nil decompose" do
+      registry = %{
+        goals: %{
+          empty_goal: %{
+            name: :empty_goal,
+            precond: nil,
+            decompose: nil
+          }
+        },
+        tasks: %{},
+        primitives: %{}
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:empty_goal, facts, %{}, registry)
+
+      assert plan.tasks == []
+    end
+
+    test "handles invalid decompose function" do
+      registry = %{
+        goals: %{
+          bad_goal: %{
+            name: :bad_goal,
+            precond: nil,
+            decompose: "not a function"
+          }
+        },
+        tasks: %{},
+        primitives: %{}
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:bad_goal, facts, %{}, registry)
+
+      assert plan.tasks == []
+    end
+
+    test "applies effects during planning" do
+      registry = %{
+        goals: %{
+          effect_goal: %{
+            name: :effect_goal,
+            precond: nil,
+            decompose: fn _facts -> [{:unlock, []}, {:enter, []}] end
+          }
+        },
+        tasks: %{},
+        primitives: %{
+          unlock: %Operator.HTN.Task{
+            name: :unlock,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            effects: [Operator.HTN.Effect.new(:plan_only, {:world, :door_unlocked}, true)],
+            cost: 1.0,
+            metadata: %{}
+          },
+          enter: %Operator.HTN.Task{
+            name: :enter,
+            type: :primitive,
+            preconditions: [fn facts -> Facts.get(facts, {:world, :door_unlocked}) == true end],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        }
+      }
+
+      facts = Facts.from_perception(%{world: %{}})
+
+      {:ok, plan} = Engine.expand(:effect_goal, facts, %{}, registry)
+
+      # Enter should be in plan because unlock's effect makes its precondition pass
+      assert plan.tasks == [{:unlock, []}, {:enter, []}]
+    end
+
+    test "handles abstract task without decompose function" do
+      registry = %{
+        goals: %{
+          test_goal: %{
+            name: :test_goal,
+            precond: nil,
+            decompose: fn _facts -> [{:no_decompose_task, [:arg]}] end
+          }
+        },
+        tasks: %{
+          no_decompose_task: %Operator.HTN.Task{
+            name: :no_decompose_task,
+            type: :abstract,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        },
+        primitives: %{}
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:test_goal, facts, %{}, registry)
+
+      # Task without decompose is treated like a leaf and added directly
+      assert plan.tasks == [{:no_decompose_task, [:arg]}]
+    end
+
+    test "handles unknown tasks by skipping them" do
+      registry = %{
+        goals: %{
+          test_goal: %{
+            name: :test_goal,
+            precond: nil,
+            decompose: fn _facts -> [{:unknown_task, []}, {:known_task, []}] end
+          }
+        },
+        tasks: %{},
+        primitives: %{
+          known_task: %Operator.HTN.Task{
+            name: :known_task,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        }
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:test_goal, facts, %{}, registry)
+
+      # Unknown task is skipped, known task remains
+      assert plan.tasks == [{:known_task, []}]
+    end
+
+    test "handles task atom without args" do
+      registry = %{
+        goals: %{
+          test_goal: %{
+            name: :test_goal,
+            precond: nil,
+            decompose: fn _facts -> [:simple_task] end
+          }
+        },
+        tasks: %{},
+        primitives: %{
+          simple_task: %Operator.HTN.Task{
+            name: :simple_task,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        }
+      }
+
+      facts = Facts.from_perception(%{})
+
+      {:ok, plan} = Engine.expand(:test_goal, facts, %{}, registry)
+
+      assert plan.tasks == [{:simple_task, []}]
+    end
   end
 
   describe "goal_preconditions_met?/2" do
@@ -213,6 +381,21 @@ defmodule Operator.HTN.EngineTest do
 
       assert Engine.goal_preconditions_met?(goal, ready_facts)
       refute Engine.goal_preconditions_met?(goal, not_ready_facts)
+    end
+
+    test "returns true for non-function precondition" do
+      goal = %{precond: "not a function"}
+      facts = Facts.from_perception(%{})
+
+      # Edge case: invalid precondition treated as no precondition
+      assert Engine.goal_preconditions_met?(goal, facts)
+    end
+
+    test "returns true for goal without precond key" do
+      goal = %{name: :test}
+      facts = Facts.from_perception(%{})
+
+      assert Engine.goal_preconditions_met?(goal, facts)
     end
   end
 end

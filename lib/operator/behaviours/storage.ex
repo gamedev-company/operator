@@ -1,47 +1,101 @@
 defmodule Operator.Storage do
   @moduledoc """
-  Behaviour for plan persistence.
+  Behaviour for plan persistence across ticks.
 
-  Implement this behaviour to customize how HTN plans are stored and
-  retrieved. The default implementation uses ETS.
+  The Storage behaviour lets you customize how HTN plans are cached between
+  game ticks. This is essential for games where plan execution spans multiple
+  frames - you need somewhere to store the "current plan" for each NPC.
+
+  ## Why Plan Storage?
+
+  HTN plans often take multiple ticks to execute:
+
+  1. Tick 1: Generate plan `[{:move_to, [:door]}, {:open_door, []}, {:enter, []}]`
+  2. Tick 1: Execute `:move_to` - NPC starts walking
+  3. Tick 2-10: NPC still walking (plan stored, waiting)
+  4. Tick 11: NPC arrives, execute `:open_door`
+  5. Tick 12: Execute `:enter`
+  6. Tick 12: Plan complete, clear storage
+
+  Without storage, you'd need to track plans yourself or regenerate them
+  every tick (expensive and inconsistent).
 
   ## Configuration
 
       config :operator,
         storage_module: MyApp.PlanStorage
 
-  ## Example Implementation
+  ## Example Implementations
 
-      defmodule MyApp.PlanStorage do
+  ### Redis (for distributed games)
+
+      defmodule MyApp.RedisPlanStorage do
         @behaviour Operator.Storage
 
         @impl true
         def persist_plan(entity_id, plan) do
-          MyApp.Cache.put({:plan, entity_id}, plan)
+          Redix.command!(:redix, ["SET", "plan:\#{entity_id}", :erlang.term_to_binary(plan)])
           :ok
         end
 
         @impl true
         def fetch_plan(entity_id) do
-          MyApp.Cache.get({:plan, entity_id})
+          case Redix.command!(:redix, ["GET", "plan:\#{entity_id}"]) do
+            nil -> nil
+            binary -> :erlang.binary_to_term(binary)
+          end
         end
 
         @impl true
         def clear_plan(entity_id) do
-          MyApp.Cache.delete({:plan, entity_id})
+          Redix.command!(:redix, ["DEL", "plan:\#{entity_id}"])
           :ok
         end
 
         @impl true
         def list_plans do
-          MyApp.Cache.list_by_prefix(:plan)
+          keys = Redix.command!(:redix, ["KEYS", "plan:*"])
+          Enum.map(keys, fn key ->
+            entity_id = String.replace_prefix(key, "plan:", "")
+            plan = fetch_plan(entity_id)
+            {entity_id, plan}
+          end)
         end
       end
 
-  ## Default ETS Implementation
+  ### In-Memory with TTL (for single-node games)
 
-  If no storage module is configured, Operator uses `Operator.HTN.Storage`
-  which provides ETS-based storage.
+      defmodule MyApp.CachexPlanStorage do
+        @behaviour Operator.Storage
+
+        @impl true
+        def persist_plan(entity_id, plan) do
+          Cachex.put(:plans, entity_id, plan, ttl: :timer.minutes(5))
+          :ok
+        end
+
+        @impl true
+        def fetch_plan(entity_id) do
+          case Cachex.get(:plans, entity_id) do
+            {:ok, plan} -> plan
+            _ -> nil
+          end
+        end
+
+        # ... etc
+      end
+
+  ## Default Implementation
+
+  If no storage module is configured, Operator uses `Operator.HTN.Storage`,
+  which provides simple ETS-based storage suitable for single-node games.
+
+  ## See Also
+
+  * `Operator.HTN.Storage` - Default ETS implementation
+  * `Operator.HTN.Plan` - The plan structure being stored
+  * `Operator.HTN.Executor` - Uses storage during plan execution
+
   """
 
   alias Operator.HTN.Plan

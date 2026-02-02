@@ -1,16 +1,29 @@
 defmodule Operator.Telemetry do
   @moduledoc """
-  Behaviour for telemetry integration.
+  Behaviour for telemetry and metrics integration.
 
-  Implement this behaviour to receive telemetry events from Operator's
-  HTN planner, goal selector, and director.
+  The Telemetry behaviour allows you to instrument Operator with your
+  observability stack. Track goal selections, plan generation times,
+  and Director events for debugging and performance analysis.
 
   ## Configuration
 
       config :operator,
         telemetry_module: MyApp.OperatorTelemetry
 
+  ## Events
+
+  Operator emits three types of events:
+
+  | Event                | When                          | Key Measurements        |
+  |----------------------|-------------------------------|-------------------------|
+  | `goal_selected`      | GoalSelector picks a goal     | `:score`                |
+  | `htn_plan_generated` | Planner creates a plan        | `:task_count`, duration |
+  | `director_event`     | Director fires an event       | `:count`                |
+
   ## Example Implementation
+
+  Using the standard `:telemetry` library:
 
       defmodule MyApp.OperatorTelemetry do
         @behaviour Operator.Telemetry
@@ -18,7 +31,7 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_goal_selected(goal_name, measurements, metadata) do
           :telemetry.execute(
-            [:my_app, :htn, :goal_selected],
+            [:my_app, :operator, :goal_selected],
             measurements,
             Map.put(metadata, :goal, goal_name)
           )
@@ -27,8 +40,8 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_htn_plan_generated(goal, task_count, duration_ms) do
           :telemetry.execute(
-            [:my_app, :htn, :plan_generated],
-            %{task_count: task_count, duration: duration_ms},
+            [:my_app, :operator, :plan_generated],
+            %{task_count: task_count, duration_ms: duration_ms},
             %{goal: goal}
           )
         end
@@ -36,12 +49,61 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_director_event(event_type, tick) do
           :telemetry.execute(
-            [:my_app, :director, :event],
+            [:my_app, :operator, :director_event],
             %{count: 1},
-            %{type: event_type, tick: tick}
+            %{event_type: event_type, tick: tick}
           )
         end
       end
+
+  ## Attaching Handlers
+
+  With `:telemetry`, attach handlers in your application startup:
+
+      def start(_type, _args) do
+        :telemetry.attach_many(
+          "operator-metrics",
+          [
+            [:my_app, :operator, :goal_selected],
+            [:my_app, :operator, :plan_generated],
+            [:my_app, :operator, :director_event]
+          ],
+          &MyApp.TelemetryHandler.handle_event/4,
+          nil
+        )
+
+        # ... rest of supervision tree
+      end
+
+  ## Prometheus Example
+
+  If using `telemetry_metrics` with Prometheus:
+
+      def metrics do
+        [
+          counter("my_app.operator.goal_selected.count",
+            tags: [:goal, :domain]
+          ),
+          distribution("my_app.operator.plan_generated.duration_ms",
+            tags: [:goal],
+            buckets: [1, 5, 10, 25, 50, 100]
+          ),
+          counter("my_app.operator.director_event.count",
+            tags: [:event_type]
+          )
+        ]
+      end
+
+  ## No-Op Default
+
+  If no telemetry module is configured, Operator silently skips emission.
+  This has zero overhead in production when telemetry isn't needed.
+
+  ## See Also
+
+  * `Operator.HTN.GoalSelector` - Emits `goal_selected`
+  * `Operator.HTN.Planner` - Emits `htn_plan_generated`
+  * `Operator.Director` - Emits `director_event`
 
   """
 

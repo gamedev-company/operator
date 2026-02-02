@@ -347,8 +347,9 @@ defmodule Operator.HTN.TestHelpers do
     unless found do
       task_str = if args, do: "{#{task_name}, #{inspect(args)}}", else: "#{task_name}"
 
-      raise ExUnit.AssertionError,
+      raise %ExUnit.AssertionError{
         message: "Expected plan to contain task #{task_str}\nPlan tasks: #{inspect(plan.tasks)}"
+      }
     end
 
     true

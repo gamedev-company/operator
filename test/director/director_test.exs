@@ -65,6 +65,19 @@ defmodule Operator.DirectorTest do
       GenServer.stop(pid)
     end
 
+    test "increments tick when world_state has no tick" do
+      {:ok, pid} = Director.start_link(name: :test_director_4b)
+
+      # First tick with no tick in world_state
+      Director.tick(%{}, :test_director_4b)
+      Process.sleep(10)
+
+      # Tick should increment from 0 to 1
+      assert Director.current_tick(:test_director_4b) == 1
+
+      GenServer.stop(pid)
+    end
+
     test "calls storyteller pick_event" do
       test_pid = self()
 

@@ -220,5 +220,52 @@ defmodule Operator.HTN.RegistryTest do
       assert :list_task in Registry.list_task_names()
       assert :list_primitive in Registry.list_primitive_names()
     end
+
+    test "list_axiom_names returns empty list when no axioms" do
+      assert Registry.list_axiom_names() == []
+    end
+  end
+
+  describe "get_axiom/2" do
+    test "returns nil for unknown axiom" do
+      assert Registry.get_axiom(:unknown_axiom) == nil
+    end
+  end
+
+  describe "modules/0" do
+    test "returns list of registered modules" do
+      defmodule ModulesTestModule do
+        def __htn__ do
+          %{goals: [], tasks: [], primitives: []}
+        end
+      end
+
+      Registry.register(ModulesTestModule)
+
+      modules = Registry.modules()
+      assert is_list(modules)
+      assert ModulesTestModule in modules
+    end
+  end
+
+  describe "refresh/1" do
+    test "rebuilds registry from modules" do
+      defmodule RefreshModule do
+        def __htn__ do
+          %{
+            goals: [%{name: :refresh_goal, precond: nil, decompose: nil, metadata: %{}}],
+            tasks: [],
+            primitives: []
+          }
+        end
+      end
+
+      Registry.register(RefreshModule)
+
+      # Manually call refresh
+      Registry.refresh()
+
+      assert :refresh_goal in Registry.list_goal_names()
+    end
   end
 end

@@ -40,7 +40,16 @@ defmodule Operator.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "CHANGELOG.md"],
+      extras: [
+        "README.md",
+        "CHANGELOG.md",
+        "guides/getting_started.md",
+        "guides/howto.md",
+        "guides/cheatsheet.md"
+      ],
+      groups_for_extras: [
+        Guides: ~r/guides\/.*/
+      ],
       source_url: @source_url,
       source_ref: "v#{@version}"
     ]

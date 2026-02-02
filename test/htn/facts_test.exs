@@ -204,4 +204,67 @@ defmodule Operator.HTN.FactsTest do
       assert Map.has_key?(map, :social)
     end
   end
+
+  describe "new/0" do
+    test "creates empty facts" do
+      facts = Facts.new()
+
+      assert facts.self == %{}
+      assert facts.world == %{}
+      assert facts.social == %{}
+    end
+
+    test "has? returns false for any key" do
+      facts = Facts.new()
+
+      refute Facts.has?(facts, {:self, :anything})
+      refute Facts.has?(facts, {:world, :anything})
+      refute Facts.has?(facts, {:social, :anything})
+    end
+  end
+
+  describe "delete/2" do
+    test "removes fact from self category" do
+      facts = Facts.from_perception(%{self: %{health: 100, mana: 50}})
+
+      updated = Facts.delete(facts, {:self, :mana})
+
+      assert Facts.has?(updated, {:self, :health})
+      refute Facts.has?(updated, {:self, :mana})
+    end
+
+    test "removes fact from world category" do
+      facts = Facts.from_perception(%{world: %{time: :day, weather: :sunny}})
+
+      updated = Facts.delete(facts, {:world, :weather})
+
+      assert Facts.has?(updated, {:world, :time})
+      refute Facts.has?(updated, {:world, :weather})
+    end
+
+    test "removes fact from social category" do
+      facts = Facts.from_perception(%{social: %{ally: :fixer, enemy: :corp}})
+
+      updated = Facts.delete(facts, {:social, :enemy})
+
+      assert Facts.has?(updated, {:social, :ally})
+      refute Facts.has?(updated, {:social, :enemy})
+    end
+
+    test "does not mutate original" do
+      facts = Facts.from_perception(%{self: %{health: 100}})
+
+      _updated = Facts.delete(facts, {:self, :health})
+
+      assert Facts.has?(facts, {:self, :health})
+    end
+
+    test "safely handles non-existent key" do
+      facts = Facts.from_perception(%{self: %{health: 100}})
+
+      updated = Facts.delete(facts, {:self, :nonexistent})
+
+      assert Facts.has?(updated, {:self, :health})
+    end
+  end
 end

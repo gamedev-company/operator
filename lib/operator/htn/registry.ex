@@ -206,13 +206,11 @@ defmodule Operator.HTN.Registry do
   end
 
   defp safe_apply(module, fun, args) do
-    try do
-      {:ok, apply(module, fun, args)}
-    rescue
-      _ -> {:error, :rescue}
-    catch
-      _, _ -> {:error, :catch}
-    end
+    {:ok, apply(module, fun, args)}
+  rescue
+    _ -> {:error, :rescue}
+  catch
+    _, _ -> {:error, :catch}
   end
 
   defp normalize_registry(%{goals: goals, tasks: tasks, primitives: primitives} = data) do
@@ -291,13 +289,11 @@ defmodule Operator.HTN.Registry do
   defp maybe_eval_function(value), do: value
 
   defp safe_eval_function(quoted) do
-    try do
-      {result, _bindings} = Code.eval_quoted(quoted)
-      result
-    rescue
-      _ -> quoted
-    catch
-      _, _ -> quoted
-    end
+    {result, _bindings} = Code.eval_quoted(quoted)
+    result
+  rescue
+    _ -> quoted
+  catch
+    _, _ -> quoted
   end
 end

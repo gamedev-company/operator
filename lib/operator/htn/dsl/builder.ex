@@ -239,11 +239,9 @@ defmodule Operator.HTN.DSL.Builder do
   defp normalize_metadata_value(value), do: value
 
   defp safe_eval_literal(quoted) do
-    try do
-      {result, _bindings} = Code.eval_quoted(quoted)
-      result
-    rescue
-      _ -> quoted
-    end
+    {result, _bindings} = Code.eval_quoted(quoted)
+    result
+  rescue
+    _ -> quoted
   end
 end

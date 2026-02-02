@@ -60,25 +60,7 @@ defmodule Operator.HTN.Planner do
   """
   @spec run(atom(), Facts.t(), map()) :: {:ok, Plan.t()} | {:error, term()}
   def run(goal_name, facts, traits) do
-    htn = Registry.all()
-    start_time = System.monotonic_time(:millisecond)
-
-    case Engine.expand(goal_name, facts, traits, htn) do
-      {:ok, plan} ->
-        duration = System.monotonic_time(:millisecond) - start_time
-
-        # Optionally annotate plan with rationalization
-        annotation = Rationalization.annotate_plan(plan)
-        annotated_plan = %{plan | metadata: Map.merge(plan.metadata, annotation)}
-
-        # Emit telemetry if configured
-        Telemetry.emit_htn_plan_generated(goal_name, length(plan.tasks), duration)
-
-        {:ok, annotated_plan}
-
-      error ->
-        error
-    end
+    run_with_registry(goal_name, facts, traits, Registry.all())
   end
 
   @doc """
@@ -145,14 +127,18 @@ defmodule Operator.HTN.Planner do
 
     case Engine.expand(goal_name, facts, traits, htn_registry) do
       {:ok, plan} ->
-        duration = System.monotonic_time(:millisecond) - start_time
-        annotation = Rationalization.annotate_plan(plan)
-        annotated_plan = %{plan | metadata: Map.merge(plan.metadata, annotation)}
-        Telemetry.emit_htn_plan_generated(goal_name, length(plan.tasks), duration)
-        {:ok, annotated_plan}
+        finalize_plan(plan, goal_name, start_time)
 
       error ->
         error
     end
+  end
+
+  defp finalize_plan(plan, goal_name, start_time) do
+    duration = System.monotonic_time(:millisecond) - start_time
+    annotation = Rationalization.annotate_plan(plan)
+    annotated_plan = %{plan | metadata: Map.merge(plan.metadata, annotation)}
+    Telemetry.emit_htn_plan_generated(goal_name, length(plan.tasks), duration)
+    {:ok, annotated_plan}
   end
 end

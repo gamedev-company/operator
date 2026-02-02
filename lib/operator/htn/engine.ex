@@ -51,7 +51,7 @@ defmodule Operator.HTN.Engine do
 
   """
 
-  alias Operator.HTN.{Effect, Facts, Plan, Task, Registry, Trace}
+  alias Operator.HTN.{Effect, Facts, Plan, Registry, Task, Trace}
 
   @doc """
   Expand a goal into a plan.
@@ -132,56 +132,64 @@ defmodule Operator.HTN.Engine do
   defp expand_task({task_name, args}, facts, traits, htn_registry) do
     task = Registry.get_task(task_name, htn_registry)
 
-    if task do
-      Trace.task_expand(task_name, args, facts)
+    cond do
+      task != nil ->
+        expand_abstract_task(task, task_name, args, facts, traits, htn_registry)
 
-      precond_met = Task.preconditions_satisfied?(task, facts, traits)
-      Trace.precondition_eval(%{task: task_name}, precond_met)
+      primitive = Registry.get_primitive(task_name, htn_registry) ->
+        expand_primitive_task(primitive, task_name, args, facts)
 
-      if precond_met do
-        case task.decompose do
-          nil ->
-            # Leaf task - apply effects and return
-            new_facts = apply_task_effects(task, facts, task_name)
-            Trace.task_complete(task_name, [{task_name, args}], :success)
-            {[{task_name, args}], new_facts}
-
-          decompose_fun when is_function(decompose_fun) ->
-            subtasks = decompose_fun.(facts)
-
-            # Expand subtasks in sequence
-            {result_tasks, final_facts} =
-              Enum.reduce(subtasks, {[], facts}, fn subtask, {acc_tasks, acc_facts} ->
-                {new_tasks, new_facts} = expand_task(subtask, acc_facts, traits, htn_registry)
-                {acc_tasks ++ new_tasks, new_facts}
-              end)
-
-            Trace.task_complete(task_name, result_tasks, :success)
-            {result_tasks, final_facts}
-        end
-      else
-        Trace.task_complete(task_name, [], :failure)
+      true ->
         {[], facts}
-      end
-    else
-      # Check if it's a primitive
-      primitive = Registry.get_primitive(task_name, htn_registry)
-
-      if primitive do
-        Trace.task_expand(task_name, args, facts)
-        # Apply primitive's effects to planning state
-        new_facts = apply_task_effects(primitive, facts, task_name)
-        Trace.task_complete(task_name, [{task_name, args}], :success)
-        {[{task_name, args}], new_facts}
-      else
-        {[], facts}
-      end
     end
   end
 
   defp expand_task(task_name, facts, traits, htn_registry)
        when is_atom(task_name) do
     expand_task({task_name, []}, facts, traits, htn_registry)
+  end
+
+  defp expand_abstract_task(task, task_name, args, facts, traits, htn_registry) do
+    Trace.task_expand(task_name, args, facts)
+
+    precond_met = Task.preconditions_satisfied?(task, facts, traits)
+    Trace.precondition_eval(%{task: task_name}, precond_met)
+
+    if precond_met do
+      expand_task_decompose(task, task_name, args, facts, traits, htn_registry)
+    else
+      Trace.task_complete(task_name, [], :failure)
+      {[], facts}
+    end
+  end
+
+  defp expand_task_decompose(task, task_name, args, facts, traits, htn_registry) do
+    case task.decompose do
+      nil ->
+        new_facts = apply_task_effects(task, facts, task_name)
+        Trace.task_complete(task_name, [{task_name, args}], :success)
+        {[{task_name, args}], new_facts}
+
+      decompose_fun when is_function(decompose_fun) ->
+        subtasks = decompose_fun.(facts)
+        {result_tasks, final_facts} = expand_subtasks(subtasks, facts, traits, htn_registry)
+        Trace.task_complete(task_name, result_tasks, :success)
+        {result_tasks, final_facts}
+    end
+  end
+
+  defp expand_primitive_task(primitive, task_name, args, facts) do
+    Trace.task_expand(task_name, args, facts)
+    new_facts = apply_task_effects(primitive, facts, task_name)
+    Trace.task_complete(task_name, [{task_name, args}], :success)
+    {[{task_name, args}], new_facts}
+  end
+
+  defp expand_subtasks(subtasks, facts, traits, htn_registry) do
+    Enum.reduce(subtasks, {[], facts}, fn subtask, {acc_tasks, acc_facts} ->
+      {new_tasks, new_facts} = expand_task(subtask, acc_facts, traits, htn_registry)
+      {acc_tasks ++ new_tasks, new_facts}
+    end)
   end
 
   # Apply task effects to facts during planning

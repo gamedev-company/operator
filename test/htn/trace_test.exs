@@ -1,7 +1,7 @@
 defmodule Operator.HTN.TraceTest do
   use ExUnit.Case, async: false
 
-  alias Operator.HTN.{Effect, Facts, Trace, Registry}
+  alias Operator.HTN.{Effect, Facts, Registry, Trace}
 
   # Test trace handler that records events
   defmodule RecordingHandler do

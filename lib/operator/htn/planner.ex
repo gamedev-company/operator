@@ -139,6 +139,74 @@ defmodule Operator.HTN.Planner do
   end
 
   @doc """
+  Explain plan generation for a specific goal.
+
+  Returns a structured map for debugging or UI tooling. Unlike tracing,
+  this gives you a deterministic, inspectable payload.
+
+  ## Example
+
+      result = Planner.explain(:patrol, facts, traits)
+      result.result
+      #=> :ok
+
+      result.plan.tasks
+      #=> [{:move_to, [:waypoint_1]}, {:look_around, []}]
+
+  """
+  @spec explain(atom(), Facts.t(), map()) :: map()
+  def explain(goal_name, facts, traits) do
+    started_at = System.monotonic_time(:millisecond)
+    goal = Registry.get_goal(goal_name)
+
+    cond do
+      goal == nil ->
+        %{
+          goal: goal_name,
+          result: :error,
+          reason: :goal_not_found,
+          preconditions_met: false,
+          plan: nil,
+          duration_ms: System.monotonic_time(:millisecond) - started_at
+        }
+
+      not goal_precond_met?(goal, facts) ->
+        %{
+          goal: goal_name,
+          result: :error,
+          reason: :preconditions_not_met,
+          preconditions_met: false,
+          plan: nil,
+          duration_ms: System.monotonic_time(:millisecond) - started_at
+        }
+
+      true ->
+        case run(goal_name, facts, traits) do
+          {:ok, plan} ->
+            %{
+              goal: goal_name,
+              result: :ok,
+              reason: nil,
+              preconditions_met: true,
+              plan: plan,
+              metadata: plan.metadata,
+              duration_ms: System.monotonic_time(:millisecond) - started_at
+            }
+
+          {:error, reason} ->
+            %{
+              goal: goal_name,
+              result: :error,
+              reason: reason,
+              preconditions_met: true,
+              plan: nil,
+              duration_ms: System.monotonic_time(:millisecond) - started_at
+            }
+        end
+    end
+  end
+
+  @doc """
   Update or create a plan on each game tick.
 
   Convenience function for tick-based game loops. Handles the common pattern
@@ -277,6 +345,10 @@ defmodule Operator.HTN.Planner do
         error
     end
   end
+
+  defp goal_precond_met?(%{precond: nil}, _facts), do: true
+  defp goal_precond_met?(%{precond: fun}, facts) when is_function(fun, 1), do: fun.(facts)
+  defp goal_precond_met?(_, _facts), do: true
 
   defp finalize_plan(plan, goal_name, start_time) do
     duration = System.monotonic_time(:millisecond) - start_time

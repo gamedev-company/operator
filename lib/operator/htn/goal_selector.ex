@@ -188,6 +188,80 @@ defmodule Operator.HTN.GoalSelector do
   end
 
   @doc """
+  Explain goal selection with scores and eligibility.
+
+  Returns a map with the selected goal, eligible/ineligible goals, and
+  scoring details. This is intended for debugging and UI tooling.
+
+  ## Example
+
+      result = GoalSelector.explain(facts, traits)
+      result.selected
+      #=> :patrol
+
+      Enum.map(result.eligible, & &1.goal)
+      #=> [:patrol, :idle]
+
+  """
+  @spec explain(Facts.t(), map(), keyword()) :: map()
+  def explain(facts, traits, opts \\ []) do
+    goals = Registry.all() |> Map.get(:goals, %{})
+    trait_weights = Keyword.get(opts, :trait_weights, default_trait_weights())
+    goal_order = Keyword.get(opts, :goal_order, [])
+
+    scored =
+      goals
+      |> Enum.map(fn {name, goal} ->
+        score = score(goal, trait_weights, traits, opts, facts)
+        eligibility = eligibility(goal, facts, traits)
+        {score, name, goal, eligibility}
+      end)
+
+    {eligible, ineligible} =
+      Enum.split_with(scored, fn {_score, _name, _goal, eligibility} ->
+        eligibility == :ok
+      end)
+
+    eligible_sorted =
+      eligible
+      |> Enum.sort(fn {score_a, name_a, _goal_a, _},
+                     {score_b, name_b, _goal_b, _} ->
+        goal_sort({score_a, name_a, nil}, {score_b, name_b, nil}, goal_order)
+      end)
+
+    selected =
+      case eligible_sorted do
+        [{_score, name, _goal, _} | _] -> name
+        [] -> nil
+      end
+
+    %{
+      selected: selected,
+      eligible:
+        Enum.map(eligible_sorted, fn {score, name, goal, _} ->
+          %{
+            goal: name,
+            score: score,
+            metadata: Map.get(goal, :metadata, %{})
+          }
+        end),
+      ineligible:
+        Enum.map(ineligible, fn {_score, name, goal, reason} ->
+          %{
+            goal: name,
+            reason: reason,
+            metadata: Map.get(goal, :metadata, %{})
+          }
+        end),
+      options: %{
+        goal_order: goal_order,
+        priority_bonus: Keyword.get(opts, :priority_bonus),
+        trait_weights: trait_weights
+      }
+    }
+  end
+
+  @doc """
   Score a specific goal for an agent without selecting it.
 
   Useful for debugging goal selection or building custom selection logic.
@@ -283,6 +357,14 @@ defmodule Operator.HTN.GoalSelector do
 
   defp precond_ok?(goal, facts, traits) do
     precond_met?(goal, facts) and trait_requirement_met?(goal, traits)
+  end
+
+  defp eligibility(goal, facts, traits) do
+    cond do
+      not precond_met?(goal, facts) -> :preconditions_not_met
+      not trait_requirement_met?(goal, traits) -> :traits_not_met
+      true -> :ok
+    end
   end
 
   defp precond_met?(%{precond: nil}, _facts), do: true

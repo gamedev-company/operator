@@ -26,6 +26,28 @@ IO.inspect(plan.tasks)
 IO.inspect(plan.validity)
 ```
 
+## Explain Goal Selection
+
+Use `GoalSelector.explain/3` to see why a goal was selected.
+
+```elixir
+result = Operator.HTN.GoalSelector.explain(facts, traits)
+IO.inspect(result.selected)
+IO.inspect(result.eligible)
+IO.inspect(result.ineligible)
+```
+
+## Explain Plan Generation
+
+Use `Planner.explain/3` for a structured payload of the plan and checks.
+
+```elixir
+result = Operator.HTN.Planner.explain(:patrol, facts, traits)
+IO.inspect(result.result)
+IO.inspect(result.reason)
+IO.inspect(result.plan)
+```
+
 ## Check Preconditions Manually
 
 If a goal does not appear, the precondition is likely failing.

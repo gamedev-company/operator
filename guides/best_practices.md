@@ -47,6 +47,7 @@ This is the aggressive, practical guidance for using Operator in real systems.
 - Turn on tracing early during behavior tuning.
 - Inspect plans directly. The plan is just data.
 - Add metadata to plans to track why they were selected.
+- Use `GoalSelector.explain/3` and `Planner.explain/3` for deterministic diagnostics.
 
 ## Testing Strategy
 

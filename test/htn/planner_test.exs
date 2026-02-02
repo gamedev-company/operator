@@ -120,6 +120,55 @@ defmodule Operator.HTN.PlannerTest do
     end
   end
 
+  describe "explain/3" do
+    test "returns structured explanation for valid goal" do
+      registry = %{
+        goals: %{
+          patrol: %{
+            name: :patrol,
+            precond: fn _facts -> true end,
+            decompose: fn _facts -> [{:wait, []}] end,
+            metadata: %{}
+          }
+        },
+        tasks: %{},
+        primitives: %{
+          wait: %Task{
+            name: :wait,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{run: fn actor, _facts -> {:ok, actor} end, args: []}
+          }
+        },
+        axioms: %{}
+      }
+
+      :persistent_term.put({Registry, :registry}, registry)
+      :persistent_term.put({Registry, :modules}, MapSet.new())
+
+      facts = Facts.new()
+      result = Planner.explain(:patrol, facts, %{})
+
+      assert result.result == :ok
+      assert result.preconditions_met == true
+      assert result.plan.goal == :patrol
+    end
+
+    test "returns error details for missing goal" do
+      :persistent_term.put({Registry, :registry}, %{goals: %{}, tasks: %{}, primitives: %{}, axioms: %{}})
+      :persistent_term.put({Registry, :modules}, MapSet.new())
+
+      facts = Facts.new()
+      result = Planner.explain(:missing_goal, facts, %{})
+
+      assert result.result == :error
+      assert result.reason == :goal_not_found
+      assert result.plan == nil
+    end
+  end
+
   describe "tick/4" do
     setup do
       registry = %{

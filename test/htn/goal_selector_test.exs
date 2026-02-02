@@ -305,6 +305,40 @@ defmodule Operator.HTN.GoalSelectorTest do
     end
   end
 
+  describe "explain/3" do
+    test "returns selected, eligible, and ineligible goals" do
+      registry = %{
+        goals: %{
+          patrol: %{
+            name: :patrol,
+            precond: fn facts -> Facts.get(facts, {:self, :ready}, false) end,
+            decompose: fn _facts -> [] end,
+            metadata: %{priority: 5}
+          },
+          rest: %{
+            name: :rest,
+            precond: fn _facts -> false end,
+            decompose: fn _facts -> [] end,
+            metadata: %{priority: 10}
+          }
+        },
+        tasks: %{},
+        primitives: %{},
+        axioms: %{}
+      }
+
+      :persistent_term.put({Registry, :registry}, registry)
+      :persistent_term.put({Registry, :modules}, MapSet.new())
+
+      facts = Facts.from_perception(%{self: %{ready: true}})
+      result = GoalSelector.explain(facts, %{})
+
+      assert result.selected == :patrol
+      assert Enum.any?(result.eligible, &(&1.goal == :patrol))
+      assert Enum.any?(result.ineligible, &(&1.goal == :rest and &1.reason == :preconditions_not_met))
+    end
+  end
+
   describe "score_goal/4" do
     test "returns score for existing goal" do
       registry = %{

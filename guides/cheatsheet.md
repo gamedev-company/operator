@@ -126,6 +126,12 @@ Planner.needs_replan?(plan, facts)
 {:ok, goal} = GoalSelector.pick_goal(facts, traits)
 :none  # No valid goals
 
+# Explain selection
+GoalSelector.explain(facts, traits)
+
+# Explain plan generation
+Planner.explain(:goal_name, facts, traits)
+
 # Options
 GoalSelector.pick_goal(facts, traits,
   trait_weights: %{{:aggressive, :attack} => 10},

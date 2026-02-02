@@ -35,6 +35,7 @@ result = Operator.HTN.GoalSelector.explain(facts, traits)
 IO.inspect(result.selected)
 IO.inspect(result.eligible)
 IO.inspect(result.ineligible)
+IO.inspect(result.ineligible |> Enum.map(& &1.missing_facts))
 ```
 
 ## Explain Plan Generation
@@ -46,6 +47,7 @@ result = Operator.HTN.Planner.explain(:patrol, facts, traits)
 IO.inspect(result.result)
 IO.inspect(result.reason)
 IO.inspect(result.plan)
+IO.inspect(result.missing_facts)
 ```
 
 ## Check Preconditions Manually

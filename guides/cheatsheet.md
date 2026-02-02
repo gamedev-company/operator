@@ -132,6 +132,9 @@ GoalSelector.explain(facts, traits)
 # Explain plan generation
 Planner.explain(:goal_name, facts, traits)
 
+# Budgeted planning
+Planner.run(:goal_name, facts, traits, budget: [max_tasks: 50, timeout_ms: 5])
+
 # Options
 GoalSelector.pick_goal(facts, traits,
   trait_weights: %{{:aggressive, :attack} => 10},
@@ -164,6 +167,16 @@ Executor.run_plan(plan, actor, facts,
   max_steps: 100,
   on_task_complete: fn task, actor, facts -> :ok end
 )
+```
+
+# Loop Helper
+
+```elixir
+alias Operator.HTN.Loop
+
+result = Loop.tick(plan, actor, facts, traits, goal: :patrol)
+result.status  # :idle | :continue | :completed | :failed
+result.plan    # remaining plan or nil
 ```
 
 ## Plans

@@ -182,6 +182,12 @@ Attach arbitrary metadata for goal selection and analytics.
 metadata priority: 5, domain: :combat, required_traits: [:aggressive]
 ```
 
+You can also declare required fact keys for validation and diagnostics:
+
+```elixir
+metadata requires_facts: [{:self, :energy}, {:world, :threat_level}]
+```
+
 ## DSL Gotchas
 
 - `precond` and `decompose` run at runtime, not compile time.

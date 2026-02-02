@@ -118,6 +118,41 @@ defmodule Operator.HTN.PlannerTest do
       assert Map.has_key?(plan.metadata, :plan_id)
       assert Map.has_key?(plan.metadata, :explanation)
     end
+
+    test "returns error when budget exceeded" do
+      registry = %{
+        goals: %{
+          test_goal: %{
+            name: :test_goal,
+            precond: nil,
+            decompose: fn _facts -> [{:action, []}] end,
+            metadata: %{}
+          }
+        },
+        tasks: %{},
+        primitives: %{
+          action: %Task{
+            name: :action,
+            type: :primitive,
+            preconditions: [],
+            decompose: nil,
+            cost: 1.0,
+            metadata: %{}
+          }
+        },
+        axioms: %{}
+      }
+
+      :persistent_term.put({Registry, :registry}, registry)
+      :persistent_term.put({Registry, :modules}, MapSet.new())
+
+      facts = Facts.new()
+      traits = %{}
+
+      result = Planner.run(:test_goal, facts, traits, budget: [max_tasks: 0])
+
+      assert result == {:error, {:budget_exceeded, :max_tasks}}
+    end
   end
 
   describe "explain/3" do

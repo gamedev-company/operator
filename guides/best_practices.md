@@ -16,12 +16,14 @@ This is the aggressive, practical guidance for using Operator in real systems.
 - Build facts in one place. Do not scatter facts creation across codepaths.
 - Use consistent keys. Changing keys breaks preconditions silently.
 - Treat facts as immutable. Always use the returned struct after updates.
+- Declare required fact keys in goal metadata (`requires_facts`) for validation.
 
 ## Planning Discipline
 
 - Use `Planner.needs_replan?/2` before throwing away a plan.
 - Avoid planning every tick unless the world is highly volatile.
 - Cache plans for multi-tick actions; replan only when facts change.
+- Use budgets for large NPC counts to cap planning cost.
 
 ## Task And Goal Design
 

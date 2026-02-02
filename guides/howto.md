@@ -380,6 +380,23 @@ defp create_new_plan(entity, facts) do
 end
 ```
 
+## Use The Loop Helper
+
+For game loops, the `Loop` helper reduces boilerplate:
+
+```elixir
+alias Operator.HTN.Loop
+
+result = Loop.tick(entity.plan, entity, facts, entity.traits, goal: :patrol)
+
+case result.status do
+  :idle -> %{entity | plan: nil}
+  :continue -> %{entity | plan: result.plan, current: result.actor}
+  :completed -> %{entity | plan: nil, current: result.actor}
+  :failed -> %{entity | plan: nil}
+end
+```
+
 ## Add Telemetry for Monitoring
 
 Track HTN performance in production:

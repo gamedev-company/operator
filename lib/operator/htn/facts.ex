@@ -205,6 +205,45 @@ defmodule Operator.HTN.Facts do
   end
 
   @doc """
+  Return the list of missing fact keys from a required set.
+
+  ## Examples
+
+      iex> facts = Facts.from_perception(%{self: %{ready: true}})
+      iex> Facts.missing_keys(facts, [{:self, :ready}, {:world, :time}])
+      [{:world, :time}]
+
+  """
+  @spec missing_keys(t(), [fact_key()]) :: [fact_key()]
+  def missing_keys(%__MODULE__{} = facts, keys) when is_list(keys) do
+    Enum.reject(keys, &has?(facts, &1))
+  end
+
+  @doc """
+  Validate that all required fact keys exist.
+
+  Returns `:ok` when all keys exist, otherwise returns `{:error, missing_keys}`.
+
+  ## Examples
+
+      iex> facts = Facts.from_perception(%{self: %{ready: true}})
+      iex> Facts.validate_required(facts, [{:self, :ready}])
+      :ok
+
+      iex> facts = Facts.from_perception(%{self: %{ready: true}})
+      iex> Facts.validate_required(facts, [{:self, :ready}, {:world, :time}])
+      {:error, [{:world, :time}]}
+
+  """
+  @spec validate_required(t(), [fact_key()]) :: :ok | {:error, [fact_key()]}
+  def validate_required(%__MODULE__{} = facts, keys) when is_list(keys) do
+    case missing_keys(facts, keys) do
+      [] -> :ok
+      missing -> {:error, missing}
+    end
+  end
+
+  @doc """
   Get a fact value with an optional default.
 
   Returns the value at the given key, or the default if the key doesn't exist.

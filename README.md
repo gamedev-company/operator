@@ -104,6 +104,8 @@ Treat this as a ruthless, practical path to production.
 1. Add tracing while you tune behaviors, then disable it.
 1. Add storage only if your plans span multiple ticks.
 1. Add the Director only when you want global pacing.
+1. Use `GoalSelector.explain/3` and `Planner.explain/3` to debug decisions.
+1. Add planning budgets once you scale beyond a handful of agents.
 
 ## HTN Planning (or: Teaching Rocks to Think)
 
@@ -194,6 +196,16 @@ case Planner.run(:acquire_data, facts, traits) do
     # You asked for a goal that doesn't exist. Classic.
     :unknown_goal
 end
+```
+
+### Loop Helper (Less Boilerplate)
+
+If you want to wire planning into a tick loop quickly:
+
+```elixir
+alias Operator.HTN.Loop
+
+result = Loop.tick(entity.plan, entity, facts, traits, goal: :patrol)
 ```
 
 ### Executing Plans
@@ -615,6 +627,7 @@ Check out the `examples/` directory. We've got:
 - `Operator.HTN.Planner` - High-level planning API
 - `Operator.HTN.Executor` - Plan and task execution
 - `Operator.HTN.Engine` - Low-level plan expansion
+- `Operator.HTN.Loop` - Tick-based planning/execution helper
 - `Operator.HTN.Registry` - Goal/task/primitive storage
 - `Operator.HTN.Effect` - World state modifications
 - `Operator.HTN.Task` - Task definitions

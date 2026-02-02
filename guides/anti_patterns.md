@@ -37,6 +37,20 @@ facts = Operator.HTN.Facts.from_perception(%{
 })
 ```
 
+## 2a) No Facts Validation
+
+Bad:
+
+```elixir
+metadata priority: 5
+```
+
+Better:
+
+```elixir
+metadata priority: 5, requires_facts: [{:self, :energy}, {:world, :threat_level}]
+```
+
 ## 3) Preconditions With Side Effects
 
 Bad:

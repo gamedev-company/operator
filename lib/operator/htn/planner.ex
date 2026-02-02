@@ -117,6 +117,7 @@ defmodule Operator.HTN.Planner do
   * `{:ok, plan}` - Successfully generated plan with tasks
   * `{:error, :goal_not_found}` - Goal not in Registry
   * `{:error, :preconditions_not_met}` - Goal preconditions failed
+  * `{:error, {:budget_exceeded, reason}}` - Planning exceeded configured budget
 
   ## Examples
 
@@ -132,10 +133,13 @@ defmodule Operator.HTN.Planner do
       facts_unarmed = Facts.from_perception(%{self: %{armed: false}})
       {:error, :preconditions_not_met} = Planner.run(:attack, facts_unarmed, traits)
 
+      # Budgeted planning
+      Planner.run(:patrol, facts, traits, budget: [max_tasks: 50, timeout_ms: 5])
+
   """
-  @spec run(atom(), Facts.t(), map()) :: {:ok, Plan.t()} | {:error, term()}
-  def run(goal_name, facts, traits) do
-    run_with_registry(goal_name, facts, traits, Registry.all())
+  @spec run(atom(), Facts.t(), map(), keyword()) :: {:ok, Plan.t()} | {:error, term()}
+  def run(goal_name, facts, traits, opts \\ []) do
+    run_with_registry(goal_name, facts, traits, Registry.all(), opts)
   end
 
   @doc """
@@ -158,6 +162,7 @@ defmodule Operator.HTN.Planner do
   def explain(goal_name, facts, traits) do
     started_at = System.monotonic_time(:millisecond)
     goal = Registry.get_goal(goal_name)
+    missing_facts = Facts.missing_keys(facts, required_fact_keys(goal))
 
     cond do
       goal == nil ->
@@ -166,6 +171,7 @@ defmodule Operator.HTN.Planner do
           result: :error,
           reason: :goal_not_found,
           preconditions_met: false,
+          missing_facts: missing_facts,
           plan: nil,
           duration_ms: System.monotonic_time(:millisecond) - started_at
         }
@@ -176,6 +182,7 @@ defmodule Operator.HTN.Planner do
           result: :error,
           reason: :preconditions_not_met,
           preconditions_met: false,
+          missing_facts: missing_facts,
           plan: nil,
           duration_ms: System.monotonic_time(:millisecond) - started_at
         }
@@ -188,6 +195,7 @@ defmodule Operator.HTN.Planner do
               result: :ok,
               reason: nil,
               preconditions_met: true,
+              missing_facts: missing_facts,
               plan: plan,
               metadata: plan.metadata,
               duration_ms: System.monotonic_time(:millisecond) - started_at
@@ -199,6 +207,7 @@ defmodule Operator.HTN.Planner do
               result: :error,
               reason: reason,
               preconditions_met: true,
+              missing_facts: missing_facts,
               plan: nil,
               duration_ms: System.monotonic_time(:millisecond) - started_at
             }
@@ -332,12 +341,12 @@ defmodule Operator.HTN.Planner do
       end
 
   """
-  @spec run_with_registry(atom(), Facts.t(), map(), map()) ::
+  @spec run_with_registry(atom(), Facts.t(), map(), map(), keyword()) ::
           {:ok, Plan.t()} | {:error, term()}
-  def run_with_registry(goal_name, facts, traits, htn_registry) do
+  def run_with_registry(goal_name, facts, traits, htn_registry, opts \\ []) do
     start_time = System.monotonic_time(:millisecond)
 
-    case Engine.expand(goal_name, facts, traits, htn_registry) do
+    case Engine.expand(goal_name, facts, traits, htn_registry, opts) do
       {:ok, plan} ->
         finalize_plan(plan, goal_name, start_time)
 
@@ -349,6 +358,14 @@ defmodule Operator.HTN.Planner do
   defp goal_precond_met?(%{precond: nil}, _facts), do: true
   defp goal_precond_met?(%{precond: fun}, facts) when is_function(fun, 1), do: fun.(facts)
   defp goal_precond_met?(_, _facts), do: true
+
+  defp required_fact_keys(nil), do: []
+
+  defp required_fact_keys(goal) do
+    goal
+    |> Map.get(:metadata, %{})
+    |> Map.get(:requires_facts, [])
+  end
 
   defp finalize_plan(plan, goal_name, start_time) do
     duration = System.monotonic_time(:millisecond) - start_time

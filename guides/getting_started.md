@@ -201,6 +201,16 @@ end
 {:ok, final_actor, final_facts} = Executor.run_plan(plan, actor, facts)
 ```
 
+## Loop Helper (Optional)
+
+For quick integration, the `Loop` helper handles plan creation and one-step execution:
+
+```elixir
+alias Operator.HTN.Loop
+
+result = Loop.tick(actor.plan, actor, facts, traits, goal: :patrol)
+```
+
 ## Plan Lifecycles
 
 - `:active` means it can run.

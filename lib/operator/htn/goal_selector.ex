@@ -239,18 +239,22 @@ defmodule Operator.HTN.GoalSelector do
       selected: selected,
       eligible:
         Enum.map(eligible_sorted, fn {score, name, goal, _} ->
+          missing_facts = missing_required_facts(goal, facts)
           %{
             goal: name,
             score: score,
-            metadata: Map.get(goal, :metadata, %{})
+            metadata: Map.get(goal, :metadata, %{}),
+            missing_facts: missing_facts
           }
         end),
       ineligible:
         Enum.map(ineligible, fn {_score, name, goal, reason} ->
+          missing_facts = missing_required_facts(goal, facts)
           %{
             goal: name,
             reason: reason,
-            metadata: Map.get(goal, :metadata, %{})
+            metadata: Map.get(goal, :metadata, %{}),
+            missing_facts: missing_facts
           }
         end),
       options: %{
@@ -357,6 +361,16 @@ defmodule Operator.HTN.GoalSelector do
 
   defp precond_ok?(goal, facts, traits) do
     precond_met?(goal, facts) and trait_requirement_met?(goal, traits)
+  end
+
+  defp missing_required_facts(goal, facts) do
+    metadata = Map.get(goal, :metadata, %{})
+    required = Map.get(metadata, :requires_facts, [])
+
+    case required do
+      [] -> []
+      keys -> Facts.missing_keys(facts, keys)
+    end
   end
 
   defp eligibility(goal, facts, traits) do

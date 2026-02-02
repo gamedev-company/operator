@@ -63,6 +63,29 @@ defmodule Operator.HTN.FactsTest do
     end
   end
 
+  describe "missing_keys/2" do
+    test "returns missing keys from required list" do
+      facts = Facts.from_perception(%{self: %{ready: true}})
+
+      assert Facts.missing_keys(facts, [{:self, :ready}, {:world, :time}]) == [{:world, :time}]
+    end
+  end
+
+  describe "validate_required/2" do
+    test "returns :ok when all required keys exist" do
+      facts = Facts.from_perception(%{self: %{ready: true}})
+
+      assert Facts.validate_required(facts, [{:self, :ready}]) == :ok
+    end
+
+    test "returns missing keys when required keys are absent" do
+      facts = Facts.from_perception(%{self: %{ready: true}})
+
+      assert Facts.validate_required(facts, [{:self, :ready}, {:world, :time}]) ==
+               {:error, [{:world, :time}]}
+    end
+  end
+
   describe "get/3" do
     test "returns fact value" do
       facts = Facts.from_perception(%{world: %{threat_level: :high}})

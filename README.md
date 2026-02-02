@@ -35,6 +35,9 @@ defmodule MyGame.NPCBehavior do
 
   # "I want data and I want it now"
   goal :acquire_data do
+    # IMPORTANT: Use full module paths in precond/decompose functions!
+    # Aliases from your module header don't work here - these functions
+    # are evaluated at runtime in a different scope.
     precond fn facts ->
       not Operator.HTN.Facts.has?(facts, {:self, :has_data})
     end
@@ -73,20 +76,27 @@ defmodule MyGame.NPCBehavior do
 end
 ```
 
+> **Heads up:** Functions inside `precond` and `decompose` blocks are evaluated at runtime, which means your module's `alias` statements won't work inside them. Always use full module paths like `Operator.HTN.Facts.get(...)` instead of `Facts.get(...)`.
+
 ### Making Plans Happen
 
 ```elixir
+alias Operator.HTN.{Facts, Plan, Planner}
+
 # What does your NPC know about the world?
-facts = Operator.HTN.Facts.from_perception(%{
+facts = Facts.from_perception(%{
   self: %{can_move: true, has_data: false},
   world: %{nearest_terminal: :server_room}
 })
+
+# Or start with empty facts
+facts = Facts.new()
 
 # What kind of NPC is this?
 traits = %{archetype: :infiltrator, traits: [:stealthy]}
 
 # Let's see what we've got
-case Operator.HTN.Planner.run(:acquire_data, facts, traits) do
+case Planner.run(:acquire_data, facts, traits) do
   {:ok, plan} ->
     IO.inspect(plan.tasks)
     # => [{:move_to, [:server_room]}, {:download_data, ["target_server"]}]
@@ -102,39 +112,104 @@ case Operator.HTN.Planner.run(:acquire_data, facts, traits) do
 end
 ```
 
-### The Secret Sauce: Planning-Time Effects
+### Executing Plans
 
-Here's where it gets spicy. When the planner is figuring out what to do, it can *simulate* the effects of actions. Your NPC can reason about unlocking a door *before* it tries to walk through it. Revolutionary stuff.
+Plans are just data - sequences of primitives to execute. The `Executor` module handles the messy business of actually running them:
 
 ```elixir
-alias Operator.HTN.{Effect, Task}
+alias Operator.HTN.{Executor, Planner}
 
-task = Task.new(:unlock_door, :primitive,
-  preconditions: [fn facts -> Facts.has?(facts, {:self, :has_key}) end],
-  effects: [
-    Effect.new(:plan_and_execute, {:world, :door_unlocked}, true)
-  ]
-)
+# Generate a plan
+{:ok, plan} = Planner.run(:patrol, facts, traits)
 
-# Now this task's precondition will pass during planning:
-enter_task = Task.new(:enter_room, :primitive,
-  preconditions: [fn facts -> Facts.get(facts, {:world, :door_unlocked}) end]
-)
+# Execute step by step (recommended for game loops)
+case Executor.step(plan, npc, facts) do
+  {:ok, :completed, npc, facts, _plan} ->
+    # All done!
+    {:idle, npc, facts}
+
+  {:ok, :continue, npc, facts, remaining_plan} ->
+    # More to do - store remaining plan for next tick
+    {:running, %{npc | plan: remaining_plan}, facts}
+
+  {:error, reason, npc, facts, _plan} ->
+    # Something went wrong - maybe replan
+    {:failed, %{npc | plan: nil}, facts}
+end
+
+# Or run the whole plan at once (useful for turn-based games)
+case Executor.run_plan(plan, npc, facts) do
+  {:ok, npc, facts} ->
+    # Everything worked
+    :done
+
+  {:error, reason, npc, facts, remaining} ->
+    # Failed partway through
+    :partial_failure
+end
+```
+
+### Effects: The Secret Sauce
+
+Here's where it gets spicy. When the planner is figuring out what to do, it can *simulate* the effects of actions. Your NPC can reason about unlocking a door *before* it tries to walk through it.
+
+```elixir
+defmodule MyGame.DoorBehavior do
+  use Operator.HTN.DSL
+
+  goal :enter_locked_room do
+    precond fn facts ->
+      not Operator.HTN.Facts.get(facts, {:world, :in_room}, false)
+    end
+
+    decompose do
+      task :unlock_door
+      task :enter_room
+    end
+  end
+
+  primitive :unlock_door do
+    run fn actor, _facts ->
+      # Unlock animation, key consumption, etc.
+      {:ok, actor}
+    end
+
+    # This effect is applied DURING PLANNING so :enter_room knows
+    # the door will be unlocked by the time it runs
+    effect Operator.HTN.Effect.new(:plan_and_execute, {:world, :door_unlocked}, true)
+  end
+
+  primitive :enter_room do
+    # This precondition passes during planning because :unlock_door's
+    # effect has already been applied to the planning state
+    precond fn facts ->
+      Operator.HTN.Facts.get(facts, {:world, :door_unlocked}, false)
+    end
+
+    run fn actor, _facts ->
+      {:ok, %{actor | location: :room}}
+    end
+
+    effect Operator.HTN.Effect.new(:plan_and_execute, {:world, :in_room}, true)
+  end
+end
 ```
 
 **Effect flavors:**
-- `:plan_only` - "Let's pretend this happened" (planning only)
-- `:plan_and_execute` - "This will actually happen" (planning + execution)
-- `:permanent` - "This happened and nothing can undo it" (persists even on failure)
+- `:plan_only` - "Let's pretend this happened" (planning only, ignored during execution)
+- `:plan_and_execute` - "This will actually happen" (applied during both planning and execution)
+- `:permanent` - "This happened and nothing can undo it" (persists even on task failure)
 
 ### Automatic Goal Selection
 
 Don't want to micromanage which goal your NPC pursues? Let the `GoalSelector` handle it:
 
 ```elixir
-case Operator.HTN.GoalSelector.pick_goal(facts, traits) do
+alias Operator.HTN.{GoalSelector, Planner}
+
+case GoalSelector.pick_goal(facts, traits) do
   {:ok, goal_name} ->
-    Operator.HTN.Planner.run(goal_name, facts, traits)
+    Planner.run(goal_name, facts, traits)
 
   :none ->
     # Nothing to do. Time to stand around looking mysterious.
@@ -201,6 +276,123 @@ Operator.Director.tick(%{
   summary: %{total_entities: 150}
 })
 ```
+
+### Director + HTN Integration
+
+The Director generates world events; HTN planning lets NPCs react to them:
+
+```elixir
+defmodule MyGame.AILoop do
+  alias Operator.HTN.{Executor, Facts, GoalSelector, Planner}
+
+  def tick(entity, world_state, director_events) do
+    # Build facts from perception + any director events
+    facts = build_facts(entity, world_state, director_events)
+    traits = entity.traits
+
+    case entity.current_plan do
+      nil ->
+        # No plan - pick a goal and make one
+        case GoalSelector.pick_goal(facts, traits) do
+          {:ok, goal} ->
+            case Planner.run(goal, facts, traits) do
+              {:ok, plan} -> %{entity | current_plan: plan}
+              {:error, _} -> entity
+            end
+
+          :none ->
+            entity  # Idle
+        end
+
+      plan ->
+        # Execute one step of current plan
+        case Executor.step(plan, entity, facts) do
+          {:ok, :completed, entity, _facts, _plan} ->
+            %{entity | current_plan: nil}
+
+          {:ok, :continue, entity, _facts, remaining} ->
+            %{entity | current_plan: remaining}
+
+          {:error, _reason, entity, _facts, _plan} ->
+            # Plan failed - will replan next tick
+            %{entity | current_plan: nil}
+        end
+    end
+  end
+end
+```
+
+## Registry API
+
+The registry stores all registered goals, tasks, primitives, and axioms:
+
+```elixir
+alias Operator.HTN.Registry
+
+# Get specific items by name
+goal = Registry.get_goal(:patrol)
+task = Registry.get_task(:move_to)
+primitive = Registry.get_primitive(:attack)
+axiom = Registry.get_axiom(:enemy_nearby)
+
+# List all registered names
+Registry.list_goal_names()      # => [:patrol, :attack, :flee]
+Registry.list_primitive_names() # => [:move, :strike, :block]
+
+# Get the full registry map
+registry = Registry.all()
+# => %{goals: %{...}, tasks: %{...}, primitives: %{...}, axioms: %{...}}
+
+# Stats
+Registry.stats()
+# => %{goals: 5, tasks: 12, primitives: 8, axioms: 3}
+```
+
+## Testing
+
+The Registry uses `persistent_term` for fast lookups, which means tests need some care:
+
+```elixir
+defmodule MyApp.BehaviorTest do
+  use ExUnit.Case, async: false  # Important!
+
+  import Operator.HTN.TestHelpers
+
+  alias Operator.HTN.{Facts, Plan, Planner}
+
+  # Reset registry before each test
+  setup :reset_registry
+
+  # Register your behavior module(s)
+  setup do
+    register_modules([MyApp.NPCBehavior])
+    :ok
+  end
+
+  test "patrol goal generates valid plan" do
+    facts = Facts.from_perception(%{
+      self: %{on_duty: true, can_move: true}
+    })
+
+    {:ok, plan} = Planner.run(:patrol, facts, %{})
+
+    assert Plan.has_tasks?(plan)
+    assert_has_task(plan, :walk_to_waypoint)
+  end
+end
+```
+
+Key points:
+- Use `async: false` - the Registry is global state
+- Call `reset_registry` in setup to ensure clean state
+- Use `register_modules/1` to register your behavior modules
+- See `Operator.HTN.TestHelpers` for more utilities
+
+```bash
+mix test
+```
+
+141 tests. All green. We checked.
 
 ## Configuration
 
@@ -314,13 +506,32 @@ Check out the `examples/` directory. We've got:
 - **chatbot** - Conversation flow management
 - **simulation** - Multi-agent chaos with the Director
 
-## Testing
+## Module Index
 
-```bash
-mix test
-```
+**Core HTN:**
+- `Operator.HTN.DSL` - Macro-based DSL for defining behaviors
+- `Operator.HTN.Facts` - World state representation
+- `Operator.HTN.Plan` - Generated plan structure
+- `Operator.HTN.Planner` - High-level planning API
+- `Operator.HTN.Executor` - Plan and task execution
+- `Operator.HTN.Engine` - Low-level plan expansion
+- `Operator.HTN.Registry` - Goal/task/primitive storage
+- `Operator.HTN.Effect` - World state modifications
+- `Operator.HTN.Task` - Task definitions
+- `Operator.HTN.Axiom` - Reusable query patterns
+- `Operator.HTN.Precondition` - Logical operators
+- `Operator.HTN.GoalSelector` - Automatic goal selection
+- `Operator.HTN.TestHelpers` - Testing utilities
 
-141 tests. All green. We checked.
+**Director:**
+- `Operator.Director` - Event orchestration GenServer
+- `Operator.Storyteller` - Storyteller behaviour
+
+**Integration:**
+- `Operator.Telemetry` - Metrics callbacks
+- `Operator.Traits` - Personality/genome integration
+- `Operator.Storage` - Plan persistence
+- `Operator.Rationalization` - Plan annotation
 
 ## Why "Operator"?
 

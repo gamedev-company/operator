@@ -6,6 +6,43 @@ defmodule Operator.HTN.DSL do
   into efficient runtime structures. This is the primary way to define HTN
   domains in Operator.
 
+  ## Important: Alias Scope in Functions
+
+  **Functions inside `precond` and `decompose` are evaluated at runtime, not
+  compile time.** This means module aliases from your module's header are NOT
+  available inside these functions.
+
+  ### This will FAIL at runtime:
+
+      defmodule MyBehavior do
+        use Operator.HTN.DSL
+
+        alias Operator.HTN.Facts  # This alias is NOT available in precond!
+
+        goal :my_goal do
+          precond fn facts ->
+            Facts.get(facts, {:self, :ready})  # FAILS - Facts not in scope
+          end
+        end
+      end
+
+  ### Use full module paths instead:
+
+      defmodule MyBehavior do
+        use Operator.HTN.DSL
+
+        goal :my_goal do
+          precond fn facts ->
+            Operator.HTN.Facts.get(facts, {:self, :ready})  # Works!
+          end
+        end
+      end
+
+  This limitation exists because the anonymous functions are stored as AST
+  and compiled at runtime when the module is registered. The runtime
+  compilation context doesn't have access to your module's compile-time
+  aliases.
+
   ## Quick Start
 
       defmodule MyGame.NPCBehavior do

@@ -157,6 +157,21 @@ defmodule Operator.HTN.Facts do
   end
 
   @doc """
+  Create an empty Facts struct.
+
+  This is a convenience alias for `from_perception(%{})`.
+
+  ## Examples
+
+      iex> facts = Facts.new()
+      iex> Facts.has?(facts, {:self, :anything})
+      false
+
+  """
+  @spec new() :: t()
+  def new, do: from_perception(%{})
+
+  @doc """
   Check if a fact key exists (has a value, even if nil).
 
   Returns `true` if the key exists in the appropriate category map,
@@ -247,6 +262,31 @@ defmodule Operator.HTN.Facts do
   def put(%__MODULE__{} = facts, {category, key}, value) do
     category_map = get_category(facts, category)
     updated_map = Map.put(category_map, key, value)
+    set_category(facts, category, updated_map)
+  end
+
+  @doc """
+  Delete a fact key, returning a new Facts struct.
+
+  ## Parameters
+
+  * `facts` - The Facts struct
+  * `key` - Tuple of `{category, path}` to delete
+
+  ## Examples
+
+      iex> facts = Facts.from_perception(%{self: %{health: 100, mana: 50}})
+      iex> updated = Facts.delete(facts, {:self, :mana})
+      iex> Facts.has?(updated, {:self, :mana})
+      false
+      iex> Facts.get(updated, {:self, :health})
+      100
+
+  """
+  @spec delete(t(), fact_key()) :: t()
+  def delete(%__MODULE__{} = facts, {category, key}) do
+    category_map = get_category(facts, category)
+    updated_map = Map.delete(category_map, key)
     set_category(facts, category, updated_map)
   end
 

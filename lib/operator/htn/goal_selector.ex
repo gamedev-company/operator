@@ -114,7 +114,7 @@ defmodule Operator.HTN.GoalSelector do
 
   """
 
-  alias Operator.HTN.{Facts, Registry}
+  alias Operator.HTN.{Facts, Precondition, Registry}
   alias Operator.{Telemetry, Traits}
 
   @doc """
@@ -360,7 +360,7 @@ defmodule Operator.HTN.GoalSelector do
   end
 
   defp precond_ok?(goal, facts, traits) do
-    precond_met?(goal, facts) and trait_requirement_met?(goal, traits)
+    precond_met?(goal, facts, traits) and trait_requirement_met?(goal, traits)
   end
 
   defp missing_required_facts(goal, facts) do
@@ -375,15 +375,21 @@ defmodule Operator.HTN.GoalSelector do
 
   defp eligibility(goal, facts, traits) do
     cond do
-      not precond_met?(goal, facts) -> :preconditions_not_met
+      not precond_met?(goal, facts, traits) -> :preconditions_not_met
       not trait_requirement_met?(goal, traits) -> :traits_not_met
       true -> :ok
     end
   end
 
-  defp precond_met?(%{precond: nil}, _facts), do: true
-  defp precond_met?(%{precond: fun}, facts) when is_function(fun, 1), do: fun.(facts)
-  defp precond_met?(_, _), do: true
+  defp precond_met?(%{precond: nil}, _facts, _traits), do: true
+
+  defp precond_met?(%{precond: conditions}, facts, traits) when is_list(conditions) do
+    Precondition.all_satisfied?(conditions, facts, traits)
+  end
+
+  defp precond_met?(%{precond: condition}, facts, traits) do
+    Precondition.satisfied?(condition, facts, traits)
+  end
 
   defp trait_requirement_met?(goal, traits) do
     required = Map.get(goal, :metadata, %{}) |> Map.get(:required_traits, [])

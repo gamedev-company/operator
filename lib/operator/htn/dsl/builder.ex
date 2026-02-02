@@ -166,13 +166,14 @@ defmodule Operator.HTN.DSL.Builder do
   """
   @spec build_task({atom(), any(), any()}) :: Task.t()
   def build_task({name, args, block}) do
-    {precond, decompose, cost, metadata} = extract_task_parts(block)
+    {precond, decompose, cost, metadata, effects} = extract_task_parts(block)
 
     %Task{
       name: name,
       type: :abstract,
       preconditions: precond,
       decompose: decompose,
+      effects: effects,
       cost: cost,
       metadata: Map.merge(metadata, %{args: args})
     }
@@ -230,13 +231,14 @@ defmodule Operator.HTN.DSL.Builder do
   """
   @spec build_primitive({atom(), any(), any()}) :: Task.t()
   def build_primitive({name, args, block}) do
-    {run_fun, metadata} = extract_primitive_parts(block)
+    {run_fun, metadata, effects} = extract_primitive_parts(block)
 
     %Task{
       name: name,
       type: :primitive,
       preconditions: [],
       decompose: nil,
+      effects: effects,
       cost: 1.0,
       metadata: Map.merge(metadata, %{args: args, run: run_fun})
     }
@@ -302,7 +304,7 @@ defmodule Operator.HTN.DSL.Builder do
         single -> [single]
       end
 
-    {precond_list, decompose, _cost, metadata} = extract_from_statements(statements)
+    {precond_list, decompose, _cost, metadata, _effects} = extract_from_statements(statements)
     {combine_preconds(precond_list), decompose, metadata}
   end
 
@@ -327,41 +329,45 @@ defmodule Operator.HTN.DSL.Builder do
   end
 
   defp extract_from_statements(statements) do
-    Enum.reduce(statements, {[], nil, 1.0, %{}}, fn statement,
-                                                    {precond_acc, decompose_acc, cost_acc,
-                                                     metadata_acc} ->
+    Enum.reduce(statements, {[], nil, 1.0, %{}, []}, fn statement,
+                                                       {precond_acc, decompose_acc, cost_acc,
+                                                        metadata_acc, effects_acc} ->
       case statement do
         {:precond, _, [fun]} ->
-          {[fun | precond_acc], decompose_acc, cost_acc, metadata_acc}
+          {[fun | precond_acc], decompose_acc, cost_acc, metadata_acc, effects_acc}
 
         # Order matters: check for do block patterns first (more specific)
         {:decompose, _, [[{:do, block}]]} ->
           # Format with keyword list: {:decompose, _, [[{:do, block}]]}
           tasks = extract_tasks_from_block(block)
-          {precond_acc, {:static_tasks, tasks}, cost_acc, metadata_acc}
+          {precond_acc, {:static_tasks, tasks}, cost_acc, metadata_acc, effects_acc}
 
         {:decompose, _, [{:do, block}]} ->
           # Format: {:decompose, _, [{:do, block}]}
           tasks = extract_tasks_from_block(block)
-          {precond_acc, {:static_tasks, tasks}, cost_acc, metadata_acc}
+          {precond_acc, {:static_tasks, tasks}, cost_acc, metadata_acc, effects_acc}
 
         {:decompose, _, [{:fn, _, _} = fun]} ->
           # Store function AST for later evaluation
-          {precond_acc, fun, cost_acc, metadata_acc}
+          {precond_acc, fun, cost_acc, metadata_acc, effects_acc}
 
         {:cost, _, [value]} ->
-          {precond_acc, decompose_acc, value, metadata_acc}
+          {precond_acc, decompose_acc, value, metadata_acc, effects_acc}
 
         {:metadata, _, [metadata_value]} ->
           metadata_map = metadata_to_map(metadata_value)
-          {precond_acc, decompose_acc, cost_acc, Map.merge(metadata_acc, metadata_map)}
+          {precond_acc, decompose_acc, cost_acc, Map.merge(metadata_acc, metadata_map),
+           effects_acc}
+
+        {:effects, _, [effects_value]} ->
+          {precond_acc, decompose_acc, cost_acc, metadata_acc, effects_value}
 
         _other ->
-          {precond_acc, decompose_acc, cost_acc, metadata_acc}
+          {precond_acc, decompose_acc, cost_acc, metadata_acc, effects_acc}
       end
     end)
-    |> then(fn {precond, decompose, cost, metadata} ->
-      {Enum.reverse(precond), decompose, cost, metadata}
+    |> then(fn {precond, decompose, cost, metadata, effects} ->
+      {Enum.reverse(precond), decompose, cost, metadata, effects}
     end)
   end
 
@@ -385,17 +391,21 @@ defmodule Operator.HTN.DSL.Builder do
   defp combine_preconds(funs), do: funs
 
   defp extract_run_from_statements(statements) do
-    Enum.reduce(statements, {nil, %{}}, fn statement, {run_acc, metadata_acc} ->
+    Enum.reduce(statements, {nil, %{}, []}, fn statement,
+                                              {run_acc, metadata_acc, effects_acc} ->
       case statement do
         {:run, _, [fun]} ->
-          {fun, metadata_acc}
+          {fun, metadata_acc, effects_acc}
 
         {:metadata, _, [metadata_value]} ->
           metadata_map = metadata_to_map(metadata_value)
-          {run_acc, Map.merge(metadata_acc, metadata_map)}
+          {run_acc, Map.merge(metadata_acc, metadata_map), effects_acc}
+
+        {:effects, _, [effects_value]} ->
+          {run_acc, metadata_acc, effects_value}
 
         _ ->
-          {run_acc, metadata_acc}
+          {run_acc, metadata_acc, effects_acc}
       end
     end)
   end

@@ -7,6 +7,7 @@ This is the aggressive, practical guidance for using Operator in real systems.
 - Keep goals small and specific. Large, vague goals lead to unstable plans.
 - Prefer shallow decompositions. Deep trees are harder to debug and tune.
 - Keep `precond` functions pure and fast. Do not hit IO or external state.
+  Preconditions are evaluated via `Operator.HTN.Precondition`.
 - Use `Facts` as a snapshot, not a database. Keep it compact.
 - Use `cost` to shape behavior. If two paths are valid, costs decide the plan.
 - Keep primitives deterministic. If you need randomness, isolate it upstream.

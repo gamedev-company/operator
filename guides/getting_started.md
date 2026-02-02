@@ -102,6 +102,8 @@ end
 ## Why Full Module Names Matter
 
 Functions inside `precond` and `decompose` run at runtime in a different scope.
+Preconditions are stored as a list of conditions and evaluated through
+`Operator.HTN.Precondition`.
 That means module aliases do not work. Always use fully qualified names inside
 those functions.
 

@@ -37,7 +37,8 @@ The Registry stores definitions in `persistent_term` for fast reads.
 ## Runtime vs Compile Time
 
 The DSL is compiled into structs, but `precond` and `decompose` run at runtime.
-This is why aliases do not work inside them.
+Preconditions are stored as a list of conditions and evaluated through
+`Operator.HTN.Precondition`. This is why aliases do not work inside them.
 
 ## Replanning Strategy
 

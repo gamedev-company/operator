@@ -545,16 +545,26 @@ defmodule Operator.HTN.Registry do
   defp name_from_item({name, _}) when is_atom(name), do: name
   defp name_from_item(item), do: item
 
+  defp normalize_runtime_item(%Task{} = task) do
+    %Task{
+      task
+      | preconditions: normalize_conditions(task.preconditions),
+        decompose: normalize_decompose(task.decompose),
+        cost: normalize_cost(task.cost),
+        effects: normalize_effects(task.effects)
+    }
+  end
+
   defp normalize_runtime_item(%{precond: precond, decompose: decompose} = item) do
     %{
       item
-      | precond: maybe_eval_function(precond),
+      | precond: normalize_conditions(precond),
         decompose: normalize_decompose(decompose)
     }
   end
 
   defp normalize_runtime_item(%{precond: precond} = item) do
-    %{item | precond: maybe_eval_function(precond)}
+    %{item | precond: normalize_conditions(precond)}
   end
 
   # Axiom normalization - convert AST to runtime Axiom struct
@@ -579,23 +589,55 @@ defmodule Operator.HTN.Registry do
 
   defp normalize_decompose(value), do: value
 
-  defp maybe_eval_function({:fn, _, _} = quoted), do: safe_eval_function(quoted)
+  defp normalize_conditions(nil), do: nil
+  defp normalize_conditions(conditions) when is_list(conditions) do
+    Enum.map(conditions, &normalize_condition/1)
+  end
 
-  defp maybe_eval_function(funs) when is_list(funs) do
-    # List of preconditions - evaluate each and combine into single function
-    evaluated = Enum.map(funs, &maybe_eval_function/1)
+  defp normalize_conditions(condition), do: normalize_condition(condition)
 
-    fn facts ->
-      Enum.all?(evaluated, fn
-        fun when is_function(fun, 1) -> fun.(facts)
-        _ -> true
-      end)
+  defp normalize_condition({:fn, _, _} = quoted), do: safe_eval_function(quoted)
+  defp normalize_condition(fun) when is_function(fun), do: fun
+
+  defp normalize_condition({op, conditions})
+       when op in [:all, :any, :first, :none] and is_list(conditions) do
+    {op, Enum.map(conditions, &normalize_condition/1)}
+  end
+
+  defp normalize_condition({:not, condition}) do
+    {:not, normalize_condition(condition)}
+  end
+
+  defp normalize_condition({:axiom, _name} = axiom), do: axiom
+  defp normalize_condition({:axiom, _name, _args} = axiom), do: axiom
+  defp normalize_condition(value), do: value
+
+  defp normalize_cost({:fn, _, _} = quoted), do: safe_eval_function(quoted)
+  defp normalize_cost(value), do: value
+
+  defp normalize_effects(nil), do: nil
+  defp normalize_effects(effects) when is_list(effects) do
+    if Enum.any?(effects, &is_tuple/1) do
+      safe_eval_literal(effects)
+    else
+      effects
     end
   end
 
-  defp maybe_eval_function(value), do: value
+  defp normalize_effects({:%{}, _, _} = quoted), do: safe_eval_literal(quoted)
+  defp normalize_effects(quoted) when is_tuple(quoted), do: safe_eval_literal(quoted)
+  defp normalize_effects(value), do: value
 
   defp safe_eval_function(quoted) do
+    {result, _bindings} = Code.eval_quoted(quoted)
+    result
+  rescue
+    _ -> quoted
+  catch
+    _, _ -> quoted
+  end
+
+  defp safe_eval_literal(quoted) do
     {result, _bindings} = Code.eval_quoted(quoted)
     result
   rescue

@@ -103,7 +103,9 @@ end
 
 ## `precond`
 
-Preconditions control eligibility. They can be functions or logical operators.
+Preconditions control eligibility. You can use anonymous functions or logical
+operators. Preconditions are stored as a list of conditions and evaluated at
+runtime via `Operator.HTN.Precondition`.
 
 ```elixir
 precond fn facts ->
@@ -120,6 +122,13 @@ Logical operators:
 {:none, [fn1, fn2]}
 {:first, [fn1, fn2]}
 {:axiom, :enemy_in_range, range: 10}
+
+To evaluate goal preconditions manually:
+
+```elixir
+goal = Operator.HTN.Registry.get_goal(:patrol)
+Operator.HTN.Precondition.all_satisfied?(goal.precond, facts, traits)
+```
 ```
 
 ## `decompose`

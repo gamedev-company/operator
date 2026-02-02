@@ -85,6 +85,9 @@ precond fn facts, traits -> :brave in traits.traits end
 
 # Nested
 {:all, [fn1, {:any, [fn2, fn3]}]}
+
+# Evaluate goal preconditions
+Operator.HTN.Precondition.all_satisfied?(goal.precond, facts, traits)
 ```
 
 ## Effects

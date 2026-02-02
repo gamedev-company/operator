@@ -365,12 +365,12 @@ defmodule Operator.HTN.EngineTest do
     end
   end
 
-  describe "goal_preconditions_met?/2" do
+  describe "goal_preconditions_met?/3" do
     test "returns true for nil precondition" do
       goal = %{precond: nil}
       facts = Facts.from_perception(%{})
 
-      assert Engine.goal_preconditions_met?(goal, facts)
+      assert Engine.goal_preconditions_met?(goal, facts, %{})
     end
 
     test "evaluates precondition function" do
@@ -379,23 +379,22 @@ defmodule Operator.HTN.EngineTest do
       ready_facts = Facts.from_perception(%{self: %{ready: true}})
       not_ready_facts = Facts.from_perception(%{})
 
-      assert Engine.goal_preconditions_met?(goal, ready_facts)
-      refute Engine.goal_preconditions_met?(goal, not_ready_facts)
+      assert Engine.goal_preconditions_met?(goal, ready_facts, %{})
+      refute Engine.goal_preconditions_met?(goal, not_ready_facts, %{})
     end
 
-    test "returns true for non-function precondition" do
+    test "returns false for non-function precondition" do
       goal = %{precond: "not a function"}
       facts = Facts.from_perception(%{})
 
-      # Edge case: invalid precondition treated as no precondition
-      assert Engine.goal_preconditions_met?(goal, facts)
+      assert Engine.goal_preconditions_met?(goal, facts, %{}) == false
     end
 
     test "returns true for goal without precond key" do
       goal = %{name: :test}
       facts = Facts.from_perception(%{})
 
-      assert Engine.goal_preconditions_met?(goal, facts)
+      assert Engine.goal_preconditions_met?(goal, facts, %{})
     end
   end
 end

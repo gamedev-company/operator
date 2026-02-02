@@ -1,7 +1,7 @@
 defmodule Operator.HTN.DSLTest do
   use ExUnit.Case, async: false
 
-  alias Operator.HTN.{Facts, Registry}
+  alias Operator.HTN.{Effect, Facts, Precondition, Registry, Task}
 
   setup do
     Registry.reset()
@@ -200,14 +200,19 @@ defmodule Operator.HTN.DSLTest do
   end
 
   describe "precondition via Registry" do
-    test "precondition becomes callable function after registration" do
+    test "precondition is normalized and evaluated after registration" do
       defmodule PrecondTest do
         use Operator.HTN.DSL
 
         # Note: Must use full module names in DSL since the code is evaluated
         # at runtime without access to compile-time aliases
         goal :precond_goal do
-          precond(fn facts -> Operator.HTN.Facts.has?(facts, {:self, :armed}) end)
+          precond({:any,
+            [
+              fn facts -> Operator.HTN.Facts.has?(facts, {:self, :armed}) end,
+              fn facts -> Operator.HTN.Facts.has?(facts, {:self, :has_backup}) end
+            ]
+          })
 
           decompose do
             task(:attack)
@@ -220,13 +225,55 @@ defmodule Operator.HTN.DSLTest do
 
       goal = Registry.get_goal(:precond_goal)
       assert goal != nil
-      assert is_function(goal.precond, 1)
+      assert is_list(goal.precond)
 
       armed_facts = Facts.from_perception(%{self: %{armed: true}})
       unarmed_facts = Facts.from_perception(%{})
 
-      assert goal.precond.(armed_facts)
-      refute goal.precond.(unarmed_facts)
+      assert Precondition.all_satisfied?(goal.precond, armed_facts, %{})
+      refute Precondition.all_satisfied?(goal.precond, unarmed_facts, %{})
+    end
+  end
+
+  describe "effects and cost normalization via Registry" do
+    test "primitive effects are normalized to Effect structs" do
+      defmodule EffectsPrimitiveDSL do
+        use Operator.HTN.DSL
+
+        primitive :wait do
+          run(fn actor, _facts -> {:ok, actor} end)
+
+          effects [
+            Operator.HTN.Effect.new(:plan_and_execute, {:self, :rested}, true)
+          ]
+        end
+      end
+
+      Code.ensure_compiled!(EffectsPrimitiveDSL)
+      Process.sleep(10)
+
+      primitive = Registry.get_primitive(:wait)
+      assert primitive != nil
+      assert is_list(primitive.effects)
+      assert [%Effect{}] = primitive.effects
+    end
+
+    test "task cost function is normalized and callable" do
+      defmodule CostTaskDSL do
+        use Operator.HTN.DSL
+
+        task :expensive do
+          cost(fn _facts -> 7.5 end)
+        end
+      end
+
+      Code.ensure_compiled!(CostTaskDSL)
+      Process.sleep(10)
+
+      task = Registry.get_task(:expensive)
+      assert task != nil
+      assert is_function(task.cost)
+      assert Task.calculate_cost(task, Facts.from_perception(%{}), %{}) == 7.5
     end
   end
 

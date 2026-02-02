@@ -56,7 +56,7 @@ If a goal does not appear, the precondition is likely failing.
 
 ```elixir
 goal = Operator.HTN.Registry.get_goal(:patrol)
-Enum.map(goal.preconditions, fn precond -> precond.(facts) end)
+Operator.HTN.Precondition.all_satisfied?(goal.precond, facts, traits)
 ```
 
 ## Validate Registry State

@@ -23,7 +23,8 @@ end
 
 ## Create Branching Behaviors
 
-Use preconditions to select between approaches:
+Use preconditions to select between approaches. Preconditions are stored as a
+list of conditions and evaluated via `Operator.HTN.Precondition`.
 
 ```elixir
 goal :engage_enemy do

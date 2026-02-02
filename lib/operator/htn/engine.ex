@@ -80,7 +80,7 @@ defmodule Operator.HTN.Engine do
     if goal do
       Trace.goal_start(goal_name, facts)
 
-      precond_met = goal_preconditions_met?(goal, facts)
+      precond_met = goal_preconditions_met?(goal, facts, traits)
       Trace.precondition_eval(%{goal: goal_name}, precond_met)
 
       if precond_met do
@@ -107,12 +107,20 @@ defmodule Operator.HTN.Engine do
   @doc """
   Check if a goal's preconditions are met.
   """
-  @spec goal_preconditions_met?(map(), Facts.t()) :: boolean()
-  def goal_preconditions_met?(goal, facts) do
+  @spec goal_preconditions_met?(map(), Facts.t(), map()) :: boolean()
+  def goal_preconditions_met?(goal, facts, traits) do
     case goal do
-      %{precond: nil} -> true
-      %{precond: precond} when is_function(precond, 1) -> precond.(facts)
-      _ -> true
+      %{precond: nil} ->
+        true
+
+      %{precond: conditions} when is_list(conditions) ->
+        Operator.HTN.Precondition.all_satisfied?(conditions, facts, traits)
+
+      %{precond: condition} ->
+        Operator.HTN.Precondition.satisfied?(condition, facts, traits)
+
+      _ ->
+        true
     end
   end
 

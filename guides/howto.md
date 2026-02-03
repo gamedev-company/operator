@@ -264,7 +264,7 @@ defmodule MyGame.PersistentStorage do
 end
 
 # Configure in config.exs
-config :operator, storage_module: MyGame.PersistentStorage
+config :ex_operator, storage_module: MyGame.PersistentStorage
 ```
 
 ## Integrate the Director for Events
@@ -435,7 +435,7 @@ defmodule MyGame.HTNTelemetry do
 end
 
 # Configure
-config :operator, telemetry_module: MyGame.HTNTelemetry
+config :ex_operator, telemetry_module: MyGame.HTNTelemetry
 
 # Attach handlers in application start
 :telemetry.attach_many("htn-metrics", [

@@ -71,7 +71,7 @@ defmodule Operator.HTN.Trace do
   ## Configuration
 
       # In config/config.exs
-      config :operator, trace_handler: MyApp.HTNTraceHandler
+      config :ex_operator, trace_handler: MyApp.HTNTraceHandler
 
       # Or at runtime (takes precedence)
       Operator.HTN.Trace.set_handler(MyApp.HTNTraceHandler)
@@ -125,7 +125,7 @@ defmodule Operator.HTN.Trace do
   """
   @spec get_handler() :: module() | nil
   def get_handler do
-    Application.get_env(:operator, :trace_handler) ||
+    Application.get_env(:ex_operator, :trace_handler) ||
       :persistent_term.get(@trace_key, nil)
   end
 
@@ -159,7 +159,7 @@ defmodule Operator.HTN.Trace do
   Context is a map with:
   - `:goal` or `:task` - The current goal/task name
   - `:precondition_index` - Index in preconditions list
-  - `:precondition_type` - `:function`, `:axiom`, `:operator`, etc.
+  - `:precondition_type` - `:function`, `:axiom`, `:ex_operator`, etc.
   """
   @spec precondition_eval(map(), boolean(), keyword()) :: :ok
   def precondition_eval(context, result, opts \\ []) do

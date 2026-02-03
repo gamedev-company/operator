@@ -16,6 +16,6 @@ defmodule JobWorker.MixProject do
   end
 
   defp deps do
-    [{:operator, path: "../.."}]
+    [{:ex_operator, path: "../.."}]
   end
 end

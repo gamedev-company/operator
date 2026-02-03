@@ -315,7 +315,7 @@ TestHelpers.assert_has_task(plan, :task_name, [:expected_arg])
 
 ```elixir
 # config/config.exs
-config :operator,
+config :ex_operator,
   storage_module: MyApp.Storage,
   telemetry_module: MyApp.Telemetry,
   rationalization_module: MyApp.Rationalization,

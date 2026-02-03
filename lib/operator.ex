@@ -136,7 +136,7 @@ defmodule Operator do
   defaults:
 
       # config/config.exs
-      config :operator,
+      config :ex_operator,
         # Emit telemetry events for monitoring
         telemetry_module: MyApp.OperatorTelemetry,
 

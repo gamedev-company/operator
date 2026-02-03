@@ -23,34 +23,34 @@ defmodule Operator.RationalizationTest do
 
   describe "get_module/0" do
     test "returns nil when not configured" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.delete_env(:operator, :rationalization_module)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.delete_env(:ex_operator, :rationalization_module)
 
       assert Rationalization.get_module() == nil
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       end
     end
 
     test "returns configured module" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.put_env(:operator, :rationalization_module, MockRationalization)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.put_env(:ex_operator, :rationalization_module, MockRationalization)
 
       assert Rationalization.get_module() == MockRationalization
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       else
-        Application.delete_env(:operator, :rationalization_module)
+        Application.delete_env(:ex_operator, :rationalization_module)
       end
     end
   end
 
   describe "annotate_plan/1" do
     test "uses default annotation when no module configured" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.delete_env(:operator, :rationalization_module)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.delete_env(:ex_operator, :rationalization_module)
 
       plan = Plan.new(:test_goal, [{:task1, []}, {:task2, []}])
       annotation = Rationalization.annotate_plan(plan)
@@ -60,13 +60,13 @@ defmodule Operator.RationalizationTest do
       assert annotation.task_count == 2
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       end
     end
 
     test "delegates to configured module" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.put_env(:operator, :rationalization_module, MockRationalization)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.put_env(:ex_operator, :rationalization_module, MockRationalization)
 
       plan = Plan.new(:delegated_goal, [{:task, []}])
       annotation = Rationalization.annotate_plan(plan)
@@ -75,17 +75,17 @@ defmodule Operator.RationalizationTest do
       assert annotation.goal == :delegated_goal
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       else
-        Application.delete_env(:operator, :rationalization_module)
+        Application.delete_env(:ex_operator, :rationalization_module)
       end
     end
   end
 
   describe "apply/1" do
     test "uses default rationalization when no module configured" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.delete_env(:operator, :rationalization_module)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.delete_env(:ex_operator, :rationalization_module)
 
       event = %{type: :test_event, data: "test"}
       rationalized = Rationalization.apply(event)
@@ -96,13 +96,13 @@ defmodule Operator.RationalizationTest do
       assert rationalized.data == "test"
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       end
     end
 
     test "preserves existing explanation in default mode" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.delete_env(:operator, :rationalization_module)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.delete_env(:ex_operator, :rationalization_module)
 
       event = %{type: :test, explanation: "Custom explanation"}
       rationalized = Rationalization.apply(event)
@@ -110,13 +110,13 @@ defmodule Operator.RationalizationTest do
       assert rationalized.explanation == "Custom explanation"
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       end
     end
 
     test "delegates to configured module" do
-      original = Application.get_env(:operator, :rationalization_module)
-      Application.put_env(:operator, :rationalization_module, MockRationalization)
+      original = Application.get_env(:ex_operator, :rationalization_module)
+      Application.put_env(:ex_operator, :rationalization_module, MockRationalization)
 
       event = %{type: :delegate_test}
       rationalized = Rationalization.apply(event)
@@ -125,9 +125,9 @@ defmodule Operator.RationalizationTest do
       assert rationalized.type == :delegate_test
 
       if original do
-        Application.put_env(:operator, :rationalization_module, original)
+        Application.put_env(:ex_operator, :rationalization_module, original)
       else
-        Application.delete_env(:operator, :rationalization_module)
+        Application.delete_env(:ex_operator, :rationalization_module)
       end
     end
   end

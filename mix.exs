@@ -6,7 +6,7 @@ defmodule Operator.MixProject do
 
   def project do
     [
-      app: :operator,
+      app: :ex_operator,
       version: @version,
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,

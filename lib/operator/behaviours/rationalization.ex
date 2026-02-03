@@ -13,7 +13,7 @@ defmodule Operator.Rationalization do
 
   ## Configuration
 
-      config :operator,
+      config :ex_operator,
         rationalization_module: MyApp.OperatorRationalization
 
   ## Example Implementation
@@ -131,7 +131,7 @@ defmodule Operator.Rationalization do
   """
   @spec get_module() :: module() | nil
   def get_module do
-    Application.get_env(:operator, :rationalization_module)
+    Application.get_env(:ex_operator, :rationalization_module)
   end
 
   @doc """

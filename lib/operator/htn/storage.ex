@@ -22,7 +22,7 @@ defmodule Operator.HTN.Storage do
 
   To use a different storage backend:
 
-      config :operator,
+      config :ex_operator,
         storage_module: MyApp.CustomStorage
 
   """

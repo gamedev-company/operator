@@ -22,7 +22,7 @@ Add Operator to your `mix.exs` dependencies:
 ```elixir
 def deps do
   [
-    {:operator, "~> 0.1.0"}
+    {:ex_operator, "~> 0.1.0"}
   ]
 end
 ```

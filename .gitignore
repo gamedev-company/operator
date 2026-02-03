@@ -27,3 +27,4 @@ operator-*.tar
 # Dialyzer PLT files
 /priv/plts/*.plt
 /priv/plts/*.plt.hash
+.env

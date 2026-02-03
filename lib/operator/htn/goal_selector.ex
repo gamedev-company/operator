@@ -67,7 +67,7 @@ defmodule Operator.HTN.GoalSelector do
 
   Global trait-goal weights can be configured:
 
-      config :operator,
+      config :ex_operator,
         htn_trait_weights: %{
           {:aggressive, :attack} => 5,
           {:cautious, :scout} => 3,
@@ -327,7 +327,7 @@ defmodule Operator.HTN.GoalSelector do
   end
 
   defp default_trait_weights do
-    Application.get_env(:operator, :htn_trait_weights, %{})
+    Application.get_env(:ex_operator, :htn_trait_weights, %{})
   end
 
   defp metadata_trait_score(metadata, traits) do

@@ -8,7 +8,7 @@ defmodule Operator.Telemetry do
 
   ## Configuration
 
-      config :operator,
+      config :ex_operator,
         telemetry_module: MyApp.OperatorTelemetry
 
   ## Events
@@ -31,7 +31,7 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_goal_selected(goal_name, measurements, metadata) do
           :telemetry.execute(
-            [:my_app, :operator, :goal_selected],
+            [:my_app, :ex_operator, :goal_selected],
             measurements,
             Map.put(metadata, :goal, goal_name)
           )
@@ -40,7 +40,7 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_htn_plan_generated(goal, task_count, duration_ms) do
           :telemetry.execute(
-            [:my_app, :operator, :plan_generated],
+            [:my_app, :ex_operator, :plan_generated],
             %{task_count: task_count, duration_ms: duration_ms},
             %{goal: goal}
           )
@@ -49,7 +49,7 @@ defmodule Operator.Telemetry do
         @impl true
         def emit_director_event(event_type, tick) do
           :telemetry.execute(
-            [:my_app, :operator, :director_event],
+            [:my_app, :ex_operator, :director_event],
             %{count: 1},
             %{event_type: event_type, tick: tick}
           )
@@ -64,9 +64,9 @@ defmodule Operator.Telemetry do
         :telemetry.attach_many(
           "operator-metrics",
           [
-            [:my_app, :operator, :goal_selected],
-            [:my_app, :operator, :plan_generated],
-            [:my_app, :operator, :director_event]
+            [:my_app, :ex_operator, :goal_selected],
+            [:my_app, :ex_operator, :plan_generated],
+            [:my_app, :ex_operator, :director_event]
           ],
           &MyApp.TelemetryHandler.handle_event/4,
           nil
@@ -164,7 +164,7 @@ defmodule Operator.Telemetry do
   """
   @spec get_module() :: module() | nil
   def get_module do
-    Application.get_env(:operator, :telemetry_module)
+    Application.get_env(:ex_operator, :telemetry_module)
   end
 
   @doc """

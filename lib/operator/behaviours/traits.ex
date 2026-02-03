@@ -19,7 +19,7 @@ defmodule Operator.Traits do
 
   ## Configuration
 
-      config :operator,
+      config :ex_operator,
         traits_module: MyApp.OperatorTraits
 
   ## Implementing the Behaviour
@@ -134,7 +134,7 @@ defmodule Operator.Traits do
   """
   @spec get_module() :: module() | nil
   def get_module do
-    Application.get_env(:operator, :traits_module)
+    Application.get_env(:ex_operator, :traits_module)
   end
 
   @doc """

@@ -22,7 +22,7 @@ defmodule Operator.Storage do
 
   ## Configuration
 
-      config :operator,
+      config :ex_operator,
         storage_module: MyApp.PlanStorage
 
   ## Example Implementations
@@ -134,7 +134,7 @@ defmodule Operator.Storage do
   """
   @spec get_module() :: module()
   def get_module do
-    Application.get_env(:operator, :storage_module, Operator.HTN.Storage)
+    Application.get_env(:ex_operator, :storage_module, Operator.HTN.Storage)
   end
 
   @doc """

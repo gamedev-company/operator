@@ -51,26 +51,26 @@ defmodule Operator.TelemetryTest do
 
   describe "get_module/0" do
     test "returns nil when not configured" do
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.delete_env(:operator, :telemetry_module)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.delete_env(:ex_operator, :telemetry_module)
 
       assert Telemetry.get_module() == nil
 
       if original do
-        Application.put_env(:operator, :telemetry_module, original)
+        Application.put_env(:ex_operator, :telemetry_module, original)
       end
     end
 
     test "returns configured module" do
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.put_env(:operator, :telemetry_module, MockTelemetry)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.put_env(:ex_operator, :telemetry_module, MockTelemetry)
 
       assert Telemetry.get_module() == MockTelemetry
 
       if original do
-        Application.put_env(:operator, :telemetry_module, original)
+        Application.put_env(:ex_operator, :telemetry_module, original)
       else
-        Application.delete_env(:operator, :telemetry_module)
+        Application.delete_env(:ex_operator, :telemetry_module)
       end
     end
   end
@@ -78,14 +78,14 @@ defmodule Operator.TelemetryTest do
   describe "emit_goal_selected/3" do
     setup do
       MockTelemetry.start_link()
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.put_env(:operator, :telemetry_module, MockTelemetry)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.put_env(:ex_operator, :telemetry_module, MockTelemetry)
 
       on_exit(fn ->
         if original do
-          Application.put_env(:operator, :telemetry_module, original)
+          Application.put_env(:ex_operator, :telemetry_module, original)
         else
-          Application.delete_env(:operator, :telemetry_module)
+          Application.delete_env(:ex_operator, :telemetry_module)
         end
 
         MockTelemetry.stop()
@@ -112,14 +112,14 @@ defmodule Operator.TelemetryTest do
   describe "emit_htn_plan_generated/3" do
     setup do
       MockTelemetry.start_link()
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.put_env(:operator, :telemetry_module, MockTelemetry)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.put_env(:ex_operator, :telemetry_module, MockTelemetry)
 
       on_exit(fn ->
         if original do
-          Application.put_env(:operator, :telemetry_module, original)
+          Application.put_env(:ex_operator, :telemetry_module, original)
         else
-          Application.delete_env(:operator, :telemetry_module)
+          Application.delete_env(:ex_operator, :telemetry_module)
         end
 
         MockTelemetry.stop()
@@ -139,14 +139,14 @@ defmodule Operator.TelemetryTest do
   describe "emit_director_event/2" do
     setup do
       MockTelemetry.start_link()
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.put_env(:operator, :telemetry_module, MockTelemetry)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.put_env(:ex_operator, :telemetry_module, MockTelemetry)
 
       on_exit(fn ->
         if original do
-          Application.put_env(:operator, :telemetry_module, original)
+          Application.put_env(:ex_operator, :telemetry_module, original)
         else
-          Application.delete_env(:operator, :telemetry_module)
+          Application.delete_env(:ex_operator, :telemetry_module)
         end
 
         MockTelemetry.stop()
@@ -165,12 +165,12 @@ defmodule Operator.TelemetryTest do
 
   describe "no-op behavior when not configured" do
     setup do
-      original = Application.get_env(:operator, :telemetry_module)
-      Application.delete_env(:operator, :telemetry_module)
+      original = Application.get_env(:ex_operator, :telemetry_module)
+      Application.delete_env(:ex_operator, :telemetry_module)
 
       on_exit(fn ->
         if original do
-          Application.put_env(:operator, :telemetry_module, original)
+          Application.put_env(:ex_operator, :telemetry_module, original)
         end
       end)
 

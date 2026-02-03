@@ -14,7 +14,7 @@ Operator gives you two things:
 ```elixir
 def deps do
   [
-    {:operator, "~> 0.1.0"}
+    {:ex_operator, "~> 0.1.0"}
   ]
 end
 ```
@@ -79,16 +79,16 @@ If that runs, you are up and planning. Everything else is just richer behaviors.
 
 For fast adoption, start here:
 
-- `guides/getting_started.md` for the full walkthrough.
-- `guides/howto.md` for practical recipes.
-- `guides/cheatsheet.md` for a quick API map.
-- `guides/testing.md` for safe Registry usage and isolation.
-- `guides/debugging.md` for tracing and plan introspection.
-- `guides/dsl_reference.md` for a full HTN DSL reference.
-- `guides/architecture.md` for system-level flow and scaling.
-- `guides/director.md` for narrative pacing and events.
-- `guides/best_practices.md` for pragmatic, production-oriented guidance.
-- `guides/anti_patterns.md` for common failure modes and fixes.
+- [Getting Started](guides/getting_started.md) for the full walkthrough.
+- [How-To](guides/howto.md) for practical recipes.
+- [Cheatsheet](guides/cheatsheet.md) for a quick API map.
+- [Testing](guides/testing.md) for safe Registry usage and isolation.
+- [Debugging](guides/debugging.md) for tracing and plan introspection.
+- [DSL Reference](guides/dsl_reference.md) for a full HTN DSL reference.
+- [Architecture](guides/architecture.md) for system-level flow and scaling.
+- [Director](guides/director.md) for narrative pacing and events.
+- [Best Practices](guides/best_practices.md) for pragmatic, production-oriented guidance.
+- [Anti-Patterns](guides/anti_patterns.md) for common failure modes and fixes.
 
 The generated API docs live in `doc/` after `mix docs`.
 
@@ -511,7 +511,7 @@ facts small, avoid heavy IO inside tasks, and use tracing only while debugging.
 Operator is pluggable. Don't like how we do something? Swap it out.
 
 ```elixir
-config :operator,
+config :ex_operator,
   telemetry_module: MyApp.OperatorTelemetry,      # Your metrics, your way
   traits_module: MyApp.OperatorTraits,            # Custom genome/personality system
   storage_module: Operator.HTN.Storage,           # Where plans live (default: ETS)
@@ -649,6 +649,11 @@ Check out the `examples/` directory. We've got:
 ## Why "Operator"?
 
 Because your NPCs are finally going to operate like they have a brain cell or two. Also it sounds cool.
+
+## Acknowledgements
+
+- This library is heavily inspired by the **Decima Engine**'s HTN implementation as seen in *Horizon Zero Dawn* and *Death Stranding*.
+- HTN effect patterns are based on techniques described in **Game AI Pro**.
 
 ## License
 

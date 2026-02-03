@@ -83,7 +83,7 @@ Operator.Director.tick(world_state)
 ## Adding New Examples
 
 1. Create a new directory under `examples/`
-2. Add a `mix.exs` with `:operator` as a dependency
+2. Add a `mix.exs` with `:ex_operator` as a dependency
 3. Define your domain in `lib/domain.ex`
 4. Create an executable example in `lib/example.ex`
 5. Add a `README.md` explaining the example

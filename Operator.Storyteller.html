@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.Storyteller — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>Storyteller</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.Storyteller.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/storyteller.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Behaviour for narrative event generators.</p><p>Storytellers are the brains behind the Director's event generation. Each
+storyteller encapsulates a different dramatic philosophy - one might favor
+constant action, another might build tension slowly before explosive releases.</p><h2 id="module-the-storyteller-s-job" class="section-heading"><a href="#module-the-storyteller-s-job" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The Storyteller's Job</span></h2><p>A storyteller answers one question each tick: &quot;Should something interesting
+happen right now?&quot; Based on world state (tension, player health, time since
+last event, etc.), it either returns <code class="inline">nil</code> (nothing happens) or an event
+map that the Director will process.</p><h2 id="module-implementing-a-storyteller" class="section-heading"><a href="#module-implementing-a-storyteller" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Implementing a Storyteller</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.DramaticStoryteller</span><span class="w"> </span><span class="k" data-group-id="1928502803-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.Storyteller</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="1928502803-2">(</span><span class="n">opts</span><span class="p" data-group-id="1928502803-2">)</span><span class="w"> </span><span class="k" data-group-id="1928502803-3">do</span><span class="w">
+    </span><span class="p" data-group-id="1928502803-4">%{</span><span class="w">
+      </span><span class="ss">last_event_tick</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="ss">min_interval</span><span class="p">:</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1928502803-5">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:min_interval</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1928502803-5">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">tension_threshold</span><span class="p">:</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1928502803-6">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:tension_threshold</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6</span><span class="p" data-group-id="1928502803-6">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">escalation_factor</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="w">
+    </span><span class="p" data-group-id="1928502803-4">}</span><span class="w">
+  </span><span class="k" data-group-id="1928502803-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">pick_event</span><span class="p" data-group-id="1928502803-7">(</span><span class="n">tick</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="1928502803-7">)</span><span class="w"> </span><span class="k" data-group-id="1928502803-8">do</span><span class="w">
+    </span><span class="n">tension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1928502803-9">(</span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="ss">:tension</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p" data-group-id="1928502803-9">)</span><span class="w">
+    </span><span class="n">ticks_since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">last_event_tick</span><span class="w">
+
+    </span><span class="k">cond</span><span class="w"> </span><span class="k" data-group-id="1928502803-10">do</span><span class="w">
+      </span><span class="c1"># Cooldown period - no events too close together</span><span class="w">
+      </span><span class="n">ticks_since</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">min_interval</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-11">{</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="1928502803-11">}</span><span class="w">
+
+      </span><span class="c1"># High tension - trigger dramatic event</span><span class="w">
+      </span><span class="n">tension</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">tension_threshold</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1928502803-12">%{</span><span class="w">
+          </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:dramatic_encounter</span><span class="p">,</span><span class="w">
+          </span><span class="ss">severity</span><span class="p">:</span><span class="w"> </span><span class="n">min</span><span class="p" data-group-id="1928502803-13">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">round</span><span class="p" data-group-id="1928502803-14">(</span><span class="n">tension</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="1928502803-14">)</span><span class="p" data-group-id="1928502803-13">)</span><span class="p">,</span><span class="w">
+          </span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="n">pick_hotspot</span><span class="p" data-group-id="1928502803-15">(</span><span class="n">world_state</span><span class="p" data-group-id="1928502803-15">)</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-12">}</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-16">{</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1928502803-17">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">last_event_tick</span><span class="p">:</span><span class="w"> </span><span class="n">tick</span><span class="p">,</span><span class="w"> </span><span class="ss">escalation_factor</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="1928502803-17">}</span><span class="p" data-group-id="1928502803-16">}</span><span class="w">
+
+      </span><span class="c1"># Low tension for too long - inject ambient event</span><span class="w">
+      </span><span class="n">ticks_since</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nc">:rand</span><span class="o">.</span><span class="n">uniform</span><span class="p" data-group-id="1928502803-18">(</span><span class="p" data-group-id="1928502803-18">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1928502803-19">%{</span><span class="w">
+          </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:ambient_event</span><span class="p">,</span><span class="w">
+          </span><span class="ss">severity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="n">pick_quiet_area</span><span class="p" data-group-id="1928502803-20">(</span><span class="n">world_state</span><span class="p" data-group-id="1928502803-20">)</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-19">}</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-21">{</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1928502803-22">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">last_event_tick</span><span class="p">:</span><span class="w"> </span><span class="n">tick</span><span class="p" data-group-id="1928502803-22">}</span><span class="p" data-group-id="1928502803-21">}</span><span class="w">
+
+      </span><span class="c1"># Nothing this tick</span><span class="w">
+      </span><span class="no">true</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="1928502803-23">{</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="1928502803-23">}</span><span class="w">
+    </span><span class="k" data-group-id="1928502803-10">end</span><span class="w">
+  </span><span class="k" data-group-id="1928502803-8">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">pick_hotspot</span><span class="p" data-group-id="1928502803-24">(</span><span class="n">world_state</span><span class="p" data-group-id="1928502803-24">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="c1"># ...</span><span class="w">
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">pick_quiet_area</span><span class="p" data-group-id="1928502803-25">(</span><span class="n">world_state</span><span class="p" data-group-id="1928502803-25">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="1928502803-1">end</span></code></pre><h2 id="module-storyteller-philosophies" class="section-heading"><a href="#module-storyteller-philosophies" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Storyteller Philosophies</span></h2><p>Different games need different pacing. Here are some patterns:</p><h3 id="module-tension-release-left-4-dead-style" class="section-heading"><a href="#module-tension-release-left-4-dead-style" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Tension-Release (Left 4 Dead style)</span></h3><p>Build tension through enemy density and environmental cues, then release
+with a dramatic event (horde attack, special infected spawn).</p><h3 id="module-reactive-nemesis-system-style" class="section-heading"><a href="#module-reactive-nemesis-system-style" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Reactive (Nemesis system style)</span></h3><p>Track player actions and generate events that respond to them. Kill a
+captain? His blood brother shows up for revenge.</p><h3 id="module-procedural-drama-dwarf-fortress-style" class="section-heading"><a href="#module-procedural-drama-dwarf-fortress-style" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Procedural Drama (Dwarf Fortress style)</span></h3><p>Generate events based on faction relationships, resource scarcity, and
+historical grudges. Let chaos emerge from simulation.</p><h3 id="module-cinematic-scripted-game-style" class="section-heading"><a href="#module-cinematic-scripted-game-style" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Cinematic (Scripted game style)</span></h3><p>Use storyteller state to track narrative beats. First act builds world,
+second act introduces conflict, third act resolves it.</p><h2 id="module-event-structure" class="section-heading"><a href="#module-event-structure" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Event Structure</span></h2><p>Events should be maps with at least a <code class="inline">:type</code> key:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3990634788-1">%{</span><span class="w">
+  </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:event_type</span><span class="p">,</span><span class="w">           </span><span class="c1"># Required: atom identifier</span><span class="w">
+  </span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3990634788-2">%{</span><span class="n">...</span><span class="p" data-group-id="3990634788-2">}</span><span class="p">,</span><span class="w">            </span><span class="c1"># Where the event occurs</span><span class="w">
+  </span><span class="ss">actors</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3990634788-3">[</span><span class="n">entity_id</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3990634788-3">]</span><span class="p">,</span><span class="w">    </span><span class="c1"># Entities involved</span><span class="w">
+  </span><span class="ss">severity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w">              </span><span class="c1"># Event intensity</span><span class="w">
+  </span><span class="ss">raw_data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3990634788-4">%{</span><span class="n">...</span><span class="p" data-group-id="3990634788-4">}</span><span class="w">             </span><span class="c1"># Game-specific data</span><span class="w">
+</span><span class="p" data-group-id="3990634788-1">}</span></code></pre><p>The Director passes events through <a href="Operator.Rationalization.html"><code class="inline">Operator.Rationalization</code></a> before
+delivering them to your game.</p><h2 id="module-world-state" class="section-heading"><a href="#module-world-state" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">World State</span></h2><p>The Director passes a <code class="inline">world_state</code> map to <code class="inline">pick_event/3</code>. Structure this
+to give storytellers the information they need:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2854343962-1">%{</span><span class="w">
+  </span><span class="ss">tick</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="ss">tension</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span><span class="w">                    </span><span class="c1"># 0.0 - 1.0</span><span class="w">
+  </span><span class="ss">player_health_percent</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w">
+  </span><span class="ss">summary</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2854343962-2">%{</span><span class="w">
+    </span><span class="ss">total_entities</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w">
+    </span><span class="ss">enemies_alive</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">
+    </span><span class="ss">by_district</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2854343962-3">%{</span><span class="s">&quot;downtown&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;suburbs&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="2854343962-3">}</span><span class="w">
+  </span><span class="p" data-group-id="2854343962-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">recent_events</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2854343962-4">[</span><span class="n">...</span><span class="p" data-group-id="2854343962-4">]</span><span class="p">,</span><span class="w">            </span><span class="c1"># What&#39;s happened lately</span><span class="w">
+  </span><span class="c1"># ... your game&#39;s specific data</span><span class="w">
+</span><span class="p" data-group-id="2854343962-1">}</span></code></pre><h2 id="module-built-in-storytellers" class="section-heading"><a href="#module-built-in-storytellers" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Built-in Storytellers</span></h2><ul><li><a href="Operator.Director.NullStoryteller.html"><code class="inline">Operator.Director.NullStoryteller</code></a> - Never generates events (for testing)</li></ul><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.Director.html"><code class="inline">Operator.Director</code></a> - The GenServer that calls storytellers</li><li><a href="Operator.Rationalization.html"><code class="inline">Operator.Rationalization</code></a> - Event annotation</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-callbacks summary">
+  <h3>
+    <a href="#callbacks">Callbacks</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:init/1" data-no-tooltip="" translate="no">init(opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Initialize storyteller state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:pick_event/3" data-no-tooltip="" translate="no">pick_event(tick, world_state, storyteller_state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decide whether to generate an event this tick.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="callbacks" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h2>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:init/1">
+
+  <div class="detail-header">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init(opts)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/storyteller.ex#L148" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> init(opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Initialize storyteller state.</p><p>Called once when the Director starts or when switching storytellers.
+Returns the initial state map that will be passed to <code class="inline">pick_event/3</code>.</p><h2 id="c:init/1-arguments" class="section-heading"><a href="#c:init/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><code class="inline">opts</code> - Configuration options passed from Director startup</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:pick_event/3">
+
+  <div class="detail-header">
+    <a href="#c:pick_event/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pick_event(tick, world_state, storyteller_state)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/storyteller.ex#L179" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> pick_event(
+  tick :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  world_state :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  storyteller_state :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()
+) :: {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | nil, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+
+      </div>
+
+<p>Decide whether to generate an event this tick.</p><p>Called every tick by the Director. Should return:</p><ul><li><code class="inline">{nil, new_state}</code> - No event this tick</li><li><code class="inline">{event_map, new_state}</code> - Generate an event</li></ul><h2 id="c:pick_event/3-arguments" class="section-heading"><a href="#c:pick_event/3-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><code class="inline">tick</code> - Current simulation tick</li><li><code class="inline">world_state</code> - Map containing world information</li><li><code class="inline">storyteller_state</code> - Current storyteller state from init/previous tick</li></ul><h2 id="c:pick_event/3-world-state" class="section-heading"><a href="#c:pick_event/3-world-state" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">World State</span></h2><p>The <code class="inline">world_state</code> map typically includes:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6836586058-1">%{</span><span class="w">
+  </span><span class="ss">tick</span><span class="p">:</span><span class="w"> </span><span class="n">non_neg_integer</span><span class="p" data-group-id="6836586058-2">(</span><span class="p" data-group-id="6836586058-2">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">summary</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6836586058-3">%{</span><span class="w">
+    </span><span class="ss">total_entities</span><span class="p">:</span><span class="w"> </span><span class="n">non_neg_integer</span><span class="p" data-group-id="6836586058-4">(</span><span class="p" data-group-id="6836586058-4">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">by_type</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6836586058-5">%{</span><span class="n">atom</span><span class="p" data-group-id="6836586058-6">(</span><span class="p" data-group-id="6836586058-6">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">non_neg_integer</span><span class="p" data-group-id="6836586058-7">(</span><span class="p" data-group-id="6836586058-7">)</span><span class="p" data-group-id="6836586058-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">by_district</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6836586058-8">%{</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="6836586058-9">(</span><span class="p" data-group-id="6836586058-9">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">non_neg_integer</span><span class="p" data-group-id="6836586058-10">(</span><span class="p" data-group-id="6836586058-10">)</span><span class="p" data-group-id="6836586058-8">}</span><span class="w">
+  </span><span class="p" data-group-id="6836586058-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">reports</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6836586058-11">[</span><span class="n">...</span><span class="p" data-group-id="6836586058-11">]</span><span class="p">,</span><span class="w">
+  </span><span class="c1"># Additional fields depend on host application</span><span class="w">
+</span><span class="p" data-group-id="6836586058-1">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

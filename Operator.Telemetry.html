@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.Telemetry — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>Telemetry</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.Telemetry.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Behaviour for telemetry and metrics integration.</p><p>The Telemetry behaviour allows you to instrument Operator with your
+observability stack. Track goal selections, plan generation times,
+and Director events for debugging and performance analysis.</p><h2 id="module-configuration" class="section-heading"><a href="#module-configuration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Configuration</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w">
+  </span><span class="ss">telemetry_module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.OperatorTelemetry</span></code></pre><h2 id="module-events" class="section-heading"><a href="#module-events" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Events</span></h2><p>Operator emits three types of events:</p><table><thead><tr><th style="text-align: left;">Event</th><th style="text-align: left;">When</th><th style="text-align: left;">Key Measurements</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">goal_selected</code></td><td style="text-align: left;">GoalSelector picks a goal</td><td style="text-align: left;"><code class="inline">:score</code></td></tr><tr><td style="text-align: left;"><code class="inline">htn_plan_generated</code></td><td style="text-align: left;">Planner creates a plan</td><td style="text-align: left;"><code class="inline">:task_count</code>, duration</td></tr><tr><td style="text-align: left;"><code class="inline">director_event</code></td><td style="text-align: left;">Director fires an event</td><td style="text-align: left;"><code class="inline">:count</code></td></tr></tbody></table><h2 id="module-example-implementation" class="section-heading"><a href="#module-example-implementation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example Implementation</span></h2><p>Using the standard <code class="inline">:telemetry</code> library:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.OperatorTelemetry</span><span class="w"> </span><span class="k" data-group-id="9610182185-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.Telemetry</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">emit_goal_selected</span><span class="p" data-group-id="9610182185-2">(</span><span class="n">goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">measurements</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p" data-group-id="9610182185-2">)</span><span class="w"> </span><span class="k" data-group-id="9610182185-3">do</span><span class="w">
+    </span><span class="nc">:telemetry</span><span class="o">.</span><span class="n">execute</span><span class="p" data-group-id="9610182185-4">(</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-5">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_selected</span><span class="p" data-group-id="9610182185-5">]</span><span class="p">,</span><span class="w">
+      </span><span class="n">measurements</span><span class="p">,</span><span class="w">
+      </span><span class="nc">Map</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="9610182185-6">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal</span><span class="p">,</span><span class="w"> </span><span class="n">goal_name</span><span class="p" data-group-id="9610182185-6">)</span><span class="w">
+    </span><span class="p" data-group-id="9610182185-4">)</span><span class="w">
+  </span><span class="k" data-group-id="9610182185-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">emit_htn_plan_generated</span><span class="p" data-group-id="9610182185-7">(</span><span class="n">goal</span><span class="p">,</span><span class="w"> </span><span class="n">task_count</span><span class="p">,</span><span class="w"> </span><span class="n">duration_ms</span><span class="p" data-group-id="9610182185-7">)</span><span class="w"> </span><span class="k" data-group-id="9610182185-8">do</span><span class="w">
+    </span><span class="nc">:telemetry</span><span class="o">.</span><span class="n">execute</span><span class="p" data-group-id="9610182185-9">(</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-10">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:plan_generated</span><span class="p" data-group-id="9610182185-10">]</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-11">%{</span><span class="ss">task_count</span><span class="p">:</span><span class="w"> </span><span class="n">task_count</span><span class="p">,</span><span class="w"> </span><span class="ss">duration_ms</span><span class="p">:</span><span class="w"> </span><span class="n">duration_ms</span><span class="p" data-group-id="9610182185-11">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-12">%{</span><span class="ss">goal</span><span class="p">:</span><span class="w"> </span><span class="n">goal</span><span class="p" data-group-id="9610182185-12">}</span><span class="w">
+    </span><span class="p" data-group-id="9610182185-9">)</span><span class="w">
+  </span><span class="k" data-group-id="9610182185-8">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">emit_director_event</span><span class="p" data-group-id="9610182185-13">(</span><span class="n">event_type</span><span class="p">,</span><span class="w"> </span><span class="n">tick</span><span class="p" data-group-id="9610182185-13">)</span><span class="w"> </span><span class="k" data-group-id="9610182185-14">do</span><span class="w">
+    </span><span class="nc">:telemetry</span><span class="o">.</span><span class="n">execute</span><span class="p" data-group-id="9610182185-15">(</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-16">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:director_event</span><span class="p" data-group-id="9610182185-16">]</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-17">%{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9610182185-17">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="9610182185-18">%{</span><span class="ss">event_type</span><span class="p">:</span><span class="w"> </span><span class="n">event_type</span><span class="p">,</span><span class="w"> </span><span class="ss">tick</span><span class="p">:</span><span class="w"> </span><span class="n">tick</span><span class="p" data-group-id="9610182185-18">}</span><span class="w">
+    </span><span class="p" data-group-id="9610182185-15">)</span><span class="w">
+  </span><span class="k" data-group-id="9610182185-14">end</span><span class="w">
+</span><span class="k" data-group-id="9610182185-1">end</span></code></pre><h2 id="module-attaching-handlers" class="section-heading"><a href="#module-attaching-handlers" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attaching Handlers</span></h2><p>With <code class="inline">:telemetry</code>, attach handlers in your application startup:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="6723160876-1">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="6723160876-1">)</span><span class="w"> </span><span class="k" data-group-id="6723160876-2">do</span><span class="w">
+  </span><span class="nc">:telemetry</span><span class="o">.</span><span class="n">attach_many</span><span class="p" data-group-id="6723160876-3">(</span><span class="w">
+    </span><span class="s">&quot;operator-metrics&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="6723160876-4">[</span><span class="w">
+      </span><span class="p" data-group-id="6723160876-5">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_selected</span><span class="p" data-group-id="6723160876-5">]</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="6723160876-6">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:plan_generated</span><span class="p" data-group-id="6723160876-6">]</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="6723160876-7">[</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">:director_event</span><span class="p" data-group-id="6723160876-7">]</span><span class="w">
+    </span><span class="p" data-group-id="6723160876-4">]</span><span class="p">,</span><span class="w">
+    </span><span class="o">&amp;</span><span class="nc">MyApp.TelemetryHandler</span><span class="o">.</span><span class="n">handle_event</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="no">nil</span><span class="w">
+  </span><span class="p" data-group-id="6723160876-3">)</span><span class="w">
+
+  </span><span class="c1"># ... rest of supervision tree</span><span class="w">
+</span><span class="k" data-group-id="6723160876-2">end</span></code></pre><h2 id="module-prometheus-example" class="section-heading"><a href="#module-prometheus-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Prometheus Example</span></h2><p>If using <code class="inline">telemetry_metrics</code> with Prometheus:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">metrics</span><span class="w"> </span><span class="k" data-group-id="8339784544-1">do</span><span class="w">
+  </span><span class="p" data-group-id="8339784544-2">[</span><span class="w">
+    </span><span class="n">counter</span><span class="p" data-group-id="8339784544-3">(</span><span class="s">&quot;my_app.operator.goal_selected.count&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">tags</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8339784544-4">[</span><span class="ss">:goal</span><span class="p">,</span><span class="w"> </span><span class="ss">:domain</span><span class="p" data-group-id="8339784544-4">]</span><span class="w">
+    </span><span class="p" data-group-id="8339784544-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">distribution</span><span class="p" data-group-id="8339784544-5">(</span><span class="s">&quot;my_app.operator.plan_generated.duration_ms&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">tags</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8339784544-6">[</span><span class="ss">:goal</span><span class="p" data-group-id="8339784544-6">]</span><span class="p">,</span><span class="w">
+      </span><span class="ss">buckets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8339784544-7">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="8339784544-7">]</span><span class="w">
+    </span><span class="p" data-group-id="8339784544-5">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">counter</span><span class="p" data-group-id="8339784544-8">(</span><span class="s">&quot;my_app.operator.director_event.count&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">tags</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8339784544-9">[</span><span class="ss">:event_type</span><span class="p" data-group-id="8339784544-9">]</span><span class="w">
+    </span><span class="p" data-group-id="8339784544-8">)</span><span class="w">
+  </span><span class="p" data-group-id="8339784544-2">]</span><span class="w">
+</span><span class="k" data-group-id="8339784544-1">end</span></code></pre><h2 id="module-no-op-default" class="section-heading"><a href="#module-no-op-default" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">No-Op Default</span></h2><p>If no telemetry module is configured, Operator silently skips emission.
+This has zero overhead in production when telemetry isn't needed.</p><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.GoalSelector.html"><code class="inline">Operator.HTN.GoalSelector</code></a> - Emits <code class="inline">goal_selected</code></li><li><a href="Operator.HTN.Planner.html"><code class="inline">Operator.HTN.Planner</code></a> - Emits <code class="inline">htn_plan_generated</code></li><li><a href="Operator.Director.html"><code class="inline">Operator.Director</code></a> - Emits <code class="inline">director_event</code></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-callbacks summary">
+  <h3>
+    <a href="#callbacks">Callbacks</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:emit_director_event/2" data-no-tooltip="" translate="no">emit_director_event(event_type, tick)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit telemetry when the Director generates an event.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:emit_goal_selected/3" data-no-tooltip="" translate="no">emit_goal_selected(goal_name, measurements, metadata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit telemetry when a goal is selected.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:emit_htn_plan_generated/3" data-no-tooltip="" translate="no">emit_htn_plan_generated(goal, task_count, duration_ms)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit telemetry when an HTN plan is generated.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#emit_director_event/2" data-no-tooltip="" translate="no">emit_director_event(event_type, tick)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit director event if telemetry is configured.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#emit_goal_selected/3" data-no-tooltip="" translate="no">emit_goal_selected(goal_name, measurements \\ %{}, metadata \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit goal selected event if telemetry is configured.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#emit_htn_plan_generated/3" data-no-tooltip="" translate="no">emit_htn_plan_generated(goal, task_count, duration_ms)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Emit plan generated event if telemetry is configured.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_module/0" data-no-tooltip="" translate="no">get_module()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the configured telemetry module, if any.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="callbacks" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h2>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:emit_director_event/2">
+
+  <div class="detail-header">
+    <a href="#c:emit_director_event/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_director_event(event_type, tick)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L157" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> emit_director_event(
+  event_type :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  tick :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Emit telemetry when the Director generates an event.</p><p>Called by <code class="inline">Director</code> when a storyteller produces an event.</p><h2 id="c:emit_director_event/2-arguments" class="section-heading"><a href="#c:emit_director_event/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><code class="inline">event_type</code> - The type of event generated</li><li><code class="inline">tick</code> - The simulation tick when the event occurred</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:emit_goal_selected/3">
+
+  <div class="detail-header">
+    <a href="#c:emit_goal_selected/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_goal_selected(goal_name, measurements, metadata)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> emit_goal_selected(
+  goal_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  measurements :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  metadata :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Emit telemetry when a goal is selected.</p><p>Called by <code class="inline">GoalSelector.pick_goal/3</code> when a goal is chosen.</p><h2 id="c:emit_goal_selected/3-arguments" class="section-heading"><a href="#c:emit_goal_selected/3-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><code class="inline">goal_name</code> - The selected goal atom (or <code class="inline">:none</code> if no goal selected)</li><li><code class="inline">measurements</code> - Map containing at least <code class="inline">:score</code></li><li><code class="inline">metadata</code> - Additional context (goal_metadata, domain, etc.)</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:emit_htn_plan_generated/3">
+
+  <div class="detail-header">
+    <a href="#c:emit_htn_plan_generated/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_htn_plan_generated(goal, task_count, duration_ms)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L140" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> emit_htn_plan_generated(
+  goal :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  task_count :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  duration_ms :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Emit telemetry when an HTN plan is generated.</p><p>Called by <code class="inline">Planner.run/3</code> after successful plan generation.</p><h2 id="c:emit_htn_plan_generated/3-arguments" class="section-heading"><a href="#c:emit_htn_plan_generated/3-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><code class="inline">goal</code> - The goal that was planned</li><li><code class="inline">task_count</code> - Number of tasks in the generated plan</li><li><code class="inline">duration_ms</code> - Time taken to generate the plan</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="emit_director_event/2">
+
+  <div class="detail-header">
+    <a href="#emit_director_event/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_director_event(event_type, tick)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> emit_director_event(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Emit director event if telemetry is configured.</p>
+  </section>
+</section>
+<section class="detail" id="emit_goal_selected/3">
+
+    <span id="emit_goal_selected/1"></span>
+
+    <span id="emit_goal_selected/2"></span>
+
+  <div class="detail-header">
+    <a href="#emit_goal_selected/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_goal_selected(goal_name, measurements \\ %{}, metadata \\ %{})</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L174" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> emit_goal_selected(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Emit goal selected event if telemetry is configured.</p>
+  </section>
+</section>
+<section class="detail" id="emit_htn_plan_generated/3">
+
+  <div class="detail-header">
+    <a href="#emit_htn_plan_generated/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">emit_htn_plan_generated(goal, task_count, duration_ms)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L185" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> emit_htn_plan_generated(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Emit plan generated event if telemetry is configured.</p>
+  </section>
+</section>
+<section class="detail" id="get_module/0">
+
+  <div class="detail-header">
+    <a href="#get_module/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_module()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/behaviours/telemetry.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_module() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | nil</pre>
+
+      </div>
+
+<p>Get the configured telemetry module, if any.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

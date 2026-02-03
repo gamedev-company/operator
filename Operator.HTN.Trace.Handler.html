@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Trace.Handler — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Trace.<wbr>Handler</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Trace.Handler.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L221" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Behaviour for HTN trace handlers.</p><p>Implement this behaviour to receive detailed tracing events during
+HTN planning. All callbacks are optional - implement only the events
+you care about.</p><h2 id="module-example-implementation" class="section-heading"><a href="#module-example-implementation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example Implementation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.DetailedTracer</span><span class="w"> </span><span class="k" data-group-id="7521354084-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.HTN.Trace.Handler</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_goal_start</span><span class="p" data-group-id="7521354084-2">(</span><span class="n">goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="7521354084-2">)</span><span class="w"> </span><span class="k" data-group-id="7521354084-3">do</span><span class="w">
+    </span><span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p" data-group-id="7521354084-4">(</span><span class="s">&quot;Planning goal: </span><span class="si" data-group-id="7521354084-5">#{</span><span class="n">goal_name</span><span class="si" data-group-id="7521354084-5">}</span><span class="s">&quot;</span><span class="p" data-group-id="7521354084-4">)</span><span class="w">
+    </span><span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p" data-group-id="7521354084-6">(</span><span class="s">&quot;Facts: </span><span class="si" data-group-id="7521354084-7">#{</span><span class="n">inspect</span><span class="p" data-group-id="7521354084-8">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="ss">pretty</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7521354084-8">)</span><span class="si" data-group-id="7521354084-7">}</span><span class="s">&quot;</span><span class="p" data-group-id="7521354084-6">)</span><span class="w">
+  </span><span class="k" data-group-id="7521354084-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_precondition_eval</span><span class="p" data-group-id="7521354084-9">(</span><span class="p" data-group-id="7521354084-10">%{</span><span class="ss">goal</span><span class="p">:</span><span class="w"> </span><span class="n">goal</span><span class="p" data-group-id="7521354084-10">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="7521354084-9">)</span><span class="w"> </span><span class="k" data-group-id="7521354084-11">do</span><span class="w">
+    </span><span class="nc">Logger</span><span class="o">.</span><span class="n">warning</span><span class="p" data-group-id="7521354084-12">(</span><span class="s">&quot;Goal </span><span class="si" data-group-id="7521354084-13">#{</span><span class="n">goal</span><span class="si" data-group-id="7521354084-13">}</span><span class="s"> precondition FAILED&quot;</span><span class="p" data-group-id="7521354084-12">)</span><span class="w">
+  </span><span class="k" data-group-id="7521354084-11">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_precondition_eval</span><span class="p" data-group-id="7521354084-14">(</span><span class="c">_context</span><span class="p">,</span><span class="w"> </span><span class="c">_result</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="7521354084-14">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:ok</span><span class="w">
+
+  </span><span class="c1"># ... implement other callbacks as needed</span><span class="w">
+</span><span class="k" data-group-id="7521354084-1">end</span></code></pre><h2 id="module-callback-summary" class="section-heading"><a href="#module-callback-summary" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Callback Summary</span></h2><table><thead><tr><th style="text-align: left;">Callback</th><th style="text-align: left;">When Called</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">on_goal_start/3</code></td><td style="text-align: left;">Goal expansion begins</td></tr><tr><td style="text-align: left;"><code class="inline">on_goal_end/3</code></td><td style="text-align: left;">Goal expansion ends</td></tr><tr><td style="text-align: left;"><code class="inline">on_precondition_eval/3</code></td><td style="text-align: left;">Precondition evaluated</td></tr><tr><td style="text-align: left;"><code class="inline">on_task_expand/4</code></td><td style="text-align: left;">Task decomposition starts</td></tr><tr><td style="text-align: left;"><code class="inline">on_task_complete/4</code></td><td style="text-align: left;">Task decomposition ends</td></tr><tr><td style="text-align: left;"><code class="inline">on_effect_apply/3</code></td><td style="text-align: left;">Effect applied to facts</td></tr><tr><td style="text-align: left;"><code class="inline">on_branch_select/3</code></td><td style="text-align: left;">Decomposition branch chosen</td></tr></tbody></table><p>All callbacks are optional via <code class="inline">@optional_callbacks</code>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-callbacks summary">
+  <h3>
+    <a href="#callbacks">Callbacks</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_branch_select/3" data-no-tooltip="" translate="no">on_branch_select(task_name, branch_id, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when a decomposition branch is selected.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_effect_apply/3" data-no-tooltip="" translate="no">on_effect_apply(effect, facts, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when an effect is applied.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_goal_end/3" data-no-tooltip="" translate="no">on_goal_end(goal_name, result, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when goal expansion ends.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_goal_start/3" data-no-tooltip="" translate="no">on_goal_start(goal_name, facts, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when goal expansion starts.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_precondition_eval/3" data-no-tooltip="" translate="no">on_precondition_eval(context, result, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when a precondition is evaluated.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_task_complete/4" data-no-tooltip="" translate="no">on_task_complete(task_name, result_tasks, status, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when task expansion completes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:on_task_expand/4" data-no-tooltip="" translate="no">on_task_expand(task_name, args, facts, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when task expansion begins.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="callbacks" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h2>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:on_branch_select/3">
+
+  <div class="detail-header">
+    <a href="#c:on_branch_select/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_branch_select(task_name, branch_id, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L296" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_branch_select(
+  task_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  branch_id :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Called when a decomposition branch is selected.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_effect_apply/3">
+
+  <div class="detail-header">
+    <a href="#c:on_effect_apply/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_effect_apply(effect, facts, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L293" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_effect_apply(effect :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>(), facts :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Called when an effect is applied.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_goal_end/3">
+
+  <div class="detail-header">
+    <a href="#c:on_goal_end/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_goal_end(goal_name, result, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L270" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_goal_end(
+  goal_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  result :: :success | :failure,
+  opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Called when goal expansion ends.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_goal_start/3">
+
+  <div class="detail-header">
+    <a href="#c:on_goal_start/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_goal_start(goal_name, facts, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L267" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_goal_start(goal_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), facts :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Called when goal expansion starts.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_precondition_eval/3">
+
+  <div class="detail-header">
+    <a href="#c:on_precondition_eval/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_precondition_eval(context, result, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L274" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_precondition_eval(context :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), result :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(), opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  :ok</pre>
+
+      </div>
+
+<p>Called when a precondition is evaluated.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_task_complete/4">
+
+  <div class="detail-header">
+    <a href="#c:on_task_complete/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_task_complete(task_name, result_tasks, status, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L285" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_task_complete(
+  task_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  result_tasks :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(),
+  status :: :success | :failure,
+  opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Called when task expansion completes.</p>
+  </section>
+</section>
+<section class="detail" id="c:on_task_expand/4">
+
+  <div class="detail-header">
+    <a href="#c:on_task_expand/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_task_expand(task_name, args, facts, opts)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L277" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> on_task_expand(
+  task_name :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  args :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(),
+  facts :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  opts :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Called when task expansion begins.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

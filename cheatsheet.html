@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator Cheatsheet — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Operator Cheatsheet</h1>
+
+<a href="cheatsheet.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/guides/cheatsheet.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p>Quick reference for HTN planning with Operator.</p><h2 id="dsl-basics" class="section-heading"><a href="#dsl-basics" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">DSL Basics</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyBehavior</span><span class="w"> </span><span class="k" data-group-id="8437350700-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Operator.HTN.DSL</span><span class="w">
+
+  </span><span class="c1"># Goal: high-level objective</span><span class="w">
+  </span><span class="n">goal</span><span class="w"> </span><span class="ss">:name</span><span class="w"> </span><span class="k" data-group-id="8437350700-2">do</span><span class="w">
+    </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="8437350700-3">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w"> </span><span class="k" data-group-id="8437350700-3">end</span><span class="w">
+    </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="8437350700-4">do</span><span class="w">
+      </span><span class="n">task</span><span class="w"> </span><span class="ss">:task_name</span><span class="p">,</span><span class="w"> </span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="w">
+    </span><span class="k" data-group-id="8437350700-4">end</span><span class="w">
+    </span><span class="n">metadata</span><span class="w"> </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="w">
+  </span><span class="k" data-group-id="8437350700-2">end</span><span class="w">
+
+  </span><span class="c1"># Task: abstract, decomposes further</span><span class="w">
+  </span><span class="n">task</span><span class="w"> </span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="k" data-group-id="8437350700-5">do</span><span class="w">
+    </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="8437350700-6">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w"> </span><span class="k" data-group-id="8437350700-6">end</span><span class="w">
+    </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="8437350700-7">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="8437350700-8">[</span><span class="p" data-group-id="8437350700-9">{</span><span class="ss">:subtask</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8437350700-10">[</span><span class="p" data-group-id="8437350700-10">]</span><span class="p" data-group-id="8437350700-9">}</span><span class="p" data-group-id="8437350700-8">]</span><span class="w"> </span><span class="k" data-group-id="8437350700-7">end</span><span class="w">
+    </span><span class="n">cost</span><span class="w"> </span><span class="mf">2.0</span><span class="w">
+    </span><span class="n">metadata</span><span class="w"> </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="w">
+  </span><span class="k" data-group-id="8437350700-5">end</span><span class="w">
+
+  </span><span class="c1"># Primitive: executable action</span><span class="w">
+  </span><span class="n">primitive</span><span class="w"> </span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="k" data-group-id="8437350700-11">do</span><span class="w">
+    </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="8437350700-12">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="8437350700-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p" data-group-id="8437350700-13">}</span><span class="w"> </span><span class="k" data-group-id="8437350700-12">end</span><span class="w">
+    </span><span class="n">effects</span><span class="w"> </span><span class="p" data-group-id="8437350700-14">[</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8437350700-15">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8437350700-16">{</span><span class="ss">:key</span><span class="p" data-group-id="8437350700-16">}</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8437350700-15">)</span><span class="p" data-group-id="8437350700-14">]</span><span class="w">
+    </span><span class="n">metadata</span><span class="w"> </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="w">
+  </span><span class="k" data-group-id="8437350700-11">end</span><span class="w">
+
+  </span><span class="c1"># Axiom: reusable query</span><span class="w">
+  </span><span class="n">axiom</span><span class="w"> </span><span class="ss">:name</span><span class="w"> </span><span class="k" data-group-id="8437350700-17">do</span><span class="w">
+    </span><span class="k" data-group-id="8437350700-18">fn</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">boolean</span><span class="w"> </span><span class="k" data-group-id="8437350700-18">end</span><span class="w">
+  </span><span class="k" data-group-id="8437350700-17">end</span><span class="w">
+</span><span class="k" data-group-id="8437350700-1">end</span></code></pre><h2 id="facts" class="section-heading"><a href="#facts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Facts</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="w">
+
+</span><span class="c1"># Create</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9545199874-1">(</span><span class="p" data-group-id="9545199874-2">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9545199874-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="9545199874-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9545199874-4">%{</span><span class="ss">time</span><span class="p">:</span><span class="w"> </span><span class="ss">:day</span><span class="p" data-group-id="9545199874-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">social</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9545199874-5">%{</span><span class="ss">faction</span><span class="p">:</span><span class="w"> </span><span class="ss">:guards</span><span class="p" data-group-id="9545199874-5">}</span><span class="w">
+</span><span class="p" data-group-id="9545199874-2">}</span><span class="p" data-group-id="9545199874-1">)</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9545199874-6">(</span><span class="p" data-group-id="9545199874-6">)</span><span class="w">  </span><span class="c1"># Empty</span><span class="w">
+
+</span><span class="c1"># Query</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9545199874-7">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-8">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="9545199874-8">}</span><span class="p" data-group-id="9545199874-7">)</span><span class="w">       </span><span class="c1"># =&gt; true</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9545199874-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="9545199874-10">}</span><span class="p" data-group-id="9545199874-9">)</span><span class="w">        </span><span class="c1"># =&gt; 100</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9545199874-11">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-12">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:mana</span><span class="p" data-group-id="9545199874-12">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9545199874-11">)</span><span class="w">       </span><span class="c1"># =&gt; 0 (default)</span><span class="w">
+
+</span><span class="c1"># Modify (returns new struct)</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="9545199874-13">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-14">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="9545199874-14">}</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="9545199874-13">)</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">delete</span><span class="p" data-group-id="9545199874-15">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-16">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:temp</span><span class="p" data-group-id="9545199874-16">}</span><span class="p" data-group-id="9545199874-15">)</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="9545199874-17">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9545199874-18">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9545199874-19">%{</span><span class="ss">mana</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p" data-group-id="9545199874-19">}</span><span class="p" data-group-id="9545199874-18">}</span><span class="p" data-group-id="9545199874-17">)</span></code></pre><h2 id="preconditions" class="section-heading"><a href="#preconditions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Preconditions</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Simple function</span><span class="w">
+</span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="7095229499-1">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="7095229499-2">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ready</span><span class="p" data-group-id="7095229499-3">}</span><span class="p" data-group-id="7095229499-2">)</span><span class="w"> </span><span class="k" data-group-id="7095229499-1">end</span><span class="w">
+
+</span><span class="c1"># With traits (arity-2)</span><span class="w">
+</span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="7095229499-4">fn</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:brave</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">traits</span><span class="o">.</span><span class="n">traits</span><span class="w"> </span><span class="k" data-group-id="7095229499-4">end</span><span class="w">
+
+</span><span class="c1"># Logical operators</span><span class="w">
+</span><span class="p" data-group-id="7095229499-5">{</span><span class="ss">:all</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-6">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="7095229499-6">]</span><span class="p" data-group-id="7095229499-5">}</span><span class="w">           </span><span class="c1"># AND (all must pass)</span><span class="w">
+</span><span class="p" data-group-id="7095229499-7">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-8">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="7095229499-8">]</span><span class="p" data-group-id="7095229499-7">}</span><span class="w">           </span><span class="c1"># OR (one must pass)</span><span class="w">
+</span><span class="p" data-group-id="7095229499-9">{</span><span class="ss">:not</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7095229499-10">fn</span><span class="p">}</span><span class="w">                   </span><span class="c1"># Negate</span><span class="w">
+</span><span class="p" data-group-id="7095229499-11">{</span><span class="ss">:none</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-12">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="7095229499-12">]</span><span class="p" data-group-id="7095229499-11">}</span><span class="w">          </span><span class="c1"># None pass</span><span class="w">
+</span><span class="p" data-group-id="7095229499-13">{</span><span class="ss">:first</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-14">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="7095229499-14">]</span><span class="p" data-group-id="7095229499-13">}</span><span class="w">         </span><span class="c1"># First match (ordered OR)</span><span class="w">
+
+</span><span class="c1"># Axiom reference</span><span class="w">
+</span><span class="p" data-group-id="7095229499-15">{</span><span class="ss">:axiom</span><span class="p">,</span><span class="w"> </span><span class="ss">:name</span><span class="p" data-group-id="7095229499-15">}</span><span class="w">
+</span><span class="p" data-group-id="7095229499-16">{</span><span class="ss">:axiom</span><span class="p">,</span><span class="w"> </span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="ss">arg</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="7095229499-16">}</span><span class="w">
+
+</span><span class="c1"># Nested</span><span class="w">
+</span><span class="p" data-group-id="7095229499-17">{</span><span class="ss">:all</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-18">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-19">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7095229499-20">[</span><span class="n">fn2</span><span class="p">,</span><span class="w"> </span><span class="n">fn3</span><span class="p" data-group-id="7095229499-20">]</span><span class="p" data-group-id="7095229499-19">}</span><span class="p" data-group-id="7095229499-18">]</span><span class="p" data-group-id="7095229499-17">}</span><span class="w">
+
+</span><span class="c1"># Evaluate goal preconditions</span><span class="w">
+</span><span class="nc">Operator.HTN.Precondition</span><span class="o">.</span><span class="n">all_satisfied?</span><span class="p" data-group-id="7095229499-21">(</span><span class="n">goal</span><span class="o">.</span><span class="n">precond</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="7095229499-21">)</span></code></pre><h2 id="effects" class="section-heading"><a href="#effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Effects</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+
+</span><span class="c1"># Types</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-1">(</span><span class="ss">:plan_only</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4553011472-1">)</span><span class="w">        </span><span class="c1"># Planning only</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-2">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4553011472-2">)</span><span class="w"> </span><span class="c1"># Planning + execution</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-3">(</span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4553011472-3">)</span><span class="w">        </span><span class="c1"># Execution, persists</span><span class="w">
+
+</span><span class="c1"># In primitives</span><span class="w">
+</span><span class="n">primitive</span><span class="w"> </span><span class="ss">:unlock</span><span class="w"> </span><span class="k" data-group-id="4553011472-4">do</span><span class="w">
+  </span><span class="n">effects</span><span class="w"> </span><span class="p" data-group-id="4553011472-5">[</span><span class="w">
+    </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-6">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4553011472-7">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_locked</span><span class="p" data-group-id="4553011472-7">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="4553011472-6">)</span><span class="w">
+  </span><span class="p" data-group-id="4553011472-5">]</span><span class="w">
+</span><span class="k" data-group-id="4553011472-4">end</span><span class="w">
+
+</span><span class="c1"># Special values</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-8">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4553011472-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ammo</span><span class="p" data-group-id="4553011472-9">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:decrement</span><span class="p" data-group-id="4553011472-8">)</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4553011472-10">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4553011472-11">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ammo</span><span class="p" data-group-id="4553011472-11">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:increment</span><span class="p" data-group-id="4553011472-10">)</span></code></pre><h2 id="planning" class="section-heading"><a href="#planning" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Planning</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="4179038366-1">{</span><span class="nc">Planner</span><span class="p">,</span><span class="w"> </span><span class="nc">GoalSelector</span><span class="p" data-group-id="4179038366-1">}</span><span class="w">
+
+</span><span class="c1"># Generate plan for specific goal</span><span class="w">
+</span><span class="p" data-group-id="4179038366-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4179038366-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4179038366-3">(</span><span class="ss">:goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4179038366-3">)</span><span class="w">
+</span><span class="p" data-group-id="4179038366-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:preconditions_not_met</span><span class="p" data-group-id="4179038366-4">}</span><span class="w">
+</span><span class="p" data-group-id="4179038366-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_not_found</span><span class="p" data-group-id="4179038366-5">}</span><span class="w">
+
+</span><span class="c1"># Replan decision</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">needs_replan?</span><span class="p" data-group-id="4179038366-6">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4179038366-6">)</span><span class="w">
+
+</span><span class="c1"># Auto-select best goal</span><span class="w">
+</span><span class="p" data-group-id="4179038366-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">goal</span><span class="p" data-group-id="4179038366-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GoalSelector</span><span class="o">.</span><span class="n">pick_goal</span><span class="p" data-group-id="4179038366-8">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4179038366-8">)</span><span class="w">
+</span><span class="ss">:none</span><span class="w">  </span><span class="c1"># No valid goals</span><span class="w">
+
+</span><span class="c1"># Explain selection</span><span class="w">
+</span><span class="nc">GoalSelector</span><span class="o">.</span><span class="n">explain</span><span class="p" data-group-id="4179038366-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4179038366-9">)</span><span class="w">
+
+</span><span class="c1"># Explain plan generation</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">explain</span><span class="p" data-group-id="4179038366-10">(</span><span class="ss">:goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4179038366-10">)</span><span class="w">
+
+</span><span class="c1"># Budgeted planning</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4179038366-11">(</span><span class="ss">:goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">budget</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4179038366-12">[</span><span class="ss">max_tasks</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout_ms</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="4179038366-12">]</span><span class="p" data-group-id="4179038366-11">)</span><span class="w">
+
+</span><span class="c1"># Options</span><span class="w">
+</span><span class="nc">GoalSelector</span><span class="o">.</span><span class="n">pick_goal</span><span class="p" data-group-id="4179038366-13">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w">
+  </span><span class="ss">trait_weights</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4179038366-14">%{</span><span class="p" data-group-id="4179038366-15">{</span><span class="ss">:aggressive</span><span class="p">,</span><span class="w"> </span><span class="ss">:attack</span><span class="p" data-group-id="4179038366-15">}</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="4179038366-14">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">goal_order</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4179038366-16">[</span><span class="ss">:preferred</span><span class="p">,</span><span class="w"> </span><span class="ss">:fallback</span><span class="p" data-group-id="4179038366-16">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">priority_bonus</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
+</span><span class="p" data-group-id="4179038366-13">)</span><span class="w">
+
+</span><span class="c1"># Score a goal without selecting it</span><span class="w">
+</span><span class="nc">GoalSelector</span><span class="o">.</span><span class="n">score_goal</span><span class="p" data-group-id="4179038366-17">(</span><span class="ss">:goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4179038366-17">)</span></code></pre><h2 id="execution" class="section-heading"><a href="#execution" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Execution</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Executor</span><span class="w">
+
+</span><span class="c1"># Step-by-step (for game loops)</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="0860258609-1">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="0860258609-1">)</span><span class="w"> </span><span class="k" data-group-id="0860258609-2">do</span><span class="w">
+  </span><span class="p" data-group-id="0860258609-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="0860258609-3">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w">
+  </span><span class="p" data-group-id="0860258609-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="0860258609-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w">
+  </span><span class="p" data-group-id="0860258609-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="0860258609-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w">
+</span><span class="k" data-group-id="0860258609-2">end</span><span class="w">
+
+</span><span class="c1"># Run entire plan</span><span class="w">
+</span><span class="p" data-group-id="0860258609-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="0860258609-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">run_plan</span><span class="p" data-group-id="0860258609-7">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="0860258609-7">)</span><span class="w">
+</span><span class="p" data-group-id="0860258609-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="0860258609-8">}</span><span class="w">
+
+</span><span class="c1"># Options</span><span class="w">
+</span><span class="nc">Executor</span><span class="o">.</span><span class="n">run_plan</span><span class="p" data-group-id="0860258609-9">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w">
+  </span><span class="ss">max_steps</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+  </span><span class="ss">on_task_complete</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="0860258609-10">fn</span><span class="w"> </span><span class="n">task</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:ok</span><span class="w"> </span><span class="k" data-group-id="0860258609-10">end</span><span class="w">
+</span><span class="p" data-group-id="0860258609-9">)</span></code></pre><h1>Loop Helper</h1><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Loop</span><span class="w">
+
+</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Loop</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="5603360426-1">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">goal</span><span class="p">:</span><span class="w"> </span><span class="ss">:patrol</span><span class="p" data-group-id="5603360426-1">)</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">status</span><span class="w">  </span><span class="c1"># :idle | :continue | :completed | :failed</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">plan</span><span class="w">    </span><span class="c1"># remaining plan or nil</span></code></pre><h2 id="plans" class="section-heading"><a href="#plans" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Plans</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Plan</span><span class="w">
+
+</span><span class="n">plan</span><span class="o">.</span><span class="n">goal</span><span class="w">        </span><span class="c1"># Goal name atom</span><span class="w">
+</span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="w">       </span><span class="c1"># [{:task, [args]}, ...]</span><span class="w">
+</span><span class="n">plan</span><span class="o">.</span><span class="n">validity</span><span class="w">    </span><span class="c1"># :active | :invalid | :completed</span><span class="w">
+
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">task_count</span><span class="p" data-group-id="3339175466-1">(</span><span class="n">plan</span><span class="p" data-group-id="3339175466-1">)</span><span class="w">
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="3339175466-2">(</span><span class="n">plan</span><span class="p" data-group-id="3339175466-2">)</span><span class="w">
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">valid?</span><span class="p" data-group-id="3339175466-3">(</span><span class="n">plan</span><span class="p" data-group-id="3339175466-3">)</span><span class="w">
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">next_task</span><span class="p" data-group-id="3339175466-4">(</span><span class="n">plan</span><span class="p" data-group-id="3339175466-4">)</span><span class="w">  </span><span class="c1"># {task_tuple, remaining_plan}</span><span class="w">
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">add_metadata</span><span class="p" data-group-id="3339175466-5">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:source</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;manual&quot;</span><span class="p" data-group-id="3339175466-5">)</span><span class="w">
+</span><span class="nc">Plan</span><span class="o">.</span><span class="n">get_metadata</span><span class="p" data-group-id="3339175466-6">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:source</span><span class="p" data-group-id="3339175466-6">)</span></code></pre><h2 id="registry" class="section-heading"><a href="#registry" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Registry</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Registry</span><span class="w">
+
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">all</span><span class="p" data-group-id="6238803172-1">(</span><span class="p" data-group-id="6238803172-1">)</span><span class="w">                    </span><span class="c1"># Full registry map</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_goal</span><span class="p" data-group-id="6238803172-2">(</span><span class="ss">:name</span><span class="p" data-group-id="6238803172-2">)</span><span class="w">          </span><span class="c1"># Goal definition</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_task</span><span class="p" data-group-id="6238803172-3">(</span><span class="ss">:name</span><span class="p" data-group-id="6238803172-3">)</span><span class="w">          </span><span class="c1"># Task struct</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_primitive</span><span class="p" data-group-id="6238803172-4">(</span><span class="ss">:name</span><span class="p" data-group-id="6238803172-4">)</span><span class="w">     </span><span class="c1"># Primitive struct</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_axiom</span><span class="p" data-group-id="6238803172-5">(</span><span class="ss">:name</span><span class="p" data-group-id="6238803172-5">)</span><span class="w">         </span><span class="c1"># Axiom struct</span><span class="w">
+
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">list_goal_names</span><span class="p" data-group-id="6238803172-6">(</span><span class="p" data-group-id="6238803172-6">)</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">list_task_names</span><span class="p" data-group-id="6238803172-7">(</span><span class="p" data-group-id="6238803172-7">)</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">list_primitive_names</span><span class="p" data-group-id="6238803172-8">(</span><span class="p" data-group-id="6238803172-8">)</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">list_axiom_names</span><span class="p" data-group-id="6238803172-9">(</span><span class="p" data-group-id="6238803172-9">)</span><span class="w">
+
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">stats</span><span class="p" data-group-id="6238803172-10">(</span><span class="p" data-group-id="6238803172-10">)</span><span class="w">    </span><span class="c1"># %{goals: n, tasks: n, ...}</span><span class="w">
+</span><span class="nc">Registry</span><span class="o">.</span><span class="n">reset</span><span class="p" data-group-id="6238803172-11">(</span><span class="p" data-group-id="6238803172-11">)</span><span class="w">    </span><span class="c1"># Clear all (for tests)</span></code></pre><h2 id="tracing" class="section-heading"><a href="#tracing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Tracing</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Trace</span><span class="w">
+</span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Trace.ConsoleHandler</span><span class="w">
+
+</span><span class="nc">Trace</span><span class="o">.</span><span class="n">set_handler</span><span class="p" data-group-id="8296405291-1">(</span><span class="nc">ConsoleHandler</span><span class="p" data-group-id="8296405291-1">)</span><span class="w">  </span><span class="c1"># Enable console output</span><span class="w">
+</span><span class="nc">Trace</span><span class="o">.</span><span class="n">enabled?</span><span class="p" data-group-id="8296405291-2">(</span><span class="p" data-group-id="8296405291-2">)</span><span class="w">                   </span><span class="c1"># Check if active</span><span class="w">
+</span><span class="nc">Trace</span><span class="o">.</span><span class="n">get_handler</span><span class="p" data-group-id="8296405291-3">(</span><span class="p" data-group-id="8296405291-3">)</span><span class="w">                </span><span class="c1"># Current handler</span><span class="w">
+</span><span class="nc">Trace</span><span class="o">.</span><span class="n">reset</span><span class="p" data-group-id="8296405291-4">(</span><span class="p" data-group-id="8296405291-4">)</span><span class="w">                      </span><span class="c1"># Disable tracing</span></code></pre><h2 id="director" class="section-heading"><a href="#director" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Director</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.Director</span><span class="w">
+
+</span><span class="c1"># Start</span><span class="w">
+</span><span class="p" data-group-id="9234184313-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="9234184313-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Director</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="9234184313-2">(</span><span class="w">
+  </span><span class="ss">storyteller</span><span class="p">:</span><span class="w"> </span><span class="nc">MyStoryteller</span><span class="p">,</span><span class="w">
+  </span><span class="ss">on_event</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="9234184313-3">fn</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">...</span><span class="w"> </span><span class="k" data-group-id="9234184313-3">end</span><span class="p">,</span><span class="w">
+  </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="ss">:my_director</span><span class="w">
+</span><span class="p" data-group-id="9234184313-2">)</span><span class="w">
+
+</span><span class="c1"># Tick</span><span class="w">
+</span><span class="nc">Director</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="9234184313-4">(</span><span class="n">world_state</span><span class="p" data-group-id="9234184313-4">)</span><span class="w">              </span><span class="c1"># Async</span><span class="w">
+</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Director</span><span class="o">.</span><span class="n">tick_sync</span><span class="p" data-group-id="9234184313-5">(</span><span class="n">world_state</span><span class="p" data-group-id="9234184313-5">)</span><span class="w"> </span><span class="c1"># Sync (returns event)</span><span class="w">
+
+</span><span class="c1"># Control</span><span class="w">
+</span><span class="nc">Director</span><span class="o">.</span><span class="n">current_tick</span><span class="p" data-group-id="9234184313-6">(</span><span class="p" data-group-id="9234184313-6">)</span><span class="w">
+</span><span class="nc">Director</span><span class="o">.</span><span class="n">change_storyteller</span><span class="p" data-group-id="9234184313-7">(</span><span class="nc">NewModule</span><span class="p" data-group-id="9234184313-7">)</span><span class="w">
+</span><span class="nc">Director</span><span class="o">.</span><span class="n">get_state</span><span class="p" data-group-id="9234184313-8">(</span><span class="p" data-group-id="9234184313-8">)</span></code></pre><h2 id="storyteller-behaviour" class="section-heading"><a href="#storyteller-behaviour" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Storyteller Behaviour</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyStoryteller</span><span class="w"> </span><span class="k" data-group-id="4078445309-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.Storyteller</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="4078445309-2">(</span><span class="c">_opts</span><span class="p" data-group-id="4078445309-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4078445309-3">%{</span><span class="ss">state</span><span class="p">:</span><span class="w"> </span><span class="ss">:initial</span><span class="p" data-group-id="4078445309-3">}</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">pick_event</span><span class="p" data-group-id="4078445309-4">(</span><span class="n">tick</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4078445309-4">)</span><span class="w"> </span><span class="k" data-group-id="4078445309-5">do</span><span class="w">
+    </span><span class="c1"># Return {event_map, new_state} or {nil, state}</span><span class="w">
+    </span><span class="p" data-group-id="4078445309-6">{</span><span class="p" data-group-id="4078445309-7">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:event</span><span class="p" data-group-id="4078445309-7">}</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4078445309-6">}</span><span class="w">
+  </span><span class="k" data-group-id="4078445309-5">end</span><span class="w">
+</span><span class="k" data-group-id="4078445309-1">end</span></code></pre><h2 id="storage" class="section-heading"><a href="#storage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Storage</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Storage</span><span class="w">
+
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">persist_plan</span><span class="p" data-group-id="9741408501-1">(</span><span class="n">entity_id</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="9741408501-1">)</span><span class="w">
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">fetch_plan</span><span class="p" data-group-id="9741408501-2">(</span><span class="n">entity_id</span><span class="p" data-group-id="9741408501-2">)</span><span class="w">
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">clear_plan</span><span class="p" data-group-id="9741408501-3">(</span><span class="n">entity_id</span><span class="p" data-group-id="9741408501-3">)</span><span class="w">
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">list_plans</span><span class="p" data-group-id="9741408501-4">(</span><span class="p" data-group-id="9741408501-4">)</span><span class="w">
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">clear_all</span><span class="p" data-group-id="9741408501-5">(</span><span class="p" data-group-id="9741408501-5">)</span><span class="w">
+</span><span class="nc">Storage</span><span class="o">.</span><span class="n">stats</span><span class="p" data-group-id="9741408501-6">(</span><span class="p" data-group-id="9741408501-6">)</span></code></pre><h2 id="testing" class="section-heading"><a href="#testing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Testing</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.TestHelpers</span><span class="w">
+
+</span><span class="c1"># In test setup</span><span class="w">
+</span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="0864855416-1">do</span><span class="w">
+  </span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">reset_registry</span><span class="p" data-group-id="0864855416-2">(</span><span class="p" data-group-id="0864855416-2">)</span><span class="w">
+  </span><span class="ss">:ok</span><span class="w">
+</span><span class="k" data-group-id="0864855416-1">end</span><span class="w">
+
+</span><span class="c1"># Register specific modules</span><span class="w">
+</span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">register_modules</span><span class="p" data-group-id="0864855416-3">(</span><span class="p" data-group-id="0864855416-4">[</span><span class="nc">MyBehavior</span><span class="p" data-group-id="0864855416-4">]</span><span class="p" data-group-id="0864855416-3">)</span><span class="w">
+</span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">setup_htn</span><span class="p" data-group-id="0864855416-5">(</span><span class="p" data-group-id="0864855416-6">[</span><span class="nc">Mod1</span><span class="p">,</span><span class="w"> </span><span class="nc">Mod2</span><span class="p" data-group-id="0864855416-6">]</span><span class="p" data-group-id="0864855416-5">)</span><span class="w">  </span><span class="c1"># Reset + register</span><span class="w">
+
+</span><span class="c1"># Isolated registry scope</span><span class="w">
+</span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">with_registry</span><span class="p" data-group-id="0864855416-7">(</span><span class="p" data-group-id="0864855416-8">[</span><span class="nc">MyBehavior</span><span class="p" data-group-id="0864855416-8">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="0864855416-9">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="c1"># Only MyBehavior registered here</span><span class="w">
+</span><span class="k" data-group-id="0864855416-9">end</span><span class="p" data-group-id="0864855416-7">)</span><span class="w">
+
+</span><span class="c1"># Create test facts</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">test_facts</span><span class="p" data-group-id="0864855416-10">(</span><span class="p" data-group-id="0864855416-11">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0864855416-12">%{</span><span class="ss">hp</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="0864855416-12">}</span><span class="p" data-group-id="0864855416-11">}</span><span class="p" data-group-id="0864855416-10">)</span><span class="w">
+
+</span><span class="c1"># Assertions</span><span class="w">
+</span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">assert_has_task</span><span class="p" data-group-id="0864855416-13">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:task_name</span><span class="p" data-group-id="0864855416-13">)</span><span class="w">
+</span><span class="nc">TestHelpers</span><span class="o">.</span><span class="n">assert_has_task</span><span class="p" data-group-id="0864855416-14">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:task_name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0864855416-15">[</span><span class="ss">:expected_arg</span><span class="p" data-group-id="0864855416-15">]</span><span class="p" data-group-id="0864855416-14">)</span></code></pre><h2 id="configuration" class="section-heading"><a href="#configuration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Configuration</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># config/config.exs</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w">
+  </span><span class="ss">storage_module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.Storage</span><span class="p">,</span><span class="w">
+  </span><span class="ss">telemetry_module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.Telemetry</span><span class="p">,</span><span class="w">
+  </span><span class="ss">rationalization_module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.Rationalization</span><span class="p">,</span><span class="w">
+  </span><span class="ss">traits_module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.Traits</span></code></pre><h2 id="common-patterns" class="section-heading"><a href="#common-patterns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Common Patterns</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Game loop integration</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">tick</span><span class="p" data-group-id="1488606689-1">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="1488606689-1">)</span><span class="w"> </span><span class="k" data-group-id="1488606689-2">do</span><span class="w">
+  </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_facts</span><span class="p" data-group-id="1488606689-3">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="1488606689-3">)</span><span class="w">
+
+  </span><span class="k">case</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">plan</span><span class="w"> </span><span class="k" data-group-id="1488606689-4">do</span><span class="w">
+    </span><span class="no">nil</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">maybe_create_plan</span><span class="p" data-group-id="1488606689-5">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="1488606689-5">)</span><span class="w">
+    </span><span class="n">plan</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">execute_or_replan</span><span class="p" data-group-id="1488606689-6">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="1488606689-6">)</span><span class="w">
+  </span><span class="k" data-group-id="1488606689-4">end</span><span class="w">
+</span><span class="k" data-group-id="1488606689-2">end</span><span class="w">
+
+</span><span class="c1"># Conditional decomposition</span><span class="w">
+</span><span class="n">task</span><span class="w"> </span><span class="ss">:approach</span><span class="w"> </span><span class="k" data-group-id="1488606689-7">do</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="1488606689-8">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="1488606689-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1488606689-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:vehicle</span><span class="p" data-group-id="1488606689-10">}</span><span class="p" data-group-id="1488606689-9">)</span><span class="w"> </span><span class="k" data-group-id="1488606689-11">do</span><span class="w">
+      </span><span class="p" data-group-id="1488606689-12">[</span><span class="p" data-group-id="1488606689-13">{</span><span class="ss">:drive_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1488606689-14">[</span><span class="n">target</span><span class="p" data-group-id="1488606689-14">]</span><span class="p" data-group-id="1488606689-13">}</span><span class="p" data-group-id="1488606689-12">]</span><span class="w">
+    </span><span class="k" data-group-id="1488606689-11">else</span><span class="w">
+      </span><span class="p" data-group-id="1488606689-15">[</span><span class="p" data-group-id="1488606689-16">{</span><span class="ss">:walk_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1488606689-17">[</span><span class="n">target</span><span class="p" data-group-id="1488606689-17">]</span><span class="p" data-group-id="1488606689-16">}</span><span class="p" data-group-id="1488606689-15">]</span><span class="w">
+    </span><span class="k" data-group-id="1488606689-11">end</span><span class="w">
+  </span><span class="k" data-group-id="1488606689-8">end</span><span class="w">
+</span><span class="k" data-group-id="1488606689-7">end</span><span class="w">
+
+</span><span class="c1"># Priority-based goal selection</span><span class="w">
+</span><span class="n">goal</span><span class="w"> </span><span class="ss">:critical</span><span class="w"> </span><span class="k" data-group-id="1488606689-18">do</span><span class="w">
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">  </span><span class="c1"># Higher = more important</span><span class="w">
+</span><span class="k" data-group-id="1488606689-18">end</span><span class="w">
+
+</span><span class="n">goal</span><span class="w"> </span><span class="ss">:idle</span><span class="w"> </span><span class="k" data-group-id="1488606689-19">do</span><span class="w">
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="k" data-group-id="1488606689-19">end</span></code></pre>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="testing.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Testing
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/operator/0.1.0/show/guides/cheatsheet.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Executor — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Executor</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Executor.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Executes HTN plans and primitive tasks.</p><p>The Executor bridges the gap between plan generation and actual execution.
+While the HTN planner generates plans (sequences of primitive tasks), the
+Executor handles running those tasks against your game/simulation state.</p><h2 id="module-quick-start" class="section-heading"><a href="#module-quick-start" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Quick Start</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Generate a plan</span><span class="w">
+</span><span class="p" data-group-id="4922605932-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4922605932-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4922605932-2">(</span><span class="ss">:my_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4922605932-2">)</span><span class="w">
+
+</span><span class="c1"># Execute step by step</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="4922605932-3">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4922605932-3">)</span><span class="w"> </span><span class="k" data-group-id="4922605932-4">do</span><span class="w">
+  </span><span class="p" data-group-id="4922605932-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p">,</span><span class="w"> </span><span class="n">updated_facts</span><span class="p" data-group-id="4922605932-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Plan finished successfully</span><span class="w">
+    </span><span class="n">handle_completion</span><span class="p" data-group-id="4922605932-6">(</span><span class="n">updated_actor</span><span class="p" data-group-id="4922605932-6">)</span><span class="w">
+
+  </span><span class="p" data-group-id="4922605932-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p">,</span><span class="w"> </span><span class="n">updated_facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="4922605932-7">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># More tasks to execute</span><span class="w">
+    </span><span class="n">loop_execution</span><span class="p" data-group-id="4922605932-8">(</span><span class="n">remaining_plan</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p">,</span><span class="w"> </span><span class="n">updated_facts</span><span class="p" data-group-id="4922605932-8">)</span><span class="w">
+
+  </span><span class="p" data-group-id="4922605932-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4922605932-9">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Task failed - decide whether to replan or abort</span><span class="w">
+    </span><span class="n">handle_failure</span><span class="p" data-group-id="4922605932-10">(</span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4922605932-10">)</span><span class="w">
+</span><span class="k" data-group-id="4922605932-4">end</span><span class="w">
+
+</span><span class="c1"># Or execute entire plan at once</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">run_plan</span><span class="p" data-group-id="4922605932-11">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4922605932-11">)</span><span class="w"> </span><span class="k" data-group-id="4922605932-12">do</span><span class="w">
+  </span><span class="p" data-group-id="4922605932-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">final_actor</span><span class="p">,</span><span class="w"> </span><span class="n">final_facts</span><span class="p" data-group-id="4922605932-13">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># All tasks completed</span><span class="w">
+    </span><span class="ss">:done</span><span class="w">
+
+  </span><span class="p" data-group-id="4922605932-14">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="4922605932-14">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Failed mid-execution</span><span class="w">
+    </span><span class="ss">:failed</span><span class="w">
+</span><span class="k" data-group-id="4922605932-12">end</span></code></pre><h2 id="module-primitive-execution" class="section-heading"><a href="#module-primitive-execution" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Primitive Execution</span></h2><p>Primitives defined via the DSL store their <code class="inline">run</code> function as quoted AST.
+The Executor handles compiling and invoking these functions:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Direct primitive execution</span><span class="w">
+</span><span class="n">primitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_primitive</span><span class="p" data-group-id="4980038798-1">(</span><span class="ss">:attack</span><span class="p" data-group-id="4980038798-1">)</span><span class="w">
+</span><span class="p" data-group-id="4980038798-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p" data-group-id="4980038798-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execute_primitive</span><span class="p" data-group-id="4980038798-3">(</span><span class="n">primitive</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4980038798-3">)</span></code></pre><h2 id="module-task-tuples" class="section-heading"><a href="#module-task-tuples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Task Tuples</span></h2><p>Plans contain task tuples of the form <code class="inline">{task_name, args}</code>:</p><pre><code class="makeup elixir" translate="no"><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="w">
+</span><span class="c1">#=&gt; [{:move_to, [:lobby]}, {:hack_terminal, [&quot;server_1&quot;]}, {:extract, []}]</span></code></pre><p>Execute individual task tuples:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6191825201-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p" data-group-id="6191825201-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execute_task</span><span class="p" data-group-id="6191825201-2">(</span><span class="p" data-group-id="6191825201-3">{</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6191825201-4">[</span><span class="ss">:enemy</span><span class="p" data-group-id="6191825201-4">]</span><span class="p" data-group-id="6191825201-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="6191825201-2">)</span></code></pre><h2 id="module-error-handling" class="section-heading"><a href="#module-error-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error Handling</span></h2><p>Execution functions return tagged tuples:</p><ul><li><code class="inline">{:ok, actor}</code> - Task succeeded, returns updated actor</li><li><code class="inline">{:error, reason}</code> - Task failed with reason</li></ul><p>Common failure reasons:</p><ul><li><code class="inline">:primitive_not_found</code> - No primitive registered with that name</li><li><code class="inline">:no_run_function</code> - Primitive missing <code class="inline">run</code> in metadata</li><li><code class="inline">:execution_failed</code> - The run function raised or returned error</li></ul><h2 id="module-effects" class="section-heading"><a href="#module-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Effects</span></h2><p>When tasks complete successfully, their <code class="inline">:plan_and_execute</code> and <code class="inline">:permanent</code>
+effects should be applied to world state. The Executor provides helpers:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Get effects to apply after successful execution</span><span class="w">
+</span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execution_effects</span><span class="p" data-group-id="7605973662-1">(</span><span class="n">primitive</span><span class="p" data-group-id="7605973662-1">)</span><span class="w">
+</span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="o">.</span><span class="n">apply_all</span><span class="p" data-group-id="7605973662-2">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="7605973662-2">)</span></code></pre><h2 id="module-integration-with-game-loop" class="section-heading"><a href="#module-integration-with-game-loop" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration with Game Loop</span></h2><p>Typical integration pattern:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.AISystem</span><span class="w"> </span><span class="k" data-group-id="4415491921-1">do</span><span class="w">
+  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="4415491921-2">{</span><span class="nc">Executor</span><span class="p">,</span><span class="w"> </span><span class="nc">Planner</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="p" data-group-id="4415491921-2">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">tick</span><span class="p" data-group-id="4415491921-3">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p" data-group-id="4415491921-3">)</span><span class="w"> </span><span class="k" data-group-id="4415491921-4">do</span><span class="w">
+    </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_facts</span><span class="p" data-group-id="4415491921-5">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p" data-group-id="4415491921-5">)</span><span class="w">
+    </span><span class="n">traits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">genome</span><span class="w">
+
+    </span><span class="k">case</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">current_plan</span><span class="w"> </span><span class="k" data-group-id="4415491921-6">do</span><span class="w">
+      </span><span class="no">nil</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># No plan - try to create one</span><span class="w">
+        </span><span class="k">case</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4415491921-7">(</span><span class="n">pick_goal</span><span class="p" data-group-id="4415491921-8">(</span><span class="n">entity</span><span class="p" data-group-id="4415491921-8">)</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4415491921-7">)</span><span class="w"> </span><span class="k" data-group-id="4415491921-9">do</span><span class="w">
+          </span><span class="p" data-group-id="4415491921-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4415491921-10">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4415491921-11">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4415491921-11">}</span><span class="w">
+          </span><span class="p" data-group-id="4415491921-12">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="4415491921-12">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">entity</span><span class="w">
+        </span><span class="k" data-group-id="4415491921-9">end</span><span class="w">
+
+      </span><span class="n">plan</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># Have a plan - execute next step</span><span class="w">
+        </span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="4415491921-13">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4415491921-13">)</span><span class="w"> </span><span class="k" data-group-id="4415491921-14">do</span><span class="w">
+          </span><span class="p" data-group-id="4415491921-15">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">updated_entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="4415491921-15">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="4415491921-16">%{</span><span class="n">updated_entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="4415491921-16">}</span><span class="w">
+
+          </span><span class="p" data-group-id="4415491921-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">updated_entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="4415491921-17">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="4415491921-18">%{</span><span class="n">updated_entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="4415491921-18">}</span><span class="w">
+
+          </span><span class="p" data-group-id="4415491921-19">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="c">_reason</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="4415491921-19">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="4415491921-20">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="4415491921-20">}</span><span class="w">  </span><span class="c1"># Replan next tick</span><span class="w">
+        </span><span class="k" data-group-id="4415491921-14">end</span><span class="w">
+    </span><span class="k" data-group-id="4415491921-6">end</span><span class="w">
+  </span><span class="k" data-group-id="4415491921-4">end</span><span class="w">
+</span><span class="k" data-group-id="4415491921-1">end</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:plan_result/0" data-no-tooltip="" translate="no">plan_result()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Result of running a complete plan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:step_result/0" data-no-tooltip="" translate="no">step_result()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Result of a plan execution step.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:task_result/0" data-no-tooltip="" translate="no">task_result()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Result of executing a single task.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#execute_primitive/4" data-no-tooltip="" translate="no">execute_primitive(primitive, actor, facts, args \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Execute a primitive's run function.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#execute_task/4" data-no-tooltip="" translate="no">execute_task(arg, actor, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Execute a single task tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#execution_effects/1" data-no-tooltip="" translate="no">execution_effects(task)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the effects that should be applied after successful task execution.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#run_plan/4" data-no-tooltip="" translate="no">run_plan(plan, actor, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Execute an entire plan to completion.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#step/4" data-no-tooltip="" translate="no">step(plan, actor, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Execute a single step of a plan.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:plan_result/0">
+
+  <div class="detail-header">
+    <a href="#t:plan_result/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">plan_result()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L149" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> plan_result() ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()}
+  | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()}</pre>
+
+      </div>
+
+<p>Result of running a complete plan.</p><ul><li><code class="inline">{:ok, actor, facts}</code> - All tasks completed successfully</li><li><code class="inline">{:error, reason, actor, facts, remaining_plan}</code> - Failed mid-execution</li></ul>
+  </section>
+</section>
+<section class="detail" id="t:step_result/0">
+
+  <div class="detail-header">
+    <a href="#t:step_result/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">step_result()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L137" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> step_result() ::
+  {:ok, :completed, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()}
+  | {:ok, :continue, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()}
+  | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()}</pre>
+
+      </div>
+
+<p>Result of a plan execution step.</p><ul><li><code class="inline">{:ok, :completed, actor, facts, plan}</code> - Plan finished</li><li><code class="inline">{:ok, :continue, actor, facts, plan}</code> - More tasks remain</li><li><code class="inline">{:error, reason, actor, facts, plan}</code> - Task failed</li></ul>
+  </section>
+</section>
+<section class="detail" id="t:task_result/0">
+
+  <div class="detail-header">
+    <a href="#t:task_result/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_result()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> task_result() :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}}</pre>
+
+      </div>
+
+<p>Result of executing a single task.</p><ul><li><code class="inline">{:ok, actor}</code> - Success with updated actor state</li><li><code class="inline">{:error, reason}</code> - Failure with reason atom or tuple</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="execute_primitive/4">
+
+    <span id="execute_primitive/3"></span>
+
+  <div class="detail-header">
+    <a href="#execute_primitive/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">execute_primitive(primitive, actor, facts, args \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L390" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> execute_primitive(<a href="Operator.HTN.Task.html#t:t/0">Operator.HTN.Task.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) ::
+  <a href="#t:task_result/0">task_result</a>()</pre>
+
+      </div>
+
+<p>Execute a primitive's run function.</p><p>Handles the complexity of extracting and compiling the run function from
+the primitive's metadata.</p><h2 id="execute_primitive/4-parameters" class="section-heading"><a href="#execute_primitive/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">primitive</code> - The primitive Task struct from the registry</li><li><code class="inline">actor</code> - Current actor state</li><li><code class="inline">facts</code> - Current world state</li><li><code class="inline">args</code> - Arguments from the task tuple (default: [])</li></ul><h2 id="execute_primitive/4-returns" class="section-heading"><a href="#execute_primitive/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, updated_actor}</code> - Execution succeeded</li><li><code class="inline">{:error, reason}</code> - Execution failed</li></ul><h2 id="execute_primitive/4-examples" class="section-heading"><a href="#execute_primitive/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">primitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_primitive</span><span class="p" data-group-id="5823753882-1">(</span><span class="ss">:fire_weapon</span><span class="p" data-group-id="5823753882-1">)</span><span class="w">
+</span><span class="p" data-group-id="5823753882-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">updated_soldier</span><span class="p" data-group-id="5823753882-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execute_primitive</span><span class="p" data-group-id="5823753882-3">(</span><span class="n">primitive</span><span class="p">,</span><span class="w"> </span><span class="n">soldier</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="5823753882-3">)</span></code></pre><h2 id="execute_primitive/4-notes" class="section-heading"><a href="#execute_primitive/4-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><p>The run function in primitives is stored as quoted AST in <code class="inline">primitive.metadata.run</code>.
+This function handles compiling and invoking it. If the run function is already
+compiled (a function reference), it's called directly.</p>
+  </section>
+</section>
+<section class="detail" id="execute_task/4">
+
+    <span id="execute_task/3"></span>
+
+  <div class="detail-header">
+    <a href="#execute_task/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">execute_task(arg, actor, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> execute_task(
+  <a href="Operator.HTN.Plan.html#t:task_tuple/0">Operator.HTN.Plan.task_tuple</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(),
+  <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+
+      </div>
+
+<p>Execute a single task tuple.</p><p>Looks up the primitive in the registry and executes its run function.</p><h2 id="execute_task/4-parameters" class="section-heading"><a href="#execute_task/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">task_tuple</code> - Tuple of <code class="inline">{task_name, args}</code></li><li><code class="inline">actor</code> - Current actor state</li><li><code class="inline">facts</code> - Current world state</li><li><code class="inline">opts</code> - Options (reserved for future use)</li></ul><h2 id="execute_task/4-returns" class="section-heading"><a href="#execute_task/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, updated_actor, updated_facts}</code> - Task succeeded</li><li><code class="inline">{:error, reason}</code> - Task failed</li></ul><h2 id="execute_task/4-examples" class="section-heading"><a href="#execute_task/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execute_task</span><span class="p" data-group-id="0938463589-1">(</span><span class="p" data-group-id="0938463589-2">{</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0938463589-3">[</span><span class="ss">:enemy_1</span><span class="p" data-group-id="0938463589-3">]</span><span class="p" data-group-id="0938463589-2">}</span><span class="p">,</span><span class="w"> </span><span class="n">warrior</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="0938463589-1">)</span><span class="w"> </span><span class="k" data-group-id="0938463589-4">do</span><span class="w">
+  </span><span class="p" data-group-id="0938463589-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">warrior</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="0938463589-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0938463589-6">(</span><span class="s">&quot;Attack successful!&quot;</span><span class="p" data-group-id="0938463589-6">)</span><span class="w">
+
+  </span><span class="p" data-group-id="0938463589-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:primitive_not_found</span><span class="p" data-group-id="0938463589-7">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0938463589-8">(</span><span class="s">&quot;No :attack primitive defined&quot;</span><span class="p" data-group-id="0938463589-8">)</span><span class="w">
+
+  </span><span class="p" data-group-id="0938463589-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0938463589-10">{</span><span class="ss">:execution_failed</span><span class="p">,</span><span class="w"> </span><span class="ss">:no_ammo</span><span class="p" data-group-id="0938463589-10">}</span><span class="p" data-group-id="0938463589-9">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0938463589-11">(</span><span class="s">&quot;Out of ammo!&quot;</span><span class="p" data-group-id="0938463589-11">)</span><span class="w">
+</span><span class="k" data-group-id="0938463589-4">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="execution_effects/1">
+
+  <div class="detail-header">
+    <a href="#execution_effects/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">execution_effects(task)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L443" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> execution_effects(<a href="Operator.HTN.Task.html#t:t/0">Operator.HTN.Task.t</a>()) :: [<a href="Operator.HTN.Effect.html#t:t/0">Operator.HTN.Effect.t</a>()]</pre>
+
+      </div>
+
+<p>Get the effects that should be applied after successful task execution.</p><p>Returns only <code class="inline">:plan_and_execute</code> and <code class="inline">:permanent</code> effects (excludes <code class="inline">:plan_only</code>).</p><h2 id="execution_effects/1-parameters" class="section-heading"><a href="#execution_effects/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">task</code> - The Task struct</li></ul><h2 id="execution_effects/1-returns" class="section-heading"><a href="#execution_effects/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>List of Effect structs to apply.</p><h2 id="execution_effects/1-examples" class="section-heading"><a href="#execution_effects/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">primitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_primitive</span><span class="p" data-group-id="6440210229-1">(</span><span class="ss">:unlock_door</span><span class="p" data-group-id="6440210229-1">)</span><span class="w">
+</span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">execution_effects</span><span class="p" data-group-id="6440210229-2">(</span><span class="n">primitive</span><span class="p" data-group-id="6440210229-2">)</span><span class="w">
+</span><span class="c1"># =&gt; [%Effect{type: :plan_and_execute, key: {:world, :door_locked}, value: false}]</span><span class="w">
+
+</span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">apply_all</span><span class="p" data-group-id="6440210229-3">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="6440210229-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="run_plan/4">
+
+    <span id="run_plan/3"></span>
+
+  <div class="detail-header">
+    <a href="#run_plan/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">run_plan(plan, actor, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> run_plan(<a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  <a href="#t:plan_result/0">plan_result</a>()</pre>
+
+      </div>
+
+<p>Execute an entire plan to completion.</p><p>Runs all tasks in sequence until either the plan completes or a task fails.</p><h2 id="run_plan/4-parameters" class="section-heading"><a href="#run_plan/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">plan</code> - The plan to execute</li><li><code class="inline">actor</code> - Initial actor state</li><li><code class="inline">facts</code> - Initial world state</li><li><code class="inline">opts</code> - Options:<ul><li><code class="inline">:on_task_complete</code> - Callback <code class="inline">fn task_tuple, actor, facts -&gt; :ok end</code></li><li><code class="inline">:max_steps</code> - Maximum tasks to execute (default: 1000)</li></ul></li></ul><h2 id="run_plan/4-returns" class="section-heading"><a href="#run_plan/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, final_actor, final_facts}</code> - All tasks completed</li><li><code class="inline">{:error, reason, actor, facts, remaining_plan}</code> - Failed mid-execution</li></ul><h2 id="run_plan/4-examples" class="section-heading"><a href="#run_plan/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4700665951-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4700665951-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4700665951-2">(</span><span class="ss">:build_house</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4700665951-2">)</span><span class="w">
+
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">run_plan</span><span class="p" data-group-id="4700665951-3">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">builder</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4700665951-3">)</span><span class="w"> </span><span class="k" data-group-id="4700665951-4">do</span><span class="w">
+  </span><span class="p" data-group-id="4700665951-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">builder</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4700665951-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="4700665951-6">(</span><span class="s">&quot;House built!&quot;</span><span class="p" data-group-id="4700665951-6">)</span><span class="w">
+
+  </span><span class="p" data-group-id="4700665951-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:no_materials</span><span class="p">,</span><span class="w"> </span><span class="n">builder</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="4700665951-7">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="4700665951-8">(</span><span class="s">&quot;Ran out of materials with </span><span class="si" data-group-id="4700665951-9">#{</span><span class="nc">Plan</span><span class="o">.</span><span class="n">task_count</span><span class="p" data-group-id="4700665951-10">(</span><span class="n">remaining</span><span class="p" data-group-id="4700665951-10">)</span><span class="si" data-group-id="4700665951-9">}</span><span class="s"> tasks left&quot;</span><span class="p" data-group-id="4700665951-8">)</span><span class="w">
+</span><span class="k" data-group-id="4700665951-4">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="step/4">
+
+    <span id="step/3"></span>
+
+  <div class="detail-header">
+    <a href="#step/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">step(plan, actor, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/executor.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> step(<a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  <a href="#t:step_result/0">step_result</a>()</pre>
+
+      </div>
+
+<p>Execute a single step of a plan.</p><p>Pops the next task from the plan, executes it, and returns the result
+along with the remaining plan.</p><h2 id="step/4-parameters" class="section-heading"><a href="#step/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">plan</code> - The plan to execute</li><li><code class="inline">actor</code> - Current actor state (passed to primitive run functions)</li><li><code class="inline">facts</code> - Current world state</li><li><code class="inline">opts</code> - Options (currently unused, reserved for future use)</li></ul><h2 id="step/4-returns" class="section-heading"><a href="#step/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, :completed, actor, facts, plan}</code> - No more tasks, plan complete</li><li><code class="inline">{:ok, :continue, actor, facts, remaining_plan}</code> - Task succeeded, more remain</li><li><code class="inline">{:error, reason, actor, facts, plan}</code> - Task failed</li></ul><h2 id="step/4-examples" class="section-heading"><a href="#step/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3050711926-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="3050711926-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="3050711926-2">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="3050711926-2">)</span><span class="w">
+
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="3050711926-3">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">npc</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="3050711926-3">)</span><span class="w"> </span><span class="k" data-group-id="3050711926-4">do</span><span class="w">
+  </span><span class="p" data-group-id="3050711926-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">npc</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="3050711926-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="3050711926-6">(</span><span class="s">&quot;Patrol complete!&quot;</span><span class="p" data-group-id="3050711926-6">)</span><span class="w">
+    </span><span class="p" data-group-id="3050711926-7">{</span><span class="n">npc</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="3050711926-7">}</span><span class="w">
+
+  </span><span class="p" data-group-id="3050711926-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">npc</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="3050711926-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Store remaining plan for next tick</span><span class="w">
+    </span><span class="p" data-group-id="3050711926-9">{</span><span class="p" data-group-id="3050711926-10">%{</span><span class="n">npc</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="3050711926-10">}</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="3050711926-9">}</span><span class="w">
+
+  </span><span class="p" data-group-id="3050711926-11">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:primitive_not_found</span><span class="p">,</span><span class="w"> </span><span class="n">npc</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="3050711926-11">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="3050711926-12">(</span><span class="s">&quot;Missing primitive - aborting plan&quot;</span><span class="p" data-group-id="3050711926-12">)</span><span class="w">
+    </span><span class="p" data-group-id="3050711926-13">{</span><span class="p" data-group-id="3050711926-14">%{</span><span class="n">npc</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="3050711926-14">}</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="3050711926-13">}</span><span class="w">
+</span><span class="k" data-group-id="3050711926-4">end</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

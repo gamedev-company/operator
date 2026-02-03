@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Trace — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Trace</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Trace.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Detailed tracing for HTN planning operations.</p><p>The Trace system lets you observe every step of the planning process -
+which goals are being expanded, which preconditions pass or fail, how
+tasks decompose, and what effects are applied. Essential for debugging
+complex HTN behaviors.</p><h2 id="module-inspiration" class="section-heading"><a href="#module-inspiration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Inspiration</span></h2><p>Inspired by Decima's HTN translator (Horizon Zero Dawn, Death Stranding)
+which inserts logging at key points: ON_START_PRED, ON_RETRY_PRED,
+ON_BIND, ON_END_PRED. This module provides similar hooks for Elixir.</p><h2 id="module-quick-start" class="section-heading"><a href="#module-quick-start" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Quick Start</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># 1. Implement a trace handler</span><span class="w">
+</span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.HTNTraceHandler</span><span class="w"> </span><span class="k" data-group-id="0975490871-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.HTN.Trace.Handler</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_goal_start</span><span class="p" data-group-id="0975490871-2">(</span><span class="n">goal_name</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-2">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-3">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-4">(</span><span class="s">&quot;[HTN] Goal start: </span><span class="si" data-group-id="0975490871-5">#{</span><span class="n">goal_name</span><span class="si" data-group-id="0975490871-5">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-4">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_goal_end</span><span class="p" data-group-id="0975490871-6">(</span><span class="n">goal_name</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-6">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-7">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-8">(</span><span class="s">&quot;[HTN] Goal end: </span><span class="si" data-group-id="0975490871-9">#{</span><span class="n">goal_name</span><span class="si" data-group-id="0975490871-9">}</span><span class="s"> -&gt; </span><span class="si" data-group-id="0975490871-10">#{</span><span class="n">result</span><span class="si" data-group-id="0975490871-10">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-8">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-7">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_precondition_eval</span><span class="p" data-group-id="0975490871-11">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-11">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-12">do</span><span class="w">
+    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p" data-group-id="0975490871-13">[</span><span class="ss">:goal</span><span class="p" data-group-id="0975490871-13">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">context</span><span class="p" data-group-id="0975490871-14">[</span><span class="ss">:task</span><span class="p" data-group-id="0975490871-14">]</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-15">(</span><span class="s">&quot;[HTN] Precondition </span><span class="si" data-group-id="0975490871-16">#{</span><span class="n">name</span><span class="si" data-group-id="0975490871-16">}</span><span class="s">: </span><span class="si" data-group-id="0975490871-17">#{</span><span class="n">result</span><span class="si" data-group-id="0975490871-17">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-15">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-12">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_task_expand</span><span class="p" data-group-id="0975490871-18">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-18">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-19">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-20">(</span><span class="s">&quot;[HTN] Expand: </span><span class="si" data-group-id="0975490871-21">#{</span><span class="n">task_name</span><span class="si" data-group-id="0975490871-21">}</span><span class="s"> </span><span class="si" data-group-id="0975490871-22">#{</span><span class="n">inspect</span><span class="p" data-group-id="0975490871-23">(</span><span class="n">args</span><span class="p" data-group-id="0975490871-23">)</span><span class="si" data-group-id="0975490871-22">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-20">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-19">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_task_complete</span><span class="p" data-group-id="0975490871-24">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">result_tasks</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-24">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-25">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-26">(</span><span class="s">&quot;[HTN] Complete: </span><span class="si" data-group-id="0975490871-27">#{</span><span class="n">task_name</span><span class="si" data-group-id="0975490871-27">}</span><span class="s"> -&gt; </span><span class="si" data-group-id="0975490871-28">#{</span><span class="n">status</span><span class="si" data-group-id="0975490871-28">}</span><span class="s"> (</span><span class="si" data-group-id="0975490871-29">#{</span><span class="n">length</span><span class="p" data-group-id="0975490871-30">(</span><span class="n">result_tasks</span><span class="p" data-group-id="0975490871-30">)</span><span class="si" data-group-id="0975490871-29">}</span><span class="s"> tasks)&quot;</span><span class="p" data-group-id="0975490871-26">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-25">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_effect_apply</span><span class="p" data-group-id="0975490871-31">(</span><span class="n">effect</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-31">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-32">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-33">(</span><span class="s">&quot;[HTN] Effect: </span><span class="si" data-group-id="0975490871-34">#{</span><span class="n">inspect</span><span class="p" data-group-id="0975490871-35">(</span><span class="n">effect</span><span class="o">.</span><span class="n">key</span><span class="p" data-group-id="0975490871-35">)</span><span class="si" data-group-id="0975490871-34">}</span><span class="s"> = </span><span class="si" data-group-id="0975490871-36">#{</span><span class="n">inspect</span><span class="p" data-group-id="0975490871-37">(</span><span class="n">effect</span><span class="o">.</span><span class="n">value</span><span class="p" data-group-id="0975490871-37">)</span><span class="si" data-group-id="0975490871-36">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-33">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-32">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_branch_select</span><span class="p" data-group-id="0975490871-38">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">branch_id</span><span class="p">,</span><span class="w"> </span><span class="c">_opts</span><span class="p" data-group-id="0975490871-38">)</span><span class="w"> </span><span class="k" data-group-id="0975490871-39">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="0975490871-40">(</span><span class="s">&quot;[HTN] Branch: </span><span class="si" data-group-id="0975490871-41">#{</span><span class="n">task_name</span><span class="si" data-group-id="0975490871-41">}</span><span class="s"> selected </span><span class="si" data-group-id="0975490871-42">#{</span><span class="n">branch_id</span><span class="si" data-group-id="0975490871-42">}</span><span class="s">&quot;</span><span class="p" data-group-id="0975490871-40">)</span><span class="w">
+  </span><span class="k" data-group-id="0975490871-39">end</span><span class="w">
+</span><span class="k" data-group-id="0975490871-1">end</span><span class="w">
+
+</span><span class="c1"># 2. Enable tracing</span><span class="w">
+</span><span class="nc">Operator.HTN.Trace</span><span class="o">.</span><span class="n">set_handler</span><span class="p" data-group-id="0975490871-43">(</span><span class="nc">MyApp.HTNTraceHandler</span><span class="p" data-group-id="0975490871-43">)</span><span class="w">
+
+</span><span class="c1"># 3. Run planner - trace events fire</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="0975490871-44">(</span><span class="ss">:my_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="0975490871-44">)</span><span class="w">
+</span><span class="c1"># [HTN] Goal start: my_goal</span><span class="w">
+</span><span class="c1"># [HTN] Precondition my_goal: true</span><span class="w">
+</span><span class="c1"># [HTN] Expand: subtask_a []</span><span class="w">
+</span><span class="c1"># [HTN] Effect: {:self, :armed} = true</span><span class="w">
+</span><span class="c1"># [HTN] Complete: subtask_a -&gt; success (1 tasks)</span><span class="w">
+</span><span class="c1"># [HTN] Goal end: my_goal -&gt; success</span></code></pre><h2 id="module-configuration" class="section-heading"><a href="#module-configuration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Configuration</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># In config/config.exs</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="ss">trace_handler</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.HTNTraceHandler</span><span class="w">
+
+</span><span class="c1"># Or at runtime (takes precedence)</span><span class="w">
+</span><span class="nc">Operator.HTN.Trace</span><span class="o">.</span><span class="n">set_handler</span><span class="p" data-group-id="8016599463-1">(</span><span class="nc">MyApp.HTNTraceHandler</span><span class="p" data-group-id="8016599463-1">)</span></code></pre><h2 id="module-trace-events" class="section-heading"><a href="#module-trace-events" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Trace Events</span></h2><table><thead><tr><th style="text-align: left;">Event</th><th style="text-align: left;">When</th><th style="text-align: left;">Key Data</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">goal_start</code></td><td style="text-align: left;">Beginning goal expansion</td><td style="text-align: left;">goal_name, facts</td></tr><tr><td style="text-align: left;"><code class="inline">goal_end</code></td><td style="text-align: left;">Goal expansion complete</td><td style="text-align: left;">goal_name, :success/:failure</td></tr><tr><td style="text-align: left;"><code class="inline">precondition_eval</code></td><td style="text-align: left;">Precondition checked</td><td style="text-align: left;">context map, result boolean</td></tr><tr><td style="text-align: left;"><code class="inline">task_expand</code></td><td style="text-align: left;">Starting task decomposition</td><td style="text-align: left;">task_name, args, facts</td></tr><tr><td style="text-align: left;"><code class="inline">task_complete</code></td><td style="text-align: left;">Task decomposition done</td><td style="text-align: left;">task_name, result_tasks</td></tr><tr><td style="text-align: left;"><code class="inline">effect_apply</code></td><td style="text-align: left;">Effect applied to working facts</td><td style="text-align: left;">effect struct, facts</td></tr><tr><td style="text-align: left;"><code class="inline">branch_select</code></td><td style="text-align: left;">Decomposition branch chosen</td><td style="text-align: left;">task_name, branch_id</td></tr></tbody></table><h2 id="module-production-performance" class="section-heading"><a href="#module-production-performance" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Production Performance</span></h2><p>When no trace handler is configured (<code class="inline">nil</code>), all trace operations are
+no-ops with minimal overhead (one <code class="inline">persistent_term</code> lookup that returns
+<code class="inline">nil</code>, then immediate return). Safe to leave trace calls in production
+code.</p><h2 id="module-built-in-console-handler" class="section-heading"><a href="#module-built-in-console-handler" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Built-in Console Handler</span></h2><p>For quick debugging, use the provided console handler:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Operator.HTN.Trace</span><span class="o">.</span><span class="n">set_handler</span><span class="p" data-group-id="1209703622-1">(</span><span class="nc">Operator.HTN.Trace.ConsoleHandler</span><span class="p" data-group-id="1209703622-1">)</span></code></pre><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.Trace.Handler.html"><code class="inline">Operator.HTN.Trace.Handler</code></a> - Behaviour for trace handlers</li><li><a href="Operator.HTN.Trace.ConsoleHandler.html"><code class="inline">Operator.HTN.Trace.ConsoleHandler</code></a> - Built-in console output handler</li><li><a href="Operator.HTN.Engine.html"><code class="inline">Operator.HTN.Engine</code></a> - Where trace events are emitted</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#branch_select/3" data-no-tooltip="" translate="no">branch_select(task_name, branch_id, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace branch selection in decomposition.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#effect_apply/3" data-no-tooltip="" translate="no">effect_apply(effect, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace effect application.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#enabled?/0" data-no-tooltip="" translate="no">enabled?()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if tracing is enabled.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_handler/0" data-no-tooltip="" translate="no">get_handler()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the current trace handler, if any.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#goal_end/3" data-no-tooltip="" translate="no">goal_end(goal_name, result, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace the end of goal expansion.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#goal_start/3" data-no-tooltip="" translate="no">goal_start(goal_name, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace the start of goal expansion.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#precondition_eval/3" data-no-tooltip="" translate="no">precondition_eval(context, result, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace precondition evaluation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset/0" data-no-tooltip="" translate="no">reset()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reset trace handler (useful for tests).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_handler/1" data-no-tooltip="" translate="no">set_handler(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the trace handler module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#task_complete/4" data-no-tooltip="" translate="no">task_complete(task_name, result_tasks, status, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace task expansion completion.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#task_expand/4" data-no-tooltip="" translate="no">task_expand(task_name, args, facts, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trace task expansion start.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="branch_select/3">
+
+    <span id="branch_select/2"></span>
+
+  <div class="detail-header">
+    <a href="#branch_select/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">branch_select(task_name, branch_id, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> branch_select(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace branch selection in decomposition.</p>
+  </section>
+</section>
+<section class="detail" id="effect_apply/3">
+
+    <span id="effect_apply/2"></span>
+
+  <div class="detail-header">
+    <a href="#effect_apply/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">effect_apply(effect, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L189" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> effect_apply(<a href="Operator.HTN.Effect.html#t:t/0">Operator.HTN.Effect.t</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace effect application.</p>
+  </section>
+</section>
+<section class="detail" id="enabled?/0">
+
+  <div class="detail-header">
+    <a href="#enabled?/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">enabled?()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L136" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> enabled?() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Check if tracing is enabled.</p>
+  </section>
+</section>
+<section class="detail" id="get_handler/0">
+
+  <div class="detail-header">
+    <a href="#get_handler/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_handler()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_handler() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | nil</pre>
+
+      </div>
+
+<p>Get the current trace handler, if any.</p>
+  </section>
+</section>
+<section class="detail" id="goal_end/3">
+
+    <span id="goal_end/2"></span>
+
+  <div class="detail-header">
+    <a href="#goal_end/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">goal_end(goal_name, result, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L152" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> goal_end(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), :success | :failure, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace the end of goal expansion.</p>
+  </section>
+</section>
+<section class="detail" id="goal_start/3">
+
+    <span id="goal_start/2"></span>
+
+  <div class="detail-header">
+    <a href="#goal_start/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">goal_start(goal_name, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L144" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> goal_start(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace the start of goal expansion.</p>
+  </section>
+</section>
+<section class="detail" id="precondition_eval/3">
+
+    <span id="precondition_eval/2"></span>
+
+  <div class="detail-header">
+    <a href="#precondition_eval/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">precondition_eval(context, result, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L165" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> precondition_eval(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace precondition evaluation.</p><p>Context is a map with:</p><ul><li><code class="inline">:goal</code> or <code class="inline">:task</code> - The current goal/task name</li><li><code class="inline">:precondition_index</code> - Index in preconditions list</li><li><code class="inline">:precondition_type</code> - <code class="inline">:function</code>, <code class="inline">:axiom</code>, <code class="inline">:operator</code>, etc.</li></ul>
+  </section>
+</section>
+<section class="detail" id="reset/0">
+
+  <div class="detail-header">
+    <a href="#reset/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reset()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L213" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reset() :: :ok</pre>
+
+      </div>
+
+<p>Reset trace handler (useful for tests).</p>
+  </section>
+</section>
+<section class="detail" id="set_handler/1">
+
+  <div class="detail-header">
+    <a href="#set_handler/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_handler(module)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L118" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_handler(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | nil) :: :ok</pre>
+
+      </div>
+
+<p>Set the trace handler module.</p>
+  </section>
+</section>
+<section class="detail" id="task_complete/4">
+
+    <span id="task_complete/3"></span>
+
+  <div class="detail-header">
+    <a href="#task_complete/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_complete(task_name, result_tasks, status, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L181" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> task_complete(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), :success | :failure, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace task expansion completion.</p>
+  </section>
+</section>
+<section class="detail" id="task_expand/4">
+
+    <span id="task_expand/3"></span>
+
+  <div class="detail-header">
+    <a href="#task_expand/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_expand(task_name, args, facts, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/trace.ex#L173" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> task_expand(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trace task expansion start.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

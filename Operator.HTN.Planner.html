@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Planner — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Planner</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Planner.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>High-level API for HTN plan generation.</p><p>The Planner is your primary interface for generating plans. It wraps the
+Engine with telemetry, rationalization, and convenience functions for
+tick-based game loops.</p><h2 id="module-basic-usage" class="section-heading"><a href="#module-basic-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Basic Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="4207033362-1">{</span><span class="nc">Facts</span><span class="p">,</span><span class="w"> </span><span class="nc">Planner</span><span class="p" data-group-id="4207033362-1">}</span><span class="w">
+
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="4207033362-2">(</span><span class="p" data-group-id="4207033362-3">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207033362-4">%{</span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="ss">:lobby</span><span class="p">,</span><span class="w"> </span><span class="ss">has_keycard</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="4207033362-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207033362-5">%{</span><span class="ss">target</span><span class="p">:</span><span class="w"> </span><span class="ss">:server_room</span><span class="p">,</span><span class="w"> </span><span class="ss">threat_level</span><span class="p">:</span><span class="w"> </span><span class="ss">:low</span><span class="p" data-group-id="4207033362-5">}</span><span class="w">
+</span><span class="p" data-group-id="4207033362-3">}</span><span class="p" data-group-id="4207033362-2">)</span><span class="w">
+
+</span><span class="n">traits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4207033362-6">%{</span><span class="ss">archetype</span><span class="p">:</span><span class="w"> </span><span class="ss">:infiltrator</span><span class="p">,</span><span class="w"> </span><span class="ss">traits</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207033362-7">[</span><span class="ss">:stealthy</span><span class="p">,</span><span class="w"> </span><span class="ss">:tech_savvy</span><span class="p" data-group-id="4207033362-7">]</span><span class="p" data-group-id="4207033362-6">}</span><span class="w">
+
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="4207033362-8">(</span><span class="ss">:infiltrate_building</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4207033362-8">)</span><span class="w"> </span><span class="k" data-group-id="4207033362-9">do</span><span class="w">
+  </span><span class="p" data-group-id="4207033362-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="4207033362-10">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="4207033362-11">(</span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="p" data-group-id="4207033362-11">)</span><span class="w">
+    </span><span class="c1"># =&gt; [{:move_to, [:server_room]}, {:hack_terminal, []}, {:download_data, []}]</span><span class="w">
+
+  </span><span class="p" data-group-id="4207033362-12">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:preconditions_not_met</span><span class="p" data-group-id="4207033362-12">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Goal preconditions not satisfied - wait or choose different goal</span><span class="w">
+    </span><span class="ss">:retry_later</span><span class="w">
+
+  </span><span class="p" data-group-id="4207033362-13">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_not_found</span><span class="p" data-group-id="4207033362-13">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Goal not registered - check your DSL module</span><span class="w">
+    </span><span class="ss">:unknown_goal</span><span class="w">
+</span><span class="k" data-group-id="4207033362-9">end</span></code></pre><h2 id="module-integration-with-game-loops" class="section-heading"><a href="#module-integration-with-game-loops" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration with Game Loops</span></h2><p>For continuous simulations, the Planner provides tick-based helpers:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.AISystem</span><span class="w"> </span><span class="k" data-group-id="8682903621-1">do</span><span class="w">
+  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="8682903621-2">{</span><span class="nc">Executor</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="p">,</span><span class="w"> </span><span class="nc">Planner</span><span class="p" data-group-id="8682903621-2">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="8682903621-3">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="8682903621-3">)</span><span class="w"> </span><span class="k" data-group-id="8682903621-4">do</span><span class="w">
+    </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_facts</span><span class="p" data-group-id="8682903621-5">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="8682903621-5">)</span><span class="w">
+    </span><span class="n">traits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">genome</span><span class="w">
+
+    </span><span class="k">case</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">plan</span><span class="w"> </span><span class="k" data-group-id="8682903621-6">do</span><span class="w">
+      </span><span class="no">nil</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># No plan - generate one</span><span class="w">
+        </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="8682903621-7">(</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">:default_goal</span><span class="p" data-group-id="8682903621-7">)</span><span class="w">
+        </span><span class="p" data-group-id="8682903621-8">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="8682903621-8">}</span><span class="w">
+
+      </span><span class="n">plan</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># Have plan - check if still valid, execute or replan</span><span class="w">
+        </span><span class="k">if</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">needs_replan?</span><span class="p" data-group-id="8682903621-9">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="8682903621-9">)</span><span class="w"> </span><span class="k" data-group-id="8682903621-10">do</span><span class="w">
+          </span><span class="n">new_plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="8682903621-11">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">:default_goal</span><span class="p" data-group-id="8682903621-11">)</span><span class="w">
+          </span><span class="p" data-group-id="8682903621-12">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="n">new_plan</span><span class="p" data-group-id="8682903621-12">}</span><span class="w">
+        </span><span class="k" data-group-id="8682903621-10">else</span><span class="w">
+          </span><span class="c1"># Execute current plan</span><span class="w">
+          </span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="8682903621-13">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="8682903621-13">)</span><span class="w"> </span><span class="k" data-group-id="8682903621-14">do</span><span class="w">
+            </span><span class="p" data-group-id="8682903621-15">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="8682903621-15">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+              </span><span class="p" data-group-id="8682903621-16">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="8682903621-16">}</span><span class="w">
+
+            </span><span class="p" data-group-id="8682903621-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="8682903621-17">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+              </span><span class="p" data-group-id="8682903621-18">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="8682903621-18">}</span><span class="w">
+
+            </span><span class="p" data-group-id="8682903621-19">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="c">_reason</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="8682903621-19">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+              </span><span class="p" data-group-id="8682903621-20">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="8682903621-20">}</span><span class="w">  </span><span class="c1"># Will replan next tick</span><span class="w">
+          </span><span class="k" data-group-id="8682903621-14">end</span><span class="w">
+        </span><span class="k" data-group-id="8682903621-10">end</span><span class="w">
+    </span><span class="k" data-group-id="8682903621-6">end</span><span class="w">
+  </span><span class="k" data-group-id="8682903621-4">end</span><span class="w">
+</span><span class="k" data-group-id="8682903621-1">end</span></code></pre><h2 id="module-what-happens-during-planning" class="section-heading"><a href="#module-what-happens-during-planning" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">What Happens During Planning</span></h2><ol><li><strong>Goal lookup</strong> - Find the goal in the Registry</li><li><strong>Precondition check</strong> - Verify goal preconditions pass</li><li><strong>Decomposition</strong> - Expand goal into task sequence</li><li><strong>Recursive expansion</strong> - Expand abstract tasks into primitives</li><li><strong>Effect simulation</strong> - Apply effects to working facts copy</li><li><strong>Annotation</strong> - Add narrative metadata via Rationalization</li><li><strong>Telemetry</strong> - Emit planning metrics</li></ol><h2 id="module-telemetry-events" class="section-heading"><a href="#module-telemetry-events" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Telemetry Events</span></h2><p>Each successful <a href="#run/3"><code class="inline">run/3</code></a> emits <code class="inline">Telemetry.emit_htn_plan_generated/3</code> with:</p><ul><li>Goal name</li><li>Task count</li><li>Planning duration (ms)</li></ul><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.Engine.html"><code class="inline">Operator.HTN.Engine</code></a> - Low-level expansion logic</li><li><a href="Operator.HTN.Executor.html"><code class="inline">Operator.HTN.Executor</code></a> - Running generated plans</li><li><a href="Operator.HTN.GoalSelector.html"><code class="inline">Operator.HTN.GoalSelector</code></a> - Automatic goal selection</li><li><a href="Operator.HTN.Plan.html"><code class="inline">Operator.HTN.Plan</code></a> - The plan data structure</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#explain/3" data-no-tooltip="" translate="no">explain(goal_name, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Explain plan generation for a specific goal.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#needs_replan?/2" data-no-tooltip="" translate="no">needs_replan?(plan, facts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if a plan needs replanning.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#run/4" data-no-tooltip="" translate="no">run(goal_name, facts, traits, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generate a plan for a goal.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#run_with_registry/5" data-no-tooltip="" translate="no">run_with_registry(goal_name, facts, traits, htn_registry, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generate a plan using a specific registry.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tick/4" data-no-tooltip="" translate="no">tick(plan, facts, traits, goal_name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Update or create a plan on each game tick.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="explain/3">
+
+  <div class="detail-header">
+    <a href="#explain/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">explain(goal_name, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L162" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> explain(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Explain plan generation for a specific goal.</p><p>Returns a structured map for debugging or UI tooling. Unlike tracing,
+this gives you a deterministic, inspectable payload.</p><h2 id="explain/3-example" class="section-heading"><a href="#explain/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">explain</span><span class="p" data-group-id="9915178024-1">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="9915178024-1">)</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+
+</span><span class="n">result</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="w">
+</span><span class="c1">#=&gt; [{:move_to, [:waypoint_1]}, {:look_around, []}]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="needs_replan?/2">
+
+  <div class="detail-header">
+    <a href="#needs_replan?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">needs_replan?(plan, facts)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L305" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> needs_replan?(<a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>() | nil, <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Check if a plan needs replanning.</p><p>Returns <code class="inline">true</code> if the plan is missing, invalid, or completed.
+Use this to decide whether to call <a href="#run/3"><code class="inline">run/3</code></a> or continue with
+the current plan.</p><h2 id="needs_replan?/2-parameters" class="section-heading"><a href="#needs_replan?/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">plan</code> - Current plan (or <code class="inline">nil</code>)</li><li><code class="inline">facts</code> - Current world state (reserved for future validation)</li></ul><h2 id="needs_replan?/2-returns" class="section-heading"><a href="#needs_replan?/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">true</code> - Plan is <code class="inline">nil</code>, <code class="inline">:invalid</code>, or <code class="inline">:completed</code></li><li><code class="inline">false</code> - Plan is <code class="inline">:active</code> and ready for execution</li></ul><h2 id="needs_replan?/2-examples" class="section-heading"><a href="#needs_replan?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Planner</span><span class="o">.</span><span class="n">needs_replan?</span><span class="p" data-group-id="4767147237-1">(</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4767147237-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="n">active_plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4767147237-2">(</span><span class="ss">:goal</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4767147237-3">[</span><span class="p" data-group-id="4767147237-4">{</span><span class="ss">:task</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4767147237-5">[</span><span class="p" data-group-id="4767147237-5">]</span><span class="p" data-group-id="4767147237-4">}</span><span class="p" data-group-id="4767147237-3">]</span><span class="p" data-group-id="4767147237-2">)</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">needs_replan?</span><span class="p" data-group-id="4767147237-6">(</span><span class="n">active_plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4767147237-6">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span><span class="w">
+
+</span><span class="n">completed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">complete</span><span class="p" data-group-id="4767147237-7">(</span><span class="n">active_plan</span><span class="p" data-group-id="4767147237-7">)</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">needs_replan?</span><span class="p" data-group-id="4767147237-8">(</span><span class="n">completed</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="4767147237-8">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="run/4">
+
+    <span id="run/3"></span>
+
+  <div class="detail-header">
+    <a href="#run/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">run(goal_name, facts, traits, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L141" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> run(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  {:ok, <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Generate a plan for a goal.</p><p>This is the primary planning function. It expands the goal into a sequence
+of primitive tasks, annotates the plan with narrative metadata, and emits
+telemetry.</p><h2 id="run/4-parameters" class="section-heading"><a href="#run/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">goal_name</code> - The goal atom to plan for (must be registered)</li><li><code class="inline">facts</code> - Current world state (<code class="inline">Facts.t()</code>)</li><li><code class="inline">traits</code> - Agent traits/genome map for cost heuristics</li></ul><h2 id="run/4-returns" class="section-heading"><a href="#run/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, plan}</code> - Successfully generated plan with tasks</li><li><code class="inline">{:error, :goal_not_found}</code> - Goal not in Registry</li><li><code class="inline">{:error, :preconditions_not_met}</code> - Goal preconditions failed</li><li><code class="inline">{:error, {:budget_exceeded, reason}}</code> - Planning exceeded configured budget</li></ul><h2 id="run/4-examples" class="section-heading"><a href="#run/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Successful planning</span><span class="w">
+</span><span class="p" data-group-id="6684960691-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="6684960691-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="6684960691-2">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="6684960691-2">)</span><span class="w">
+</span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="w">
+</span><span class="c1">#=&gt; [{:walk_to, [:waypoint_1]}, {:scan, []}, {:walk_to, [:waypoint_2]}]</span><span class="w">
+
+</span><span class="c1"># Goal doesn&#39;t exist</span><span class="w">
+</span><span class="p" data-group-id="6684960691-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_not_found</span><span class="p" data-group-id="6684960691-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="6684960691-4">(</span><span class="ss">:nonexistent</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="6684960691-4">)</span><span class="w">
+
+</span><span class="c1"># Preconditions failed (e.g., attack requires weapon)</span><span class="w">
+</span><span class="n">facts_unarmed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="6684960691-5">(</span><span class="p" data-group-id="6684960691-6">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6684960691-7">%{</span><span class="ss">armed</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="6684960691-7">}</span><span class="p" data-group-id="6684960691-6">}</span><span class="p" data-group-id="6684960691-5">)</span><span class="w">
+</span><span class="p" data-group-id="6684960691-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:preconditions_not_met</span><span class="p" data-group-id="6684960691-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="6684960691-9">(</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="n">facts_unarmed</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="6684960691-9">)</span><span class="w">
+
+</span><span class="c1"># Budgeted planning</span><span class="w">
+</span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="6684960691-10">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">budget</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6684960691-11">[</span><span class="ss">max_tasks</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout_ms</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="6684960691-11">]</span><span class="p" data-group-id="6684960691-10">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="run_with_registry/5">
+
+    <span id="run_with_registry/4"></span>
+
+  <div class="detail-header">
+    <a href="#run_with_registry/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">run_with_registry(goal_name, facts, traits, htn_registry, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L346" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> run_with_registry(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  {:ok, <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Generate a plan using a specific registry.</p><p>Primarily useful for testing with isolated registries or when you need
+to plan against a subset of behaviors.</p><h2 id="run_with_registry/5-parameters" class="section-heading"><a href="#run_with_registry/5-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">goal_name</code> - The goal atom to plan for</li><li><code class="inline">facts</code> - Current world state</li><li><code class="inline">traits</code> - Agent traits/genome</li><li><code class="inline">htn_registry</code> - Registry map (from <code class="inline">Registry.all()</code> or custom)</li></ul><h2 id="run_with_registry/5-returns" class="section-heading"><a href="#run_with_registry/5-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>Same as <a href="#run/3"><code class="inline">run/3</code></a>.</p><h2 id="run_with_registry/5-examples" class="section-heading"><a href="#run_with_registry/5-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Testing with isolated registry</span><span class="w">
+</span><span class="n">test</span><span class="w"> </span><span class="s">&quot;my goal generates correct plan&quot;</span><span class="w"> </span><span class="k" data-group-id="3708224538-1">do</span><span class="w">
+  </span><span class="n">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3708224538-2">%{</span><span class="w">
+    </span><span class="ss">goals</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-3">%{</span><span class="ss">test_goal</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-4">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="ss">:test_goal</span><span class="p">,</span><span class="w"> </span><span class="ss">decompose</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3708224538-4">}</span><span class="p" data-group-id="3708224538-3">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">tasks</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-5">%{</span><span class="p" data-group-id="3708224538-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">primitives</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-6">%{</span><span class="ss">test_action</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-7">%</span><span class="nc" data-group-id="3708224538-7">Task</span><span class="p" data-group-id="3708224538-7">{</span><span class="n">...</span><span class="p" data-group-id="3708224538-7">}</span><span class="p" data-group-id="3708224538-6">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">axioms</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3708224538-8">%{</span><span class="p" data-group-id="3708224538-8">}</span><span class="w">
+  </span><span class="p" data-group-id="3708224538-2">}</span><span class="w">
+
+  </span><span class="p" data-group-id="3708224538-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="3708224538-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run_with_registry</span><span class="p" data-group-id="3708224538-10">(</span><span class="ss">:test_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3708224538-11">%{</span><span class="p" data-group-id="3708224538-11">}</span><span class="p">,</span><span class="w"> </span><span class="n">registry</span><span class="p" data-group-id="3708224538-10">)</span><span class="w">
+  </span><span class="n">assert</span><span class="w"> </span><span class="p" data-group-id="3708224538-12">[</span><span class="p" data-group-id="3708224538-13">{</span><span class="ss">:test_action</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3708224538-14">[</span><span class="p" data-group-id="3708224538-14">]</span><span class="p" data-group-id="3708224538-13">}</span><span class="p" data-group-id="3708224538-12">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="w">
+</span><span class="k" data-group-id="3708224538-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="tick/4">
+
+  <div class="detail-header">
+    <a href="#tick/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tick(plan, facts, traits, goal_name)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/planner.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> tick(<a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>() | nil, <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) ::
+  <a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>() | nil</pre>
+
+      </div>
+
+<p>Update or create a plan on each game tick.</p><p>Convenience function for tick-based game loops. Handles the common pattern
+of &quot;create plan if none exists, replan if invalid, keep if valid&quot;.</p><h2 id="tick/4-parameters" class="section-heading"><a href="#tick/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">plan</code> - Current plan (or <code class="inline">nil</code> if none)</li><li><code class="inline">facts</code> - Current world state</li><li><code class="inline">traits</code> - Agent traits/genome</li><li><code class="inline">goal_name</code> - Goal to plan for if replanning needed</li></ul><h2 id="tick/4-returns" class="section-heading"><a href="#tick/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">%Plan{}</code> - The current or newly generated plan</li><li><code class="inline">nil</code> - Planning failed and no valid plan exists</li></ul><h2 id="tick/4-behavior" class="section-heading"><a href="#tick/4-behavior" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Behavior</span></h2><table><thead><tr><th style="text-align: left;">Current Plan</th><th style="text-align: left;">Plan Valid?</th><th style="text-align: left;">Result</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">nil</code></td><td style="text-align: left;">N/A</td><td style="text-align: left;">Generate new plan</td></tr><tr><td style="text-align: left;"><code class="inline">%Plan{}</code></td><td style="text-align: left;">Yes</td><td style="text-align: left;">Return existing plan</td></tr><tr><td style="text-align: left;"><code class="inline">%Plan{}</code></td><td style="text-align: left;">No</td><td style="text-align: left;">Generate new plan</td></tr></tbody></table><h2 id="tick/4-examples" class="section-heading"><a href="#tick/4-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># In your game loop</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update_ai</span><span class="p" data-group-id="8082169833-1">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="8082169833-1">)</span><span class="w"> </span><span class="k" data-group-id="8082169833-2">do</span><span class="w">
+  </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_facts</span><span class="p" data-group-id="8082169833-3">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="p" data-group-id="8082169833-3">)</span><span class="w">
+  </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="8082169833-4">(</span><span class="n">entity</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">:default_goal</span><span class="p" data-group-id="8082169833-4">)</span><span class="w">
+  </span><span class="p" data-group-id="8082169833-5">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">plan</span><span class="p">:</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="8082169833-5">}</span><span class="w">
+</span><span class="k" data-group-id="8082169833-2">end</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

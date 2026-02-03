@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Getting Started — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Getting Started</h1>
+
+<a href="getting_started.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/guides/getting_started.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p>This guide walks you through building your first HTN (Hierarchical Task Network)
+planning system with Operator. By the end, you'll have an NPC that can plan and
+execute behaviors based on world state.</p><h2 id="what-you-ll-build" class="section-heading"><a href="#what-you-ll-build" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">What You'll Build</span></h2><p>You will build a single NPC behavior module, generate a plan, and execute it
+step-by-step. The focus is clarity, not scale.</p><h2 id="prerequisites" class="section-heading"><a href="#prerequisites" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Prerequisites</span></h2><ul><li>Elixir 1.15 or later.</li><li>A Mix project where you can add a dependency.</li><li>A willingness to keep facts deterministic.</li></ul><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><p>Add Operator to your <code class="inline">mix.exs</code> dependencies:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="9704340947-1">do</span><span class="w">
+  </span><span class="p" data-group-id="9704340947-2">[</span><span class="w">
+    </span><span class="p" data-group-id="9704340947-3">{</span><span class="ss">:operator</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="9704340947-3">}</span><span class="w">
+  </span><span class="p" data-group-id="9704340947-2">]</span><span class="w">
+</span><span class="k" data-group-id="9704340947-1">end</span></code></pre><p>Then fetch dependencies:</p><pre><code class="makeup bash" translate="no"><span class="">mix deps.get
+</span></code></pre><h2 id="a-minimal-mental-model" class="section-heading"><a href="#a-minimal-mental-model" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">A Minimal Mental Model</span></h2><p>HTN is a hierarchy:</p><ul><li>Goals define intent.</li><li>Tasks define how to achieve goals.</li><li>Primitives define real actions.</li></ul><p>Facts are the world snapshot. Plans are sequences of primitives.</p><h2 id="core-concepts" class="section-heading"><a href="#core-concepts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Core Concepts</span></h2><p>Before writing code, understand the HTN hierarchy:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Goals</span><span class="w"> </span><span class="p" data-group-id="8296921532-1">(</span><span class="n">high</span><span class="o">-</span><span class="n">level</span><span class="w"> </span><span class="n">objectives</span><span class="p" data-group-id="8296921532-1">)</span><span class="w">
+  </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="w"> </span><span class="nc">Tasks</span><span class="w"> </span><span class="p" data-group-id="8296921532-2">(</span><span class="n">abstract</span><span class="w"> </span><span class="n">steps</span><span class="p" data-group-id="8296921532-2">)</span><span class="w">
+       </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="w"> </span><span class="nc">Primitives</span><span class="w"> </span><span class="p" data-group-id="8296921532-3">(</span><span class="n">executable</span><span class="w"> </span><span class="n">actions</span><span class="p" data-group-id="8296921532-3">)</span></code></pre><ul><li><strong>Goals</strong> - What the agent wants to achieve (&quot;patrol area&quot;, &quot;attack enemy&quot;)</li><li><strong>Tasks</strong> - How to achieve it, decomposed into subtasks</li><li><strong>Primitives</strong> - Actual actions your game executes (&quot;move&quot;, &quot;fire&quot;, &quot;wait&quot;)</li></ul><h2 id="your-first-behavior-module" class="section-heading"><a href="#your-first-behavior-module" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Your First Behavior Module</span></h2><p>Create a behavior module that defines what your NPC can do:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.GuardBehavior</span><span class="w"> </span><span class="k" data-group-id="7248943802-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Operator.HTN.DSL</span><span class="w">
+
+  </span><span class="c1"># A goal that decomposes into tasks</span><span class="w">
+  </span><span class="n">goal</span><span class="w"> </span><span class="ss">:patrol</span><span class="w"> </span><span class="k" data-group-id="7248943802-2">do</span><span class="w">
+    </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="7248943802-3">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7248943802-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7248943802-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:energy</span><span class="p" data-group-id="7248943802-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7248943802-4">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w">
+    </span><span class="k" data-group-id="7248943802-3">end</span><span class="w">
+
+    </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="7248943802-6">do</span><span class="w">
+      </span><span class="n">task</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="ss">:waypoint_1</span><span class="w">
+      </span><span class="n">task</span><span class="w"> </span><span class="ss">:look_around</span><span class="w">
+      </span><span class="n">task</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="ss">:waypoint_2</span><span class="w">
+      </span><span class="n">task</span><span class="w"> </span><span class="ss">:look_around</span><span class="w">
+    </span><span class="k" data-group-id="7248943802-6">end</span><span class="w">
+
+    </span><span class="n">metadata</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">domain</span><span class="p">:</span><span class="w"> </span><span class="ss">:routine</span><span class="w">
+  </span><span class="k" data-group-id="7248943802-2">end</span><span class="w">
+
+  </span><span class="c1"># Primitives are the leaf actions</span><span class="w">
+  </span><span class="n">primitive</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="k" data-group-id="7248943802-7">do</span><span class="w">
+    </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="7248943802-8">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="c1"># Your game&#39;s movement logic here</span><span class="w">
+      </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="7248943802-9">(</span><span class="s">&quot;</span><span class="si" data-group-id="7248943802-10">#{</span><span class="n">actor</span><span class="o">.</span><span class="n">name</span><span class="si" data-group-id="7248943802-10">}</span><span class="s"> moving to </span><span class="si" data-group-id="7248943802-11">#{</span><span class="n">destination</span><span class="si" data-group-id="7248943802-11">}</span><span class="s">&quot;</span><span class="p" data-group-id="7248943802-9">)</span><span class="w">
+      </span><span class="p" data-group-id="7248943802-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p" data-group-id="7248943802-12">}</span><span class="w">
+    </span><span class="k" data-group-id="7248943802-8">end</span><span class="w">
+  </span><span class="k" data-group-id="7248943802-7">end</span><span class="w">
+
+  </span><span class="n">primitive</span><span class="w"> </span><span class="ss">:look_around</span><span class="w"> </span><span class="k" data-group-id="7248943802-13">do</span><span class="w">
+    </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="7248943802-14">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="7248943802-15">(</span><span class="s">&quot;</span><span class="si" data-group-id="7248943802-16">#{</span><span class="n">actor</span><span class="o">.</span><span class="n">name</span><span class="si" data-group-id="7248943802-16">}</span><span class="s"> scanning area...&quot;</span><span class="p" data-group-id="7248943802-15">)</span><span class="w">
+      </span><span class="p" data-group-id="7248943802-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p" data-group-id="7248943802-17">}</span><span class="w">
+    </span><span class="k" data-group-id="7248943802-14">end</span><span class="w">
+  </span><span class="k" data-group-id="7248943802-13">end</span><span class="w">
+</span><span class="k" data-group-id="7248943802-1">end</span></code></pre><h2 id="why-full-module-names-matter" class="section-heading"><a href="#why-full-module-names-matter" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Why Full Module Names Matter</span></h2><p>Functions inside <code class="inline">precond</code> and <code class="inline">decompose</code> run at runtime in a different scope.
+Preconditions are stored as a list of conditions and evaluated through
+<a href="Operator.HTN.Precondition.html"><code class="inline">Operator.HTN.Precondition</code></a>.
+That means module aliases do not work. Always use fully qualified names inside
+those functions.</p><h2 id="understanding-facts" class="section-heading"><a href="#understanding-facts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Understanding Facts</span></h2><p>Facts represent the agent's knowledge about the world:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="w">
+
+</span><span class="c1"># Create facts from perception data</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3986188662-1">(</span><span class="p" data-group-id="3986188662-2">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3986188662-3">%{</span><span class="w">
+    </span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="ss">energy</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w">
+    </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3986188662-4">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3986188662-4">}</span><span class="w">
+  </span><span class="p" data-group-id="3986188662-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3986188662-5">%{</span><span class="w">
+    </span><span class="ss">threat_level</span><span class="p">:</span><span class="w"> </span><span class="ss">:low</span><span class="p">,</span><span class="w">
+    </span><span class="ss">time_of_day</span><span class="p">:</span><span class="w"> </span><span class="ss">:day</span><span class="w">
+  </span><span class="p" data-group-id="3986188662-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">social</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3986188662-6">%{</span><span class="w">
+    </span><span class="ss">faction</span><span class="p">:</span><span class="w"> </span><span class="ss">:guards</span><span class="w">
+  </span><span class="p" data-group-id="3986188662-6">}</span><span class="w">
+</span><span class="p" data-group-id="3986188662-2">}</span><span class="p" data-group-id="3986188662-1">)</span><span class="w">
+
+</span><span class="c1"># Query facts in preconditions</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3986188662-7">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3986188662-8">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="3986188662-8">}</span><span class="p" data-group-id="3986188662-7">)</span><span class="w">      </span><span class="c1"># =&gt; true</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3986188662-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3986188662-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="3986188662-10">}</span><span class="p" data-group-id="3986188662-9">)</span><span class="w">       </span><span class="c1"># =&gt; 100</span><span class="w">
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3986188662-11">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3986188662-12">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ammo</span><span class="p" data-group-id="3986188662-12">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3986188662-11">)</span><span class="w">      </span><span class="c1"># =&gt; 0 (default)</span></code></pre><h2 id="keep-facts-small" class="section-heading"><a href="#keep-facts-small" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Keep Facts Small</span></h2><p>Facts are meant to be lightweight snapshots. If you have very large data, keep a
+compact summary in facts and leave the heavy data elsewhere.</p><h2 id="generating-plans" class="section-heading"><a href="#generating-plans" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Generating Plans</span></h2><p>Use the Planner to create a plan for a goal:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Planner</span><span class="w">
+
+</span><span class="c1"># Build facts from your game state</span><span class="w">
+</span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5355488082-1">(</span><span class="p" data-group-id="5355488082-2">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5355488082-3">%{</span><span class="ss">energy</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="5355488082-3">}</span><span class="w">
+</span><span class="p" data-group-id="5355488082-2">}</span><span class="p" data-group-id="5355488082-1">)</span><span class="w">
+
+</span><span class="c1"># Traits influence goal selection and costs</span><span class="w">
+</span><span class="n">traits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5355488082-4">%{</span><span class="ss">archetype</span><span class="p">:</span><span class="w"> </span><span class="ss">:guard</span><span class="p" data-group-id="5355488082-4">}</span><span class="w">
+
+</span><span class="c1"># Generate a plan</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="5355488082-5">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="5355488082-5">)</span><span class="w"> </span><span class="k" data-group-id="5355488082-6">do</span><span class="w">
+  </span><span class="p" data-group-id="5355488082-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="5355488082-7">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="5355488082-8">(</span><span class="n">plan</span><span class="o">.</span><span class="n">tasks</span><span class="p" data-group-id="5355488082-8">)</span><span class="w">
+    </span><span class="c1"># =&gt; [{:move_to, [:waypoint_1]}, {:look_around, []}, ...]</span><span class="w">
+
+  </span><span class="p" data-group-id="5355488082-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:preconditions_not_met</span><span class="p" data-group-id="5355488082-9">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="5355488082-10">(</span><span class="s">&quot;Guard doesn&#39;t have enough energy to patrol&quot;</span><span class="p" data-group-id="5355488082-10">)</span><span class="w">
+
+  </span><span class="p" data-group-id="5355488082-11">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:goal_not_found</span><span class="p" data-group-id="5355488082-11">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="5355488082-12">(</span><span class="s">&quot;Unknown goal&quot;</span><span class="p" data-group-id="5355488082-12">)</span><span class="w">
+</span><span class="k" data-group-id="5355488082-6">end</span></code></pre><h2 id="handling-errors-cleanly" class="section-heading"><a href="#handling-errors-cleanly" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Handling Errors Cleanly</span></h2><p>Always handle the planner's error tuples. They are your signal that either the
+goal does not exist or the world state does not qualify.</p><h2 id="executing-plans" class="section-heading"><a href="#executing-plans" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Executing Plans</span></h2><p>Execute plans step-by-step or all at once:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Executor</span><span class="w">
+
+</span><span class="n">actor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2390907050-1">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Guard #1&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2390907050-1">}</span><span class="w">
+
+</span><span class="c1"># Execute one step at a time (good for game loops)</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="2390907050-2">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="2390907050-2">)</span><span class="w"> </span><span class="k" data-group-id="2390907050-3">do</span><span class="w">
+  </span><span class="p" data-group-id="2390907050-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p">,</span><span class="w"> </span><span class="n">updated_facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="2390907050-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Store remaining_plan for next tick</span><span class="w">
+    </span><span class="p" data-group-id="2390907050-5">{</span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="2390907050-5">}</span><span class="w">
+
+  </span><span class="p" data-group-id="2390907050-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">final_actor</span><span class="p">,</span><span class="w"> </span><span class="n">final_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="2390907050-6">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Plan finished!</span><span class="w">
+    </span><span class="p" data-group-id="2390907050-7">{</span><span class="ss">:done</span><span class="p">,</span><span class="w"> </span><span class="n">final_actor</span><span class="p" data-group-id="2390907050-7">}</span><span class="w">
+
+  </span><span class="p" data-group-id="2390907050-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="2390907050-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Task failed, might need to replan</span><span class="w">
+    </span><span class="p" data-group-id="2390907050-9">{</span><span class="ss">:failed</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="2390907050-9">}</span><span class="w">
+</span><span class="k" data-group-id="2390907050-3">end</span><span class="w">
+
+</span><span class="c1"># Or execute entire plan at once</span><span class="w">
+</span><span class="p" data-group-id="2390907050-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">final_actor</span><span class="p">,</span><span class="w"> </span><span class="n">final_facts</span><span class="p" data-group-id="2390907050-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">run_plan</span><span class="p" data-group-id="2390907050-11">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="2390907050-11">)</span></code></pre><h2 id="loop-helper-optional" class="section-heading"><a href="#loop-helper-optional" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Loop Helper (Optional)</span></h2><p>For quick integration, the <code class="inline">Loop</code> helper handles plan creation and one-step execution:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Loop</span><span class="w">
+
+</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Loop</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="1020438551-1">(</span><span class="n">actor</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="ss">goal</span><span class="p">:</span><span class="w"> </span><span class="ss">:patrol</span><span class="p" data-group-id="1020438551-1">)</span></code></pre><h2 id="plan-lifecycles" class="section-heading"><a href="#plan-lifecycles" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Plan Lifecycles</span></h2><ul><li><code class="inline">:active</code> means it can run.</li><li><code class="inline">:invalid</code> means the world changed.</li><li><code class="inline">:completed</code> means it finished.</li></ul><h2 id="game-loop-integration" class="section-heading"><a href="#game-loop-integration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Game Loop Integration</span></h2><p>Here's a typical integration pattern:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.AISystem</span><span class="w"> </span><span class="k" data-group-id="7326043710-1">do</span><span class="w">
+  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="7326043710-2">{</span><span class="nc">Executor</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="p">,</span><span class="w"> </span><span class="nc">GoalSelector</span><span class="p">,</span><span class="w"> </span><span class="nc">Planner</span><span class="p" data-group-id="7326043710-2">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">tick</span><span class="p" data-group-id="7326043710-3">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p" data-group-id="7326043710-3">)</span><span class="w"> </span><span class="k" data-group-id="7326043710-4">do</span><span class="w">
+    </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_facts</span><span class="p" data-group-id="7326043710-5">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p" data-group-id="7326043710-5">)</span><span class="w">
+    </span><span class="n">traits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">genome</span><span class="w">
+
+    </span><span class="k">case</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">current_plan</span><span class="w"> </span><span class="k" data-group-id="7326043710-6">do</span><span class="w">
+      </span><span class="no">nil</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># No plan - pick a goal and plan</span><span class="w">
+        </span><span class="k">case</span><span class="w"> </span><span class="nc">GoalSelector</span><span class="o">.</span><span class="n">pick_goal</span><span class="p" data-group-id="7326043710-7">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="7326043710-7">)</span><span class="w"> </span><span class="k" data-group-id="7326043710-8">do</span><span class="w">
+          </span><span class="p" data-group-id="7326043710-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">goal</span><span class="p" data-group-id="7326043710-9">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="k">case</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7326043710-10">(</span><span class="n">goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="7326043710-10">)</span><span class="w"> </span><span class="k" data-group-id="7326043710-11">do</span><span class="w">
+              </span><span class="p" data-group-id="7326043710-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="7326043710-12">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="7326043710-13">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="7326043710-13">}</span><span class="w">
+              </span><span class="p" data-group-id="7326043710-14">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="7326043710-14">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">entity</span><span class="w">
+            </span><span class="k" data-group-id="7326043710-11">end</span><span class="w">
+          </span><span class="ss">:none</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="n">entity</span><span class="w">  </span><span class="c1"># No valid goals</span><span class="w">
+        </span><span class="k" data-group-id="7326043710-8">end</span><span class="w">
+
+      </span><span class="n">plan</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="c1"># Have a plan - execute next step</span><span class="w">
+        </span><span class="k">case</span><span class="w"> </span><span class="nc">Executor</span><span class="o">.</span><span class="n">step</span><span class="p" data-group-id="7326043710-15">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="7326043710-15">)</span><span class="w"> </span><span class="k" data-group-id="7326043710-16">do</span><span class="w">
+          </span><span class="p" data-group-id="7326043710-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:completed</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="7326043710-17">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="7326043710-18">%{</span><span class="n">updated</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="7326043710-18">}</span><span class="w">
+
+          </span><span class="p" data-group-id="7326043710-19">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:continue</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="7326043710-19">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="7326043710-20">%{</span><span class="n">updated</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="7326043710-20">}</span><span class="w">
+
+          </span><span class="p" data-group-id="7326043710-21">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="c">_reason</span><span class="p">,</span><span class="w"> </span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="p">,</span><span class="w"> </span><span class="c">_plan</span><span class="p" data-group-id="7326043710-21">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="c1"># Invalidate plan, will replan next tick</span><span class="w">
+            </span><span class="p" data-group-id="7326043710-22">%{</span><span class="n">entity</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">current_plan</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="7326043710-22">}</span><span class="w">
+        </span><span class="k" data-group-id="7326043710-16">end</span><span class="w">
+    </span><span class="k" data-group-id="7326043710-6">end</span><span class="w">
+  </span><span class="k" data-group-id="7326043710-4">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">build_facts</span><span class="p" data-group-id="7326043710-23">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p" data-group-id="7326043710-23">)</span><span class="w"> </span><span class="k" data-group-id="7326043710-24">do</span><span class="w">
+    </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="7326043710-25">(</span><span class="p" data-group-id="7326043710-26">%{</span><span class="w">
+      </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7326043710-27">%{</span><span class="w">
+        </span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">health</span><span class="p">,</span><span class="w">
+        </span><span class="ss">energy</span><span class="p">:</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span><span class="w">
+        </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="n">entity</span><span class="o">.</span><span class="n">position</span><span class="w">
+      </span><span class="p" data-group-id="7326043710-27">}</span><span class="p">,</span><span class="w">
+      </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="7326043710-28">(</span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7326043710-29">[</span><span class="ss">:threat_level</span><span class="p">,</span><span class="w"> </span><span class="ss">:time_of_day</span><span class="p" data-group-id="7326043710-29">]</span><span class="p" data-group-id="7326043710-28">)</span><span class="w">
+    </span><span class="p" data-group-id="7326043710-26">}</span><span class="p" data-group-id="7326043710-25">)</span><span class="w">
+  </span><span class="k" data-group-id="7326043710-24">end</span><span class="w">
+</span><span class="k" data-group-id="7326043710-1">end</span></code></pre><h2 id="replanning-strategy" class="section-heading"><a href="#replanning-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Replanning Strategy</span></h2><p>If your world changes often, do not discard plans too aggressively. Use
+<code class="inline">Planner.needs_replan?/2</code> to decide when to regenerate.</p><h2 id="adding-preconditions" class="section-heading"><a href="#adding-preconditions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Adding Preconditions</span></h2><p>Preconditions control when goals and tasks are available:</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:attack</span><span class="w"> </span><span class="k" data-group-id="3851117272-1">do</span><span class="w">
+  </span><span class="c1"># Simple precondition</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="3851117272-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3851117272-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3851117272-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="3851117272-4">}</span><span class="p" data-group-id="3851117272-3">)</span><span class="w"> </span><span class="ow">and</span><span class="w">
+    </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3851117272-5">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3851117272-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ammo</span><span class="p" data-group-id="3851117272-6">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3851117272-5">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="k" data-group-id="3851117272-2">end</span><span class="w">
+
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="3851117272-7">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:aim_at_target</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:fire_weapon</span><span class="w">
+  </span><span class="k" data-group-id="3851117272-7">end</span><span class="w">
+</span><span class="k" data-group-id="3851117272-1">end</span></code></pre><p>Use logical operators for complex conditions:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Precondition</span><span class="w">
+
+</span><span class="c1"># OR: has weapon OR near weapon pickup</span><span class="w">
+</span><span class="p" data-group-id="9820321171-1">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9820321171-2">[</span><span class="w">
+  </span><span class="k" data-group-id="9820321171-3">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9820321171-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9820321171-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="9820321171-5">}</span><span class="p" data-group-id="9820321171-4">)</span><span class="w"> </span><span class="k" data-group-id="9820321171-3">end</span><span class="p">,</span><span class="w">
+  </span><span class="k" data-group-id="9820321171-6">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9820321171-7">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9820321171-8">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon_nearby</span><span class="p" data-group-id="9820321171-8">}</span><span class="p" data-group-id="9820321171-7">)</span><span class="w"> </span><span class="k" data-group-id="9820321171-6">end</span><span class="w">
+</span><span class="p" data-group-id="9820321171-2">]</span><span class="p" data-group-id="9820321171-1">}</span><span class="w">
+
+</span><span class="c1"># Negation</span><span class="w">
+</span><span class="p" data-group-id="9820321171-9">{</span><span class="ss">:not</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9820321171-10">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9820321171-11">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9820321171-12">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:stunned</span><span class="p" data-group-id="9820321171-12">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="9820321171-11">)</span><span class="w"> </span><span class="k" data-group-id="9820321171-10">end</span><span class="p" data-group-id="9820321171-9">}</span></code></pre><h2 id="using-effects" class="section-heading"><a href="#using-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Using Effects</span></h2><p>Effects update world state during planning:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+
+</span><span class="n">primitive</span><span class="w"> </span><span class="ss">:unlock_door</span><span class="w"> </span><span class="k" data-group-id="3888682392-1">do</span><span class="w">
+  </span><span class="n">effects</span><span class="w"> </span><span class="p" data-group-id="3888682392-2">[</span><span class="w">
+    </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="3888682392-3">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3888682392-4">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_locked</span><span class="p" data-group-id="3888682392-4">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="3888682392-3">)</span><span class="w">
+  </span><span class="p" data-group-id="3888682392-2">]</span><span class="w">
+
+  </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="3888682392-5">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="3888682392-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">actor</span><span class="p" data-group-id="3888682392-6">}</span><span class="w">
+  </span><span class="k" data-group-id="3888682392-5">end</span><span class="w">
+</span><span class="k" data-group-id="3888682392-1">end</span></code></pre><p>Effect types:</p><ul><li><code class="inline">:plan_only</code> - Only applied during planning (hypothetical)</li><li><code class="inline">:plan_and_execute</code> - Applied during planning AND execution</li><li><code class="inline">:permanent</code> - Applied at execution, persists beyond plan</li></ul><h2 id="next-steps" class="section-heading"><a href="#next-steps" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Next Steps</span></h2><ul><li>Read the <a href="howto.html">How-To Guides</a> for specific recipes</li><li>Check the <a href="cheatsheet.html">Cheatsheet</a> for quick reference</li><li>Explore the <a href="api-reference.html">API Reference</a> for details</li><li>See the <code class="inline">examples/</code> directory for complete implementations</li><li>Read <code class="inline">guides/testing.md</code> for Registry-safe testing</li><li>Read <code class="inline">guides/debugging.md</code> for tracing and diagnostics</li></ul>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="director.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Director
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="howto.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+How-To Guides
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/operator/0.1.0/show/guides/getting_started.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

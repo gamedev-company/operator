@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Effect — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Effect</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Effect.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Effects represent world state changes that result from task execution.</p><p>Effects are the bridge between planning and reality. They let the planner
+reason about future states, enabling complex plans where early actions
+create conditions needed by later actions.</p><h2 id="module-why-effects-matter" class="section-heading"><a href="#module-why-effects-matter" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Why Effects Matter</span></h2><p>Consider an NPC that needs to enter a locked room:</p><ol><li><p>Without effects, the planner checks <code class="inline">:enter_room</code>'s precondition
+(<code class="inline">door_unlocked == true</code>), finds it false, and gives up.</p></li><li><p>With effects, the planner:</p><ul><li>Plans <code class="inline">:unlock_door</code> first</li><li>Applies its effect (<code class="inline">door_unlocked = true</code>) to a working copy of facts</li><li>Now <code class="inline">:enter_room</code>'s precondition passes against the projected state</li><li>Generates plan: <code class="inline">[{:unlock_door, []}, {:enter_room, []}]</code></li></ul></li></ol><p>This is the essence of HTN planning - reasoning about sequences of actions
+and their cumulative effects on world state.</p><h2 id="module-effect-types" class="section-heading"><a href="#module-effect-types" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Effect Types</span></h2><p>Based on GameAIPro HTN patterns, there are three effect types:</p><table><thead><tr><th style="text-align: left;">Type</th><th style="text-align: left;">Planning</th><th style="text-align: left;">Execution</th><th style="text-align: left;">Use Case</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:plan_only</code></td><td style="text-align: left;">✓</td><td style="text-align: left;">✗</td><td style="text-align: left;">Temporary planning assumptions</td></tr><tr><td style="text-align: left;"><code class="inline">:plan_and_execute</code></td><td style="text-align: left;">✓</td><td style="text-align: left;">✓</td><td style="text-align: left;">Standard effects (most common)</td></tr><tr><td style="text-align: left;"><code class="inline">:permanent</code></td><td style="text-align: left;">✓</td><td style="text-align: left;">✓*</td><td style="text-align: left;">Effects that persist on failure</td></tr></tbody></table><p>*Permanent effects are applied even if subsequent tasks fail.</p><h3 id="module-plan_only" class="section-heading"><a href="#module-plan_only" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">:plan_only</code></span></h3><p>Applied during planning but NOT during execution. Use when:</p><ul><li><p>The execution system handles the effect differently</p></li><li><p>You need to &quot;pretend&quot; something is true for planning purposes</p></li><li><p>Simulating optimistic assumptions</p><p>  # Assume we'll find ammo during the mission (planning only)
+  Effect.new(:plan_only, {:self, :has_ammo}, true)</p></li></ul><h3 id="module-plan_and_execute" class="section-heading"><a href="#module-plan_and_execute" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">:plan_and_execute</code></span></h3><p>Applied during both planning AND execution. This is the standard type for
+most game actions.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Door is unlocked after picking the lock</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1992882130-1">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1992882130-2">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_unlocked</span><span class="p" data-group-id="1992882130-2">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1992882130-1">)</span><span class="w">
+
+</span><span class="c1"># Health consumed after healing</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1992882130-3">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1992882130-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health_potion_count</span><span class="p" data-group-id="1992882130-4">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1992882130-3">)</span></code></pre><h3 id="module-permanent" class="section-heading"><a href="#module-permanent" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">:permanent</code></span></h3><p>Applied during planning and persists regardless of task success/failure.
+Use sparingly - these represent irreversible actions.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Alert triggered - can&#39;t un-ring that bell</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="3390437497-1">(</span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3390437497-2">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:alarm_triggered</span><span class="p" data-group-id="3390437497-2">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3390437497-1">)</span><span class="w">
+
+</span><span class="c1"># Resource consumed even if subsequent actions fail</span><span class="w">
+</span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="3390437497-3">(</span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3390437497-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:grenade_count</span><span class="p" data-group-id="3390437497-4">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:decrement</span><span class="p" data-group-id="3390437497-3">)</span></code></pre><h2 id="module-working-with-effects" class="section-heading"><a href="#module-working-with-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Working with Effects</span></h2><h3 id="module-creating-effects" class="section-heading"><a href="#module-creating-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Creating Effects</span></h3><pre><code class="makeup elixir" translate="no"><span class="n">effect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2184613992-1">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2184613992-2">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="2184613992-2">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2184613992-1">)</span></code></pre><h3 id="module-applying-effects" class="section-heading"><a href="#module-applying-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Applying Effects</span></h3><pre><code class="makeup elixir" translate="no"><span class="c1"># Single effect</span><span class="w">
+</span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">apply_effect</span><span class="p" data-group-id="5114646523-1">(</span><span class="n">effect</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="5114646523-1">)</span><span class="w">
+
+</span><span class="c1"># Multiple effects</span><span class="w">
+</span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">apply_all</span><span class="p" data-group-id="5114646523-2">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="5114646523-2">)</span></code></pre><h3 id="module-filtering-effects" class="section-heading"><a href="#module-filtering-effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Filtering Effects</span></h3><pre><code class="makeup elixir" translate="no"><span class="c1"># Get effects for execution (excludes :plan_only)</span><span class="w">
+</span><span class="n">execution_effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">execution_effects</span><span class="p" data-group-id="0163799347-1">(</span><span class="n">task</span><span class="o">.</span><span class="n">effects</span><span class="p" data-group-id="0163799347-1">)</span><span class="w">
+
+</span><span class="c1"># Get effects by specific type</span><span class="w">
+</span><span class="n">permanent_only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">filter_by_type</span><span class="p" data-group-id="0163799347-2">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="0163799347-2">)</span></code></pre><h2 id="module-integration-with-tasks" class="section-heading"><a href="#module-integration-with-tasks" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration with Tasks</span></h2><p>Effects are typically defined on primitives in the DSL:</p><pre><code class="makeup elixir" translate="no"><span class="n">primitive</span><span class="w"> </span><span class="ss">:unlock_door</span><span class="w"> </span><span class="k" data-group-id="7271472283-1">do</span><span class="w">
+  </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="7271472283-2">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7271472283-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7271472283-4">%{</span><span class="n">actor</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">picked_lock</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7271472283-4">}</span><span class="p" data-group-id="7271472283-3">}</span><span class="w">
+  </span><span class="k" data-group-id="7271472283-2">end</span><span class="w">
+
+  </span><span class="n">effect</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7271472283-5">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7271472283-6">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_unlocked</span><span class="p" data-group-id="7271472283-6">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7271472283-5">)</span><span class="w">
+</span><span class="k" data-group-id="7271472283-1">end</span></code></pre><p>The <code class="inline">Executor</code> automatically applies execution effects after successful
+primitive completion.</p><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.Task.html"><code class="inline">Operator.HTN.Task</code></a> - Where effects are attached</li><li><a href="Operator.HTN.Engine.html"><code class="inline">Operator.HTN.Engine</code></a> - Applies effects during planning</li><li><a href="Operator.HTN.Executor.html"><code class="inline">Operator.HTN.Executor</code></a> - Applies effects during execution</li><li><a href="Operator.HTN.Facts.html"><code class="inline">Operator.HTN.Facts</code></a> - The world state effects modify</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:effect_type/0" data-no-tooltip="" translate="no">effect_type()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The effect type determining when the effect is applied.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The Effect struct.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#apply_all/2" data-no-tooltip="" translate="no">apply_all(effects, facts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Apply multiple effects to facts in sequence.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#apply_effect/2" data-no-tooltip="" translate="no">apply_effect(effect, facts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Apply an effect to facts, updating the world state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#execution_effects/1" data-no-tooltip="" translate="no">execution_effects(effects)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get only effects that should be applied during execution.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#filter_by_type/2" data-no-tooltip="" translate="no">filter_by_type(effects, type)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Filter effects by type.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/3" data-no-tooltip="" translate="no">new(type, key, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a new effect.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#planning_effects/1" data-no-tooltip="" translate="no">planning_effects(effects)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get only effects applied during planning.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:effect_type/0">
+
+  <div class="detail-header">
+    <a href="#t:effect_type/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">effect_type()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> effect_type() :: :plan_only | :plan_and_execute | :permanent</pre>
+
+      </div>
+
+<p>The effect type determining when the effect is applied.</p><ul><li><code class="inline">:plan_only</code> - Planning phase only</li><li><code class="inline">:plan_and_execute</code> - Both planning and execution</li><li><code class="inline">:permanent</code> - Persists even on task failure</li></ul>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L139" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Operator.HTN.Effect{
+  key: <a href="Operator.HTN.Facts.html#t:fact_key/0">Operator.HTN.Facts.fact_key</a>(),
+  type: <a href="#t:effect_type/0">effect_type</a>(),
+  value: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()
+}</pre>
+
+      </div>
+
+<p>The Effect struct.</p><h2 id="t:t/0-fields" class="section-heading"><a href="#t:t/0-fields" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fields</span></h2><ul><li><code class="inline">:type</code> - When the effect is applied</li><li><code class="inline">:key</code> - The fact key to modify (e.g., <code class="inline">{:self, :armed}</code>)</li><li><code class="inline">:value</code> - The new value to set</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="apply_all/2">
+
+  <div class="detail-header">
+    <a href="#apply_all/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">apply_all(effects, facts)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L237" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> apply_all([<a href="#t:t/0">t</a>()], <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()) :: <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()</pre>
+
+      </div>
+
+<p>Apply multiple effects to facts in sequence.</p><p>Effects are applied in list order, so later effects can override earlier ones
+if they modify the same key.</p><h2 id="apply_all/2-parameters" class="section-heading"><a href="#apply_all/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">effects</code> - List of Effect structs</li><li><code class="inline">facts</code> - The current Facts struct</li></ul><h2 id="apply_all/2-returns" class="section-heading"><a href="#apply_all/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A new Facts struct with all effects applied.</p><h2 id="apply_all/2-examples" class="section-heading"><a href="#apply_all/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="7605538129-1">{</span><span class="nc">Effect</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="p" data-group-id="7605538129-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7605538129-2">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7605538129-3">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7605538129-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="7605538129-4">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7605538129-3">)</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7605538129-5">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7605538129-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:in_combat</span><span class="p" data-group-id="7605538129-6">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7605538129-5">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="7605538129-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">apply_all</span><span class="p" data-group-id="7605538129-7">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7605538129-8">(</span><span class="p" data-group-id="7605538129-8">)</span><span class="p" data-group-id="7605538129-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7605538129-9">(</span><span class="n">updated_facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7605538129-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="7605538129-10">}</span><span class="p" data-group-id="7605538129-9">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="apply_effect/2">
+
+  <div class="detail-header">
+    <a href="#apply_effect/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">apply_effect(effect, facts)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L205" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> apply_effect(<a href="#t:t/0">t</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()) :: <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()</pre>
+
+      </div>
+
+<p>Apply an effect to facts, updating the world state.</p><p>This function modifies the facts by setting the effect's key to its value.
+Named <code class="inline">apply_effect</code> to avoid conflict with <a href="https://hexdocs.pm/elixir/Kernel.html#apply/2"><code class="inline">Kernel.apply/2</code></a>.</p><h2 id="apply_effect/2-parameters" class="section-heading"><a href="#apply_effect/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">effect</code> - The Effect struct to apply</li><li><code class="inline">facts</code> - The current Facts struct</li></ul><h2 id="apply_effect/2-returns" class="section-heading"><a href="#apply_effect/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A new Facts struct with the effect applied.</p><h2 id="apply_effect/2-examples" class="section-heading"><a href="#apply_effect/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="7553915458-1">{</span><span class="nc">Effect</span><span class="p">,</span><span class="w"> </span><span class="nc">Facts</span><span class="p" data-group-id="7553915458-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="7553915458-2">(</span><span class="p" data-group-id="7553915458-3">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7553915458-4">%{</span><span class="ss">armed</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7553915458-4">}</span><span class="p" data-group-id="7553915458-3">}</span><span class="p" data-group-id="7553915458-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">effect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7553915458-5">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7553915458-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="7553915458-6">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7553915458-5">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">updated_facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Effect</span><span class="o">.</span><span class="n">apply_effect</span><span class="p" data-group-id="7553915458-7">(</span><span class="n">effect</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p" data-group-id="7553915458-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7553915458-8">(</span><span class="n">updated_facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7553915458-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="7553915458-9">}</span><span class="p" data-group-id="7553915458-8">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="execution_effects/1">
+
+  <div class="detail-header">
+    <a href="#execution_effects/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">execution_effects(effects)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L298" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> execution_effects([<a href="#t:t/0">t</a>()]) :: [<a href="#t:t/0">t</a>()]</pre>
+
+      </div>
+
+<p>Get only effects that should be applied during execution.</p><p>Excludes <code class="inline">:plan_only</code> effects, which are only used during planning.
+Returns both <code class="inline">:plan_and_execute</code> and <code class="inline">:permanent</code> effects.</p><h2 id="execution_effects/1-parameters" class="section-heading"><a href="#execution_effects/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">effects</code> - List of Effect structs</li></ul><h2 id="execution_effects/1-returns" class="section-heading"><a href="#execution_effects/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>List of effects suitable for execution (excludes <code class="inline">:plan_only</code>).</p><h2 id="execution_effects/1-examples" class="section-heading"><a href="#execution_effects/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1197425724-1">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1197425724-2">(</span><span class="ss">:plan_only</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1197425724-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:optimistic_assumption</span><span class="p" data-group-id="1197425724-3">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1197425724-2">)</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1197425724-4">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1197425724-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="1197425724-5">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1197425724-4">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="1197425724-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="1197425724-6">(</span><span class="nc">Effect</span><span class="o">.</span><span class="n">execution_effects</span><span class="p" data-group-id="1197425724-7">(</span><span class="n">effects</span><span class="p" data-group-id="1197425724-7">)</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="1197425724-6">)</span><span class="w">
+</span><span class="p" data-group-id="1197425724-8">[</span><span class="ss">:plan_and_execute</span><span class="p" data-group-id="1197425724-8">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="filter_by_type/2">
+
+  <div class="detail-header">
+    <a href="#filter_by_type/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">filter_by_type(effects, type)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L268" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> filter_by_type([<a href="#t:t/0">t</a>()], <a href="#t:effect_type/0">effect_type</a>()) :: [<a href="#t:t/0">t</a>()]</pre>
+
+      </div>
+
+<p>Filter effects by type.</p><h2 id="filter_by_type/2-parameters" class="section-heading"><a href="#filter_by_type/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">effects</code> - List of Effect structs</li><li><code class="inline">type</code> - The effect type to filter for</li></ul><h2 id="filter_by_type/2-returns" class="section-heading"><a href="#filter_by_type/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>List of effects matching the specified type.</p><h2 id="filter_by_type/2-examples" class="section-heading"><a href="#filter_by_type/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2833801393-1">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2833801393-2">(</span><span class="ss">:plan_only</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2833801393-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:assumed_safe</span><span class="p" data-group-id="2833801393-3">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2833801393-2">)</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2833801393-4">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2833801393-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="2833801393-5">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2833801393-4">)</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2833801393-6">(</span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2833801393-7">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:alerted</span><span class="p" data-group-id="2833801393-7">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2833801393-6">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="2833801393-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">length</span><span class="p" data-group-id="2833801393-8">(</span><span class="nc">Effect</span><span class="o">.</span><span class="n">filter_by_type</span><span class="p" data-group-id="2833801393-9">(</span><span class="n">effects</span><span class="p">,</span><span class="w"> </span><span class="ss">:plan_only</span><span class="p" data-group-id="2833801393-9">)</span><span class="p" data-group-id="2833801393-8">)</span><span class="w">
+</span><span class="mi">1</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/3">
+
+  <div class="detail-header">
+    <a href="#new/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(type, key, value)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L171" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="#t:effect_type/0">effect_type</a>(), <a href="Operator.HTN.Facts.html#t:fact_key/0">Operator.HTN.Facts.fact_key</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Create a new effect.</p><h2 id="new/3-parameters" class="section-heading"><a href="#new/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">type</code> - When the effect is applied:<ul><li><code class="inline">:plan_only</code> - Planning phase only</li><li><code class="inline">:plan_and_execute</code> - Both planning and execution (most common)</li><li><code class="inline">:permanent</code> - Persists even on task failure</li></ul></li><li><code class="inline">key</code> - The fact key to modify (e.g., <code class="inline">{:self, :has_weapon}</code>)</li><li><code class="inline">value</code> - The new value to set</li></ul><h2 id="new/3-examples" class="section-heading"><a href="#new/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="c1"># Standard effect - door unlocked after picking lock</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8824915711-1">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8824915711-2">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_locked</span><span class="p" data-group-id="8824915711-2">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="8824915711-1">)</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="c1"># Planning assumption - assume we&#39;ll find resources</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8824915711-3">(</span><span class="ss">:plan_only</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8824915711-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_keycard</span><span class="p" data-group-id="8824915711-4">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8824915711-3">)</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="c1"># Permanent - alert can&#39;t be un-triggered</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8824915711-5">(</span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8824915711-6">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:security_alerted</span><span class="p" data-group-id="8824915711-6">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8824915711-5">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="planning_effects/1">
+
+  <div class="detail-header">
+    <a href="#planning_effects/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">planning_effects(effects)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/effect.ex#L328" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> planning_effects([<a href="#t:t/0">t</a>()]) :: [<a href="#t:t/0">t</a>()]</pre>
+
+      </div>
+
+<p>Get only effects applied during planning.</p><p>All effect types are applied during planning, so this returns the full list.
+This function exists for API symmetry with <a href="#execution_effects/1"><code class="inline">execution_effects/1</code></a>.</p><h2 id="planning_effects/1-parameters" class="section-heading"><a href="#planning_effects/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">effects</code> - List of Effect structs</li></ul><h2 id="planning_effects/1-returns" class="section-heading"><a href="#planning_effects/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>The input list unchanged (all effects apply during planning).</p><h2 id="planning_effects/1-examples" class="section-heading"><a href="#planning_effects/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN.Effect</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">effects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2572941174-1">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2572941174-2">(</span><span class="ss">:plan_only</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2572941174-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:assumed</span><span class="p" data-group-id="2572941174-3">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2572941174-2">)</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2572941174-4">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2572941174-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:real</span><span class="p" data-group-id="2572941174-5">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2572941174-4">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="2572941174-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Effect</span><span class="o">.</span><span class="n">planning_effects</span><span class="p" data-group-id="2572941174-6">(</span><span class="n">effects</span><span class="p" data-group-id="2572941174-6">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">effects</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

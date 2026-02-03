@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.TestHelpers — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>TestHelpers</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.TestHelpers.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Test utilities for working with Operator's HTN system.</p><p>This module provides helper functions for setting up and tearing down
+HTN test fixtures, particularly around Registry isolation.</p><h2 id="module-why-test-helpers" class="section-heading"><a href="#module-why-test-helpers" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Why Test Helpers?</span></h2><p>Operator's Registry uses <code class="inline">persistent_term</code> for fast lookups, which means:</p><ol><li><strong>Global state</strong> - Registered modules persist across tests</li><li><strong>No automatic cleanup</strong> - You must explicitly reset between tests</li><li><strong>Async conflicts</strong> - Tests using Registry should use <code class="inline">async: false</code></li></ol><h2 id="module-quick-start" class="section-heading"><a href="#module-quick-start" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Quick Start</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.BehaviorTest</span><span class="w"> </span><span class="k" data-group-id="5311907829-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+
+  </span><span class="c1"># Import the helpers</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Operator.HTN.TestHelpers</span><span class="w">
+
+  </span><span class="c1"># Use the setup helper</span><span class="w">
+  </span><span class="n">setup</span><span class="w"> </span><span class="ss">:reset_registry</span><span class="w">
+
+  </span><span class="c1"># Or use the full setup with module registration</span><span class="w">
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="5311907829-2">do</span><span class="w">
+    </span><span class="n">setup_htn</span><span class="p" data-group-id="5311907829-3">(</span><span class="p" data-group-id="5311907829-4">[</span><span class="nc">MyApp.NPCBehavior</span><span class="p">,</span><span class="w"> </span><span class="nc">MyApp.EnemyBehavior</span><span class="p" data-group-id="5311907829-4">]</span><span class="p" data-group-id="5311907829-3">)</span><span class="w">
+  </span><span class="k" data-group-id="5311907829-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;my behavior works&quot;</span><span class="w"> </span><span class="k" data-group-id="5311907829-5">do</span><span class="w">
+    </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5311907829-6">(</span><span class="p" data-group-id="5311907829-6">)</span><span class="w">
+    </span><span class="p" data-group-id="5311907829-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="5311907829-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="5311907829-8">(</span><span class="ss">:my_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5311907829-9">%{</span><span class="p" data-group-id="5311907829-9">}</span><span class="p" data-group-id="5311907829-8">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="5311907829-10">(</span><span class="n">plan</span><span class="p" data-group-id="5311907829-10">)</span><span class="w">
+  </span><span class="k" data-group-id="5311907829-5">end</span><span class="w">
+</span><span class="k" data-group-id="5311907829-1">end</span></code></pre><h2 id="module-setup-functions" class="section-heading"><a href="#module-setup-functions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Setup Functions</span></h2><p>The module provides several setup patterns:</p><h3 id="module-reset_registry-1" class="section-heading"><a href="#module-reset_registry-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">reset_registry/1</span></h3><p>ExUnit setup callback that resets the registry before each test:</p><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="ss">:reset_registry</span></code></pre><h3 id="module-setup_htn-1" class="section-heading"><a href="#module-setup_htn-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">setup_htn/1</span></h3><p>Full setup that resets registry and registers modules:</p><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="2421751603-1">do</span><span class="w">
+  </span><span class="n">setup_htn</span><span class="p" data-group-id="2421751603-2">(</span><span class="p" data-group-id="2421751603-3">[</span><span class="nc">MyBehavior</span><span class="p" data-group-id="2421751603-3">]</span><span class="p" data-group-id="2421751603-2">)</span><span class="w">
+</span><span class="k" data-group-id="2421751603-1">end</span></code></pre><h3 id="module-with_registry-2" class="section-heading"><a href="#module-with_registry-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">with_registry/2</span></h3><p>Runs a function with specific modules registered, then cleans up:</p><pre><code class="makeup elixir" translate="no"><span class="n">test</span><span class="w"> </span><span class="s">&quot;isolated test&quot;</span><span class="w"> </span><span class="k" data-group-id="8548296801-1">do</span><span class="w">
+  </span><span class="n">with_registry</span><span class="w"> </span><span class="p" data-group-id="8548296801-2">[</span><span class="nc">TestBehavior</span><span class="p" data-group-id="8548296801-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8548296801-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="c1"># Test code here - registry only contains TestBehavior</span><span class="w">
+  </span><span class="k" data-group-id="8548296801-3">end</span><span class="w">
+  </span><span class="c1"># Registry is reset after block</span><span class="w">
+</span><span class="k" data-group-id="8548296801-1">end</span></code></pre><h2 id="module-module-registration" class="section-heading"><a href="#module-module-registration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Module Registration</span></h2><p>When testing HTN modules, you need to ensure they're registered:</p><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="6192513727-1">do</span><span class="w">
+  </span><span class="c1"># Reset first to ensure clean state</span><span class="w">
+  </span><span class="nc">Operator.HTN.Registry</span><span class="o">.</span><span class="n">reset</span><span class="p" data-group-id="6192513727-2">(</span><span class="p" data-group-id="6192513727-2">)</span><span class="w">
+
+  </span><span class="c1"># Ensure module is compiled</span><span class="w">
+  </span><span class="nc">Code</span><span class="o">.</span><span class="n">ensure_loaded!</span><span class="p" data-group-id="6192513727-3">(</span><span class="nc">MyBehavior</span><span class="p" data-group-id="6192513727-3">)</span><span class="w">
+
+  </span><span class="c1"># Register it</span><span class="w">
+  </span><span class="nc">Operator.HTN.Registry</span><span class="o">.</span><span class="n">register</span><span class="p" data-group-id="6192513727-4">(</span><span class="nc">MyBehavior</span><span class="p" data-group-id="6192513727-4">)</span><span class="w">
+
+  </span><span class="ss">:ok</span><span class="w">
+</span><span class="k" data-group-id="6192513727-1">end</span></code></pre><p>Or use the helper:</p><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="2281090702-1">do</span><span class="w">
+  </span><span class="n">setup_htn</span><span class="p" data-group-id="2281090702-2">(</span><span class="p" data-group-id="2281090702-3">[</span><span class="nc">MyBehavior</span><span class="p" data-group-id="2281090702-3">]</span><span class="p" data-group-id="2281090702-2">)</span><span class="w">
+</span><span class="k" data-group-id="2281090702-1">end</span></code></pre><h2 id="module-async-tests" class="section-heading"><a href="#module-async-tests" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Async Tests</span></h2><p>Because the Registry is global, tests that use it cannot run in parallel:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># WRONG - will cause flaky tests</span><span class="w">
+</span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+</span><span class="c1"># CORRECT</span><span class="w">
+</span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">false</span></code></pre><p>Tests that don't touch the Registry (e.g., pure Facts manipulation) can
+safely use <code class="inline">async: true</code>.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><h3 id="module-basic-test-setup" class="section-heading"><a href="#module-basic-test-setup" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Basic Test Setup</span></h3><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.CombatBehaviorTest</span><span class="w"> </span><span class="k" data-group-id="3343150908-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Operator.HTN.TestHelpers</span><span class="w">
+
+  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="3343150908-2">{</span><span class="nc">Facts</span><span class="p">,</span><span class="w"> </span><span class="nc">Plan</span><span class="p">,</span><span class="w"> </span><span class="nc">Planner</span><span class="p" data-group-id="3343150908-2">}</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="ss">:reset_registry</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="3343150908-3">do</span><span class="w">
+    </span><span class="c1"># Register our behavior module</span><span class="w">
+    </span><span class="n">register_modules</span><span class="p" data-group-id="3343150908-4">(</span><span class="p" data-group-id="3343150908-5">[</span><span class="nc">MyApp.CombatBehavior</span><span class="p" data-group-id="3343150908-5">]</span><span class="p" data-group-id="3343150908-4">)</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w">
+  </span><span class="k" data-group-id="3343150908-3">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;attack goal generates plan when armed&quot;</span><span class="w"> </span><span class="k" data-group-id="3343150908-6">do</span><span class="w">
+    </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3343150908-7">(</span><span class="p" data-group-id="3343150908-8">%{</span><span class="w">
+      </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3343150908-9">%{</span><span class="ss">armed</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">ammo</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="3343150908-9">}</span><span class="p">,</span><span class="w">
+      </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3343150908-10">%{</span><span class="ss">enemy_visible</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3343150908-10">}</span><span class="w">
+    </span><span class="p" data-group-id="3343150908-8">}</span><span class="p" data-group-id="3343150908-7">)</span><span class="w">
+
+    </span><span class="n">assert</span><span class="w"> </span><span class="p" data-group-id="3343150908-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="3343150908-11">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="3343150908-12">(</span><span class="ss">:attack_enemy</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3343150908-13">%{</span><span class="p" data-group-id="3343150908-13">}</span><span class="p" data-group-id="3343150908-12">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="3343150908-14">(</span><span class="n">plan</span><span class="p" data-group-id="3343150908-14">)</span><span class="w">
+  </span><span class="k" data-group-id="3343150908-6">end</span><span class="w">
+</span><span class="k" data-group-id="3343150908-1">end</span></code></pre><h3 id="module-testing-multiple-behaviors" class="section-heading"><a href="#module-testing-multiple-behaviors" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Testing Multiple Behaviors</span></h3><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.IntegrationTest</span><span class="w"> </span><span class="k" data-group-id="0125524195-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Operator.HTN.TestHelpers</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="0125524195-2">do</span><span class="w">
+    </span><span class="n">setup_htn</span><span class="p" data-group-id="0125524195-3">(</span><span class="p" data-group-id="0125524195-4">[</span><span class="w">
+      </span><span class="nc">MyApp.CombatBehavior</span><span class="p">,</span><span class="w">
+      </span><span class="nc">MyApp.MovementBehavior</span><span class="p">,</span><span class="w">
+      </span><span class="nc">MyApp.SocialBehavior</span><span class="w">
+    </span><span class="p" data-group-id="0125524195-4">]</span><span class="p" data-group-id="0125524195-3">)</span><span class="w">
+  </span><span class="k" data-group-id="0125524195-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;behaviors can reference each other&quot;</span><span class="w"> </span><span class="k" data-group-id="0125524195-5">do</span><span class="w">
+    </span><span class="c1"># Test cross-behavior task references</span><span class="w">
+  </span><span class="k" data-group-id="0125524195-5">end</span><span class="w">
+</span><span class="k" data-group-id="0125524195-1">end</span></code></pre><h3 id="module-isolated-test-with-with_registry" class="section-heading"><a href="#module-isolated-test-with-with_registry" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Isolated Test with with_registry</span></h3><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.IsolatedTest</span><span class="w"> </span><span class="k" data-group-id="3389043852-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Operator.HTN.TestHelpers</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;test A uses BehaviorA&quot;</span><span class="w"> </span><span class="k" data-group-id="3389043852-2">do</span><span class="w">
+    </span><span class="n">with_registry</span><span class="w"> </span><span class="p" data-group-id="3389043852-3">[</span><span class="nc">BehaviorA</span><span class="p" data-group-id="3389043852-3">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3389043852-4">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="c1"># Only BehaviorA is registered</span><span class="w">
+      </span><span class="n">assert</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_goal</span><span class="p" data-group-id="3389043852-5">(</span><span class="ss">:goal_a</span><span class="p" data-group-id="3389043852-5">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="no">nil</span><span class="w">
+      </span><span class="n">assert</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_goal</span><span class="p" data-group-id="3389043852-6">(</span><span class="ss">:goal_b</span><span class="p" data-group-id="3389043852-6">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="no">nil</span><span class="w">
+    </span><span class="k" data-group-id="3389043852-4">end</span><span class="w">
+  </span><span class="k" data-group-id="3389043852-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;test B uses BehaviorB&quot;</span><span class="w"> </span><span class="k" data-group-id="3389043852-7">do</span><span class="w">
+    </span><span class="n">with_registry</span><span class="w"> </span><span class="p" data-group-id="3389043852-8">[</span><span class="nc">BehaviorB</span><span class="p" data-group-id="3389043852-8">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3389043852-9">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="c1"># Only BehaviorB is registered</span><span class="w">
+      </span><span class="n">assert</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_goal</span><span class="p" data-group-id="3389043852-10">(</span><span class="ss">:goal_a</span><span class="p" data-group-id="3389043852-10">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="no">nil</span><span class="w">
+      </span><span class="n">assert</span><span class="w"> </span><span class="nc">Registry</span><span class="o">.</span><span class="n">get_goal</span><span class="p" data-group-id="3389043852-11">(</span><span class="ss">:goal_b</span><span class="p" data-group-id="3389043852-11">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="no">nil</span><span class="w">
+    </span><span class="k" data-group-id="3389043852-9">end</span><span class="w">
+  </span><span class="k" data-group-id="3389043852-7">end</span><span class="w">
+</span><span class="k" data-group-id="3389043852-1">end</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#assert_has_task/3" data-no-tooltip="" translate="no">assert_has_task(plan, task_name, args \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Assert that a plan contains a specific task.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register_modules/1" data-no-tooltip="" translate="no">register_modules(modules)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Register one or more HTN modules with the Registry.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset_registry/1" data-no-tooltip="" translate="no">reset_registry(context \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>ExUnit setup callback that resets the Registry.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#setup_htn/1" data-no-tooltip="" translate="no">setup_htn(modules)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Full setup that resets registry and registers modules.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#test_facts/1" data-no-tooltip="" translate="no">test_facts(data \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a test Facts struct from a simple map.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#with_registry/2" data-no-tooltip="" translate="no">with_registry(modules, fun)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Run a function with specific modules registered, then reset.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="assert_has_task/3">
+
+    <span id="assert_has_task/2"></span>
+
+  <div class="detail-header">
+    <a href="#assert_has_task/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">assert_has_task(plan, task_name, args \\ nil)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> assert_has_task(<a href="Operator.HTN.Plan.html#t:t/0">Operator.HTN.Plan.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>() | nil) :: true</pre>
+
+      </div>
+
+<p>Assert that a plan contains a specific task.</p><h2 id="assert_has_task/3-parameters" class="section-heading"><a href="#assert_has_task/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">plan</code> - The Plan struct</li><li><code class="inline">task_name</code> - Expected task name atom</li><li><code class="inline">args</code> - Optional expected arguments (if nil, only checks task name)</li></ul><h2 id="assert_has_task/3-examples" class="section-heading"><a href="#assert_has_task/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run!</span><span class="p" data-group-id="4316198138-1">(</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="4316198138-1">)</span><span class="w">
+</span><span class="n">assert_has_task</span><span class="p" data-group-id="4316198138-2">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:fire_weapon</span><span class="p" data-group-id="4316198138-2">)</span><span class="w">
+</span><span class="n">assert_has_task</span><span class="p" data-group-id="4316198138-3">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4316198138-4">[</span><span class="ss">:enemy_position</span><span class="p" data-group-id="4316198138-4">]</span><span class="p" data-group-id="4316198138-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="register_modules/1">
+
+  <div class="detail-header">
+    <a href="#register_modules/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register_modules(modules)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L218" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> register_modules(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | [<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()]) :: :ok</pre>
+
+      </div>
+
+<p>Register one or more HTN modules with the Registry.</p><p>Ensures each module is loaded and then registers it.</p><h2 id="register_modules/1-parameters" class="section-heading"><a href="#register_modules/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">modules</code> - Single module or list of modules to register</li></ul><h2 id="register_modules/1-examples" class="section-heading"><a href="#register_modules/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="6215477407-1">do</span><span class="w">
+  </span><span class="n">reset_registry</span><span class="p" data-group-id="6215477407-2">(</span><span class="p" data-group-id="6215477407-3">%{</span><span class="p" data-group-id="6215477407-3">}</span><span class="p" data-group-id="6215477407-2">)</span><span class="w">
+  </span><span class="n">register_modules</span><span class="p" data-group-id="6215477407-4">(</span><span class="p" data-group-id="6215477407-5">[</span><span class="nc">MyApp.Behavior</span><span class="p" data-group-id="6215477407-5">]</span><span class="p" data-group-id="6215477407-4">)</span><span class="w">
+  </span><span class="ss">:ok</span><span class="w">
+</span><span class="k" data-group-id="6215477407-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="reset_registry/1">
+
+    <span id="reset_registry/0"></span>
+
+  <div class="detail-header">
+    <a href="#reset_registry/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reset_registry(context \\ %{})</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reset_registry(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: :ok</pre>
+
+      </div>
+
+<p>ExUnit setup callback that resets the Registry.</p><p>Use in your test module's setup:</p><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="ss">:reset_registry</span></code></pre><p>This ensures each test starts with a clean, empty registry.</p><h2 id="reset_registry/1-returns" class="section-heading"><a href="#reset_registry/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>Always returns <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="setup_htn/1">
+
+  <div class="detail-header">
+    <a href="#setup_htn/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">setup_htn(modules)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L249" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> setup_htn([<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()]) :: :ok</pre>
+
+      </div>
+
+<p>Full setup that resets registry and registers modules.</p><p>Convenience function combining <a href="#reset_registry/1"><code class="inline">reset_registry/1</code></a> and <a href="#register_modules/1"><code class="inline">register_modules/1</code></a>.</p><h2 id="setup_htn/1-parameters" class="section-heading"><a href="#setup_htn/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">modules</code> - List of modules to register</li></ul><h2 id="setup_htn/1-returns" class="section-heading"><a href="#setup_htn/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>Returns <code class="inline">:ok</code> for use in ExUnit setup blocks.</p><h2 id="setup_htn/1-examples" class="section-heading"><a href="#setup_htn/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="4691882352-1">do</span><span class="w">
+  </span><span class="n">setup_htn</span><span class="p" data-group-id="4691882352-2">(</span><span class="p" data-group-id="4691882352-3">[</span><span class="nc">MyApp.NPCBehavior</span><span class="p" data-group-id="4691882352-3">]</span><span class="p" data-group-id="4691882352-2">)</span><span class="w">
+</span><span class="k" data-group-id="4691882352-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="test_facts/1">
+
+    <span id="test_facts/0"></span>
+
+  <div class="detail-header">
+    <a href="#test_facts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">test_facts(data \\ %{})</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L318" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> test_facts(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>()</pre>
+
+      </div>
+
+<p>Create a test Facts struct from a simple map.</p><p>Shorthand for <code class="inline">Facts.from_perception/1</code> with a cleaner test syntax.</p><h2 id="test_facts/1-parameters" class="section-heading"><a href="#test_facts/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">data</code> - Map with <code class="inline">:self</code>, <code class="inline">:world</code>, and/or <code class="inline">:social</code> keys</li></ul><h2 id="test_facts/1-examples" class="section-heading"><a href="#test_facts/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_facts</span><span class="p" data-group-id="9299064614-1">(</span><span class="p" data-group-id="9299064614-2">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9299064614-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="ss">armed</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="9299064614-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9299064614-4">%{</span><span class="ss">enemies</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9299064614-5">[</span><span class="ss">:goblin</span><span class="p" data-group-id="9299064614-5">]</span><span class="p" data-group-id="9299064614-4">}</span><span class="w">
+</span><span class="p" data-group-id="9299064614-2">}</span><span class="p" data-group-id="9299064614-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="with_registry/2">
+
+  <div class="detail-header">
+    <a href="#with_registry/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">with_registry(modules, fun)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/test_helpers.ex#L282" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> with_registry([<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()], (-&gt; <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>())) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+
+      </div>
+
+<p>Run a function with specific modules registered, then reset.</p><p>Useful for tests that need complete isolation from other tests.</p><h2 id="with_registry/2-parameters" class="section-heading"><a href="#with_registry/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">modules</code> - Modules to register for the duration</li><li><code class="inline">fun</code> - Zero-arity function to execute</li></ul><h2 id="with_registry/2-returns" class="section-heading"><a href="#with_registry/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>The return value of <code class="inline">fun</code>.</p><h2 id="with_registry/2-examples" class="section-heading"><a href="#with_registry/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">test</span><span class="w"> </span><span class="s">&quot;isolated behavior test&quot;</span><span class="w"> </span><span class="k" data-group-id="2640070758-1">do</span><span class="w">
+  </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">with_registry</span><span class="w"> </span><span class="p" data-group-id="2640070758-2">[</span><span class="nc">TestBehavior</span><span class="p" data-group-id="2640070758-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2640070758-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2640070758-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="2640070758-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="2640070758-5">(</span><span class="ss">:test_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="2640070758-5">)</span><span class="w">
+    </span><span class="n">plan</span><span class="w">
+  </span><span class="k" data-group-id="2640070758-3">end</span><span class="w">
+
+  </span><span class="n">assert</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="2640070758-6">(</span><span class="n">result</span><span class="p" data-group-id="2640070758-6">)</span><span class="w">
+</span><span class="k" data-group-id="2640070758-1">end</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

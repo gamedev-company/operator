@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Facts — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Facts</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Facts.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>World state representation for HTN planning.</p><p>Facts represent an agent's knowledge about the world, organized into three
+categories:</p><ul><li><strong>self</strong> - Agent's internal state (health, inventory, abilities)</li><li><strong>world</strong> - Environmental knowledge (locations, objects, conditions)</li><li><strong>social</strong> - Relationships and knowledge about other agents</li></ul><h2 id="module-creating-facts" class="section-heading"><a href="#module-creating-facts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Creating Facts</span></h2><p>The primary way to create facts is from a perception map:</p><pre><code class="makeup elixir" translate="no"><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="0747134191-1">(</span><span class="p" data-group-id="0747134191-2">%{</span><span class="w">
+  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-3">%{</span><span class="w">
+    </span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-4">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="0747134191-4">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">inventory</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-5">[</span><span class="ss">:keycard</span><span class="p">,</span><span class="w"> </span><span class="ss">:pistol</span><span class="p" data-group-id="0747134191-5">]</span><span class="w">
+  </span><span class="p" data-group-id="0747134191-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-6">%{</span><span class="w">
+    </span><span class="ss">time_of_day</span><span class="p">:</span><span class="w"> </span><span class="ss">:night</span><span class="p">,</span><span class="w">
+    </span><span class="ss">alarm_active</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w">
+    </span><span class="ss">guards_nearby</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+  </span><span class="p" data-group-id="0747134191-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">social</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-7">%{</span><span class="w">
+    </span><span class="ss">faction_standing</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0747134191-8">%{</span><span class="ss">corp</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="ss">runners</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="0747134191-8">}</span><span class="w">
+  </span><span class="p" data-group-id="0747134191-7">}</span><span class="w">
+</span><span class="p" data-group-id="0747134191-2">}</span><span class="p" data-group-id="0747134191-1">)</span></code></pre><h2 id="module-querying-facts" class="section-heading"><a href="#module-querying-facts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Querying Facts</span></h2><p>Use <a href="#has?/2"><code class="inline">has?/2</code></a> to check for existence and <a href="#get/3"><code class="inline">get/3</code></a> to retrieve values:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="7536852821-1">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7536852821-2">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:keycard</span><span class="p" data-group-id="7536852821-2">}</span><span class="p" data-group-id="7536852821-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true (checks if key exists in self map)</span><span class="w">
+
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7536852821-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7536852821-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="7536852821-4">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7536852821-3">)</span><span class="w">
+</span><span class="c1">#=&gt; 100</span><span class="w">
+
+</span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7536852821-5">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7536852821-6">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:alarm_active</span><span class="p" data-group-id="7536852821-6">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7536852821-5">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span></code></pre><h2 id="module-modifying-facts-during-planning" class="section-heading"><a href="#module-modifying-facts-during-planning" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Modifying Facts (During Planning)</span></h2><p>Facts are immutable. Modifications return new fact structs:</p><pre><code class="makeup elixir" translate="no"><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="5807420931-1">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5807420931-2">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="5807420931-2">}</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="5807420931-1">)</span><span class="w">
+</span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="5807420931-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5807420931-4">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5807420931-5">%{</span><span class="ss">ammo</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="5807420931-5">}</span><span class="p" data-group-id="5807420931-4">}</span><span class="p" data-group-id="5807420931-3">)</span></code></pre><p>This immutability is crucial for HTN planning - the planner can explore
+different branches without corrupting shared state.</p><h2 id="module-fact-keys" class="section-heading"><a href="#module-fact-keys" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fact Keys</span></h2><p>Keys are always tuples of <code class="inline">{category, path}</code> where:</p><ul><li><code class="inline">category</code> is <code class="inline">:self</code>, <code class="inline">:world</code>, or <code class="inline">:social</code></li><li><code class="inline">path</code> is an atom or nested key path</li></ul><h2 id="module-integration-with-preconditions" class="section-heading"><a href="#module-integration-with-preconditions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration with Preconditions</span></h2><p>Facts are passed to precondition functions during planning:</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:attack</span><span class="w"> </span><span class="k" data-group-id="9818933957-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="9818933957-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9818933957-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9818933957-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="9818933957-4">}</span><span class="p" data-group-id="9818933957-3">)</span><span class="w"> </span><span class="ow">and</span><span class="w">
+    </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9818933957-5">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9818933957-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ammo</span><span class="p" data-group-id="9818933957-6">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9818933957-5">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="k" data-group-id="9818933957-2">end</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="9818933957-1">end</span></code></pre><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.Effect.html"><code class="inline">Operator.HTN.Effect</code></a> - Modifying facts during planning</li><li><a href="Operator.HTN.Plan.html"><code class="inline">Operator.HTN.Plan</code></a> - Plans generated from facts</li><li><a href="Operator.HTN.Precondition.html"><code class="inline">Operator.HTN.Precondition</code></a> - Logical operators on facts</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:category/0" data-no-tooltip="" translate="no">category()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The category of a fact.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:fact_key/0" data-no-tooltip="" translate="no">fact_key()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A fact key specifying category and path.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The Facts struct containing agent world knowledge.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete/2" data-no-tooltip="" translate="no">delete(facts, arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Delete a fact key, returning a new Facts struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_perception/1" data-no-tooltip="" translate="no">from_perception(perception)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create facts from a perception map.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get/3" data-no-tooltip="" translate="no">get(facts, arg, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get a fact value with an optional default.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#has?/2" data-no-tooltip="" translate="no">has?(facts, arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if a fact key exists (has a value, even if nil).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#merge/2" data-no-tooltip="" translate="no">merge(facts, additional)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Merge additional facts into the existing struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#missing_keys/2" data-no-tooltip="" translate="no">missing_keys(facts, keys)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Return the list of missing fact keys from a required set.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/0" data-no-tooltip="" translate="no">new()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create an empty Facts struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put/3" data-no-tooltip="" translate="no">put(facts, arg, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set a fact value, returning a new Facts struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_map/1" data-no-tooltip="" translate="no">to_map(facts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert facts to a flat map representation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#validate_required/2" data-no-tooltip="" translate="no">validate_required(facts, keys)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Validate that all required fact keys exist.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:category/0">
+
+  <div class="detail-header">
+    <a href="#t:category/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">category()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> category() :: :self | :world | :social</pre>
+
+      </div>
+
+<p>The category of a fact.</p>
+  </section>
+</section>
+<section class="detail" id="t:fact_key/0">
+
+  <div class="detail-header">
+    <a href="#t:fact_key/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fact_key()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L99" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> fact_key() :: {<a href="#t:category/0">category</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>A fact key specifying category and path.</p><p>Categories:</p><ul><li><code class="inline">:self</code> - Agent's internal state</li><li><code class="inline">:world</code> - Environmental knowledge</li><li><code class="inline">:social</code> - Relationship data</li></ul><h2 id="t:fact_key/0-examples" class="section-heading"><a href="#t:fact_key/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6883978320-1">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="6883978320-1">}</span><span class="w">
+</span><span class="p" data-group-id="6883978320-2">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_locked</span><span class="p" data-group-id="6883978320-2">}</span><span class="w">
+</span><span class="p" data-group-id="6883978320-3">{</span><span class="ss">:social</span><span class="p">,</span><span class="w"> </span><span class="ss">:faction_standing</span><span class="p" data-group-id="6883978320-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L114" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Operator.HTN.Facts{self: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), social: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), world: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+
+      </div>
+
+<p>The Facts struct containing agent world knowledge.</p><h2 id="t:t/0-fields" class="section-heading"><a href="#t:t/0-fields" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fields</span></h2><ul><li><code class="inline">:self</code> - Map of agent's internal state</li><li><code class="inline">:world</code> - Map of environmental knowledge</li><li><code class="inline">:social</code> - Map of relationship/social knowledge</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="delete/2">
+
+  <div class="detail-header">
+    <a href="#delete/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete(facts, arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L325" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete(<a href="#t:t/0">t</a>(), <a href="#t:fact_key/0">fact_key</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Delete a fact key, returning a new Facts struct.</p><h2 id="delete/2-parameters" class="section-heading"><a href="#delete/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">facts</code> - The Facts struct</li><li><code class="inline">key</code> - Tuple of <code class="inline">{category, path}</code> to delete</li></ul><h2 id="delete/2-examples" class="section-heading"><a href="#delete/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3560359250-1">(</span><span class="p" data-group-id="3560359250-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3560359250-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="ss">mana</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p" data-group-id="3560359250-3">}</span><span class="p" data-group-id="3560359250-2">}</span><span class="p" data-group-id="3560359250-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">delete</span><span class="p" data-group-id="3560359250-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3560359250-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:mana</span><span class="p" data-group-id="3560359250-5">}</span><span class="p" data-group-id="3560359250-4">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3560359250-6">(</span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3560359250-7">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:mana</span><span class="p" data-group-id="3560359250-7">}</span><span class="p" data-group-id="3560359250-6">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3560359250-8">(</span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3560359250-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="3560359250-9">}</span><span class="p" data-group-id="3560359250-8">)</span><span class="w">
+</span><span class="mi">100</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_perception/1">
+
+  <div class="detail-header">
+    <a href="#from_perception/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_perception(perception)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L151" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_perception(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Create facts from a perception map.</p><p>This is the primary constructor for Facts. The perception map should contain
+keys for <code class="inline">:self</code>, <code class="inline">:world</code>, and/or <code class="inline">:social</code>.</p><h2 id="from_perception/1-parameters" class="section-heading"><a href="#from_perception/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">perception</code> - Map with optional <code class="inline">:self</code>, <code class="inline">:world</code>, <code class="inline">:social</code> keys</li></ul><h2 id="from_perception/1-examples" class="section-heading"><a href="#from_perception/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5389951925-1">(</span><span class="p" data-group-id="5389951925-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389951925-3">%{</span><span class="ss">ready</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5389951925-3">}</span><span class="p" data-group-id="5389951925-2">}</span><span class="p" data-group-id="5389951925-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5389951925-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5389951925-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ready</span><span class="p" data-group-id="5389951925-5">}</span><span class="p" data-group-id="5389951925-4">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5389951925-6">(</span><span class="p" data-group-id="5389951925-7">%{</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389951925-8">%{</span><span class="ss">hp</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="ss">mp</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p" data-group-id="5389951925-8">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389951925-9">%{</span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="ss">:town</span><span class="p" data-group-id="5389951925-9">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="5389951925-7">}</span><span class="p" data-group-id="5389951925-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5389951925-10">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5389951925-11">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:location</span><span class="p" data-group-id="5389951925-11">}</span><span class="p" data-group-id="5389951925-10">)</span><span class="w">
+</span><span class="ss">:town</span></code></pre><h2 id="from_perception/1-empty-facts" class="section-heading"><a href="#from_perception/1-empty-facts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Empty Facts</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9195398904-1">(</span><span class="p" data-group-id="9195398904-2">%{</span><span class="p" data-group-id="9195398904-2">}</span><span class="p" data-group-id="9195398904-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9195398904-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9195398904-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:anything</span><span class="p" data-group-id="9195398904-4">}</span><span class="p" data-group-id="9195398904-3">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get/3">
+
+    <span id="get/2"></span>
+
+  <div class="detail-header">
+    <a href="#get/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get(facts, arg, default \\ nil)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L273" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get(<a href="#t:t/0">t</a>(), <a href="#t:fact_key/0">fact_key</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+
+      </div>
+
+<p>Get a fact value with an optional default.</p><p>Returns the value at the given key, or the default if the key doesn't exist.</p><h2 id="get/3-parameters" class="section-heading"><a href="#get/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">facts</code> - The Facts struct</li><li><code class="inline">key</code> - Tuple of <code class="inline">{category, path}</code></li><li><code class="inline">default</code> - Value to return if key doesn't exist (default: <code class="inline">nil</code>)</li></ul><h2 id="get/3-examples" class="section-heading"><a href="#get/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9160025528-1">(</span><span class="p" data-group-id="9160025528-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9160025528-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="9160025528-3">}</span><span class="p" data-group-id="9160025528-2">}</span><span class="p" data-group-id="9160025528-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9160025528-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9160025528-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="9160025528-5">}</span><span class="p" data-group-id="9160025528-4">)</span><span class="w">
+</span><span class="mi">100</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9160025528-6">(</span><span class="p" data-group-id="9160025528-7">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9160025528-8">%{</span><span class="p" data-group-id="9160025528-8">}</span><span class="p" data-group-id="9160025528-7">}</span><span class="p" data-group-id="9160025528-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9160025528-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9160025528-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="9160025528-10">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9160025528-9">)</span><span class="w">
+</span><span class="mi">0</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9160025528-11">(</span><span class="p" data-group-id="9160025528-12">%{</span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9160025528-13">%{</span><span class="ss">enemies</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9160025528-14">[</span><span class="ss">:goblin</span><span class="p">,</span><span class="w"> </span><span class="ss">:orc</span><span class="p" data-group-id="9160025528-14">]</span><span class="p" data-group-id="9160025528-13">}</span><span class="p" data-group-id="9160025528-12">}</span><span class="p" data-group-id="9160025528-11">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9160025528-15">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9160025528-16">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemies</span><span class="p" data-group-id="9160025528-16">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9160025528-17">[</span><span class="p" data-group-id="9160025528-17">]</span><span class="p" data-group-id="9160025528-15">)</span><span class="w">
+</span><span class="p" data-group-id="9160025528-18">[</span><span class="ss">:goblin</span><span class="p">,</span><span class="w"> </span><span class="ss">:orc</span><span class="p" data-group-id="9160025528-18">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="has?/2">
+
+  <div class="detail-header">
+    <a href="#has?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">has?(facts, arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L202" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> has?(<a href="#t:t/0">t</a>(), <a href="#t:fact_key/0">fact_key</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Check if a fact key exists (has a value, even if nil).</p><p>Returns <code class="inline">true</code> if the key exists in the appropriate category map,
+regardless of the value.</p><h2 id="has?/2-parameters" class="section-heading"><a href="#has?/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">facts</code> - The Facts struct</li><li><code class="inline">key</code> - Tuple of <code class="inline">{category, path}</code></li></ul><h2 id="has?/2-examples" class="section-heading"><a href="#has?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9968331363-1">(</span><span class="p" data-group-id="9968331363-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9968331363-3">%{</span><span class="ss">weapon</span><span class="p">:</span><span class="w"> </span><span class="ss">:sword</span><span class="p" data-group-id="9968331363-3">}</span><span class="p" data-group-id="9968331363-2">}</span><span class="p" data-group-id="9968331363-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9968331363-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9968331363-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="9968331363-5">}</span><span class="p" data-group-id="9968331363-4">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="c1"># Key exists, even though value is nil</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9968331363-6">(</span><span class="p" data-group-id="9968331363-7">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9968331363-8">%{</span><span class="ss">weapon</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="9968331363-8">}</span><span class="p" data-group-id="9968331363-7">}</span><span class="p" data-group-id="9968331363-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9968331363-9">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9968331363-10">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="9968331363-10">}</span><span class="p" data-group-id="9968331363-9">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="9968331363-11">(</span><span class="p" data-group-id="9968331363-12">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9968331363-13">%{</span><span class="p" data-group-id="9968331363-13">}</span><span class="p" data-group-id="9968331363-12">}</span><span class="p" data-group-id="9968331363-11">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="9968331363-14">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9968331363-15">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="9968331363-15">}</span><span class="p" data-group-id="9968331363-14">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="merge/2">
+
+  <div class="detail-header">
+    <a href="#merge/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">merge(facts, additional)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L352" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> merge(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Merge additional facts into the existing struct.</p><p>Performs a shallow merge of each category.</p><h2 id="merge/2-parameters" class="section-heading"><a href="#merge/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">facts</code> - The Facts struct</li><li><code class="inline">additional</code> - Map with <code class="inline">:self</code>, <code class="inline">:world</code>, and/or <code class="inline">:social</code> keys</li></ul><h2 id="merge/2-examples" class="section-heading"><a href="#merge/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="4207689218-1">(</span><span class="p" data-group-id="4207689218-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207689218-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="4207689218-3">}</span><span class="p" data-group-id="4207689218-2">}</span><span class="p" data-group-id="4207689218-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="4207689218-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4207689218-5">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207689218-6">%{</span><span class="ss">mana</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p" data-group-id="4207689218-6">}</span><span class="p">,</span><span class="w"> </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4207689218-7">%{</span><span class="ss">zone</span><span class="p">:</span><span class="w"> </span><span class="ss">:forest</span><span class="p" data-group-id="4207689218-7">}</span><span class="p" data-group-id="4207689218-5">}</span><span class="p" data-group-id="4207689218-4">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="4207689218-8">(</span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4207689218-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:mana</span><span class="p" data-group-id="4207689218-9">}</span><span class="p" data-group-id="4207689218-8">)</span><span class="w">
+</span><span class="mi">50</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="4207689218-10">(</span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4207689218-11">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:zone</span><span class="p" data-group-id="4207689218-11">}</span><span class="p" data-group-id="4207689218-10">)</span><span class="w">
+</span><span class="ss">:forest</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="missing_keys/2">
+
+  <div class="detail-header">
+    <a href="#missing_keys/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">missing_keys(facts, keys)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L218" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> missing_keys(<a href="#t:t/0">t</a>(), [<a href="#t:fact_key/0">fact_key</a>()]) :: [<a href="#t:fact_key/0">fact_key</a>()]</pre>
+
+      </div>
+
+<p>Return the list of missing fact keys from a required set.</p><h2 id="missing_keys/2-examples" class="section-heading"><a href="#missing_keys/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5242852346-1">(</span><span class="p" data-group-id="5242852346-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5242852346-3">%{</span><span class="ss">ready</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5242852346-3">}</span><span class="p" data-group-id="5242852346-2">}</span><span class="p" data-group-id="5242852346-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">missing_keys</span><span class="p" data-group-id="5242852346-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5242852346-5">[</span><span class="p" data-group-id="5242852346-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ready</span><span class="p" data-group-id="5242852346-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5242852346-7">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:time</span><span class="p" data-group-id="5242852346-7">}</span><span class="p" data-group-id="5242852346-5">]</span><span class="p" data-group-id="5242852346-4">)</span><span class="w">
+</span><span class="p" data-group-id="5242852346-8">[</span><span class="p" data-group-id="5242852346-9">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:time</span><span class="p" data-group-id="5242852346-9">}</span><span class="p" data-group-id="5242852346-8">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/0">
+
+  <div class="detail-header">
+    <a href="#new/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L172" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new() :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Create an empty Facts struct.</p><p>This is a convenience alias for <code class="inline">from_perception(%{})</code>.</p><h2 id="new/0-examples" class="section-heading"><a href="#new/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6230823612-1">(</span><span class="p" data-group-id="6230823612-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="6230823612-2">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6230823612-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:anything</span><span class="p" data-group-id="6230823612-3">}</span><span class="p" data-group-id="6230823612-2">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="put/3">
+
+  <div class="detail-header">
+    <a href="#put/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put(facts, arg, value)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L300" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put(<a href="#t:t/0">t</a>(), <a href="#t:fact_key/0">fact_key</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Set a fact value, returning a new Facts struct.</p><p>This is used during planning to simulate effects of actions.</p><h2 id="put/3-parameters" class="section-heading"><a href="#put/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">facts</code> - The Facts struct</li><li><code class="inline">key</code> - Tuple of <code class="inline">{category, path}</code></li><li><code class="inline">value</code> - The new value to set</li></ul><h2 id="put/3-examples" class="section-heading"><a href="#put/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="1683649125-1">(</span><span class="p" data-group-id="1683649125-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1683649125-3">%{</span><span class="ss">health</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1683649125-3">}</span><span class="p" data-group-id="1683649125-2">}</span><span class="p" data-group-id="1683649125-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="1683649125-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1683649125-5">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="1683649125-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="1683649125-4">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1683649125-6">(</span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1683649125-7">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="1683649125-7">}</span><span class="p" data-group-id="1683649125-6">)</span><span class="w">
+</span><span class="mi">80</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1683649125-8">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1683649125-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:health</span><span class="p" data-group-id="1683649125-9">}</span><span class="p" data-group-id="1683649125-8">)</span><span class="w">
+</span><span class="mi">100</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_map/1">
+
+  <div class="detail-header">
+    <a href="#to_map/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_map(facts)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L373" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_map(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Convert facts to a flat map representation.</p><p>Useful for debugging and logging.</p><h2 id="to_map/1-examples" class="section-heading"><a href="#to_map/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="2840769716-1">(</span><span class="p" data-group-id="2840769716-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2840769716-3">%{</span><span class="ss">hp</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="2840769716-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2840769716-4">%{</span><span class="ss">zone</span><span class="p">:</span><span class="w"> </span><span class="ss">:a</span><span class="p" data-group-id="2840769716-4">}</span><span class="p" data-group-id="2840769716-2">}</span><span class="p" data-group-id="2840769716-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">to_map</span><span class="p" data-group-id="2840769716-5">(</span><span class="n">facts</span><span class="p" data-group-id="2840769716-5">)</span><span class="w">
+</span><span class="p" data-group-id="2840769716-6">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2840769716-7">%{</span><span class="ss">hp</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="2840769716-7">}</span><span class="p">,</span><span class="w"> </span><span class="ss">world</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2840769716-8">%{</span><span class="ss">zone</span><span class="p">:</span><span class="w"> </span><span class="ss">:a</span><span class="p" data-group-id="2840769716-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">social</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2840769716-9">%{</span><span class="p" data-group-id="2840769716-9">}</span><span class="p" data-group-id="2840769716-6">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="validate_required/2">
+
+  <div class="detail-header">
+    <a href="#validate_required/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">validate_required(facts, keys)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/facts.ex#L239" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> validate_required(<a href="#t:t/0">t</a>(), [<a href="#t:fact_key/0">fact_key</a>()]) :: :ok | {:error, [<a href="#t:fact_key/0">fact_key</a>()]}</pre>
+
+      </div>
+
+<p>Validate that all required fact keys exist.</p><p>Returns <code class="inline">:ok</code> when all keys exist, otherwise returns <code class="inline">{:error, missing_keys}</code>.</p><h2 id="validate_required/2-examples" class="section-heading"><a href="#validate_required/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5769071607-1">(</span><span class="p" data-group-id="5769071607-2">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5769071607-3">%{</span><span class="ss">ready</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5769071607-3">}</span><span class="p" data-group-id="5769071607-2">}</span><span class="p" data-group-id="5769071607-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">validate_required</span><span class="p" data-group-id="5769071607-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5769071607-5">[</span><span class="p" data-group-id="5769071607-6">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ready</span><span class="p" data-group-id="5769071607-6">}</span><span class="p" data-group-id="5769071607-5">]</span><span class="p" data-group-id="5769071607-4">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="5769071607-7">(</span><span class="p" data-group-id="5769071607-8">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5769071607-9">%{</span><span class="ss">ready</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5769071607-9">}</span><span class="p" data-group-id="5769071607-8">}</span><span class="p" data-group-id="5769071607-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Facts</span><span class="o">.</span><span class="n">validate_required</span><span class="p" data-group-id="5769071607-10">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5769071607-11">[</span><span class="p" data-group-id="5769071607-12">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:ready</span><span class="p" data-group-id="5769071607-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5769071607-13">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:time</span><span class="p" data-group-id="5769071607-13">}</span><span class="p" data-group-id="5769071607-11">]</span><span class="p" data-group-id="5769071607-10">)</span><span class="w">
+</span><span class="p" data-group-id="5769071607-14">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5769071607-15">[</span><span class="p" data-group-id="5769071607-16">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:time</span><span class="p" data-group-id="5769071607-16">}</span><span class="p" data-group-id="5769071607-15">]</span><span class="p" data-group-id="5769071607-14">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

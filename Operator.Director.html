@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.Director — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>Director</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.Director.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Narrative orchestration system for dynamic event generation.</p><p>The Director is a GenServer that acts as your game's &quot;AI Director&quot; (inspired
+by Left 4 Dead's famous system). It monitors world state and decides when
+interesting events should occur, controlling narrative pacing and dramatic
+tension.</p><h2 id="module-the-director-pattern" class="section-heading"><a href="#module-the-director-pattern" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The Director Pattern</span></h2><pre><code class="makeup elixir" translate="no"><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">
+</span><span class="err">│</span><span class="w">                        </span><span class="nc">Game</span><span class="w"> </span><span class="nc">Loop</span><span class="w">                                 </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">     </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">     </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nc">Update</span><span class="w"> </span><span class="nc">NPCs</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="o">--</span><span class="o">&gt;</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="nc">Physics</span><span class="o">/</span><span class="nc">AI</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="o">--</span><span class="o">&gt;</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="nc">Render</span><span class="w">      </span><span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">     </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">     </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">         </span><span class="err">│</span><span class="w">                                                        </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">         </span><span class="err">│</span><span class="w"> </span><span class="n">world_state</span><span class="w">                                            </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">         </span><span class="err">▼</span><span class="w">                                                        </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">                       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">           </span><span class="nc">Director</span><span class="w">                  </span><span class="err">│</span><span class="w">                       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">    </span><span class="err">│</span><span class="w">                       </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">      </span><span class="nc">Storyteller</span><span class="w">            </span><span class="err">│</span><span class="w">    </span><span class="err">│</span><span class="w">     </span><span class="err">┌</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┐</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">monitors</span><span class="w"> </span><span class="n">tension</span><span class="w">         </span><span class="err">│</span><span class="o">--</span><span class="o">--</span><span class="err">│</span><span class="o">--</span><span class="o">-&gt;</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="nc">Game</span><span class="w"> </span><span class="nc">Events</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">picks</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">timing</span><span class="w">       </span><span class="err">│</span><span class="w">    </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="p" data-group-id="4591071952-1">(</span><span class="n">spawn</span><span class="w"> </span><span class="n">enemy</span><span class="p">,</span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">controls</span><span class="w"> </span><span class="n">pacing</span><span class="w">          </span><span class="err">│</span><span class="w">    </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w">  </span><span class="n">trigger</span><span class="w">     </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">    </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w">  </span><span class="n">dialogue</span><span class="p" data-group-id="4591071952-1">)</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">│</span><span class="w">   </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">     </span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span><span class="w">  </span><span class="err">│</span><span class="w">
+</span><span class="err">└</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">─</span><span class="err">┘</span></code></pre><h2 id="module-quick-start" class="section-heading"><a href="#module-quick-start" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Quick Start</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># 1. Define your storyteller</span><span class="w">
+</span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.TensionStoryteller</span><span class="w"> </span><span class="k" data-group-id="1628058516-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Operator.Storyteller</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="1628058516-2">(</span><span class="c">_opts</span><span class="p" data-group-id="1628058516-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1628058516-3">%{</span><span class="ss">last_event_tick</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1628058516-3">}</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">pick_event</span><span class="p" data-group-id="1628058516-4">(</span><span class="n">tick</span><span class="p">,</span><span class="w"> </span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="1628058516-4">)</span><span class="w"> </span><span class="k" data-group-id="1628058516-5">do</span><span class="w">
+    </span><span class="n">tension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1628058516-6">(</span><span class="n">world_state</span><span class="p">,</span><span class="w"> </span><span class="ss">:tension</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p" data-group-id="1628058516-6">)</span><span class="w">
+
+    </span><span class="k">if</span><span class="w"> </span><span class="n">tension</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.7</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">last_event_tick</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k" data-group-id="1628058516-7">do</span><span class="w">
+      </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1628058516-8">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:ambush</span><span class="p">,</span><span class="w"> </span><span class="ss">location</span><span class="p">:</span><span class="w"> </span><span class="n">pick_location</span><span class="p" data-group-id="1628058516-9">(</span><span class="n">world_state</span><span class="p" data-group-id="1628058516-9">)</span><span class="p" data-group-id="1628058516-8">}</span><span class="w">
+      </span><span class="p" data-group-id="1628058516-10">{</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1628058516-11">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">last_event_tick</span><span class="p">:</span><span class="w"> </span><span class="n">tick</span><span class="p" data-group-id="1628058516-11">}</span><span class="p" data-group-id="1628058516-10">}</span><span class="w">
+    </span><span class="k" data-group-id="1628058516-7">else</span><span class="w">
+      </span><span class="p" data-group-id="1628058516-12">{</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="1628058516-12">}</span><span class="w">
+    </span><span class="k" data-group-id="1628058516-7">end</span><span class="w">
+  </span><span class="k" data-group-id="1628058516-5">end</span><span class="w">
+</span><span class="k" data-group-id="1628058516-1">end</span><span class="w">
+
+</span><span class="c1"># 2. Start the Director</span><span class="w">
+</span><span class="p" data-group-id="1628058516-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="c">_pid</span><span class="p" data-group-id="1628058516-13">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1628058516-14">(</span><span class="w">
+  </span><span class="ss">storyteller</span><span class="p">:</span><span class="w"> </span><span class="nc">MyGame.TensionStoryteller</span><span class="p">,</span><span class="w">
+  </span><span class="ss">on_event</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">MyGame.EventHandler</span><span class="o">.</span><span class="n">process</span><span class="o">/</span><span class="mi">1</span><span class="w">
+</span><span class="p" data-group-id="1628058516-14">)</span><span class="w">
+
+</span><span class="c1"># 3. Feed it world state each tick</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">game_tick</span><span class="p" data-group-id="1628058516-15">(</span><span class="n">world_state</span><span class="p" data-group-id="1628058516-15">)</span><span class="w"> </span><span class="k" data-group-id="1628058516-16">do</span><span class="w">
+  </span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">tick</span><span class="p" data-group-id="1628058516-17">(</span><span class="n">world_state</span><span class="p" data-group-id="1628058516-17">)</span><span class="w">
+  </span><span class="c1"># ... rest of game loop</span><span class="w">
+</span><span class="k" data-group-id="1628058516-16">end</span></code></pre><h2 id="module-startup-options" class="section-heading"><a href="#module-startup-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Startup Options</span></h2><ul><li><code class="inline">:storyteller</code> - Module implementing <a href="Operator.Storyteller.html"><code class="inline">Operator.Storyteller</code></a>
+(default: <code class="inline">NullStoryteller</code>)</li><li><code class="inline">:name</code> - GenServer name (default: <a href="Operator.Director.html"><code class="inline">Operator.Director</code></a>)</li><li><code class="inline">:on_event</code> - Callback <code class="inline">fn event -&gt; :ok end</code> for generated events</li></ul><h2 id="module-event-flow" class="section-heading"><a href="#module-event-flow" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Event Flow</span></h2><ol><li>Your game calls <code class="inline">Director.tick(world_state)</code> each simulation tick</li><li>Director invokes <code class="inline">storyteller.pick_event(tick, world_state, state)</code></li><li>If the storyteller returns an event, Director:<ul><li>Rationalizes it via <a href="Operator.Rationalization.html"><code class="inline">Operator.Rationalization</code></a></li><li>Emits telemetry via <a href="Operator.Telemetry.html"><code class="inline">Operator.Telemetry</code></a></li><li>Calls your <code class="inline">:on_event</code> callback</li></ul></li><li>Your game reacts to the event (spawn enemies, trigger dialogue, etc.)</li></ol><h2 id="module-runtime-control" class="section-heading"><a href="#module-runtime-control" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Runtime Control</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Change storytellers based on game phase</span><span class="w">
+</span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">change_storyteller</span><span class="p" data-group-id="1145609989-1">(</span><span class="nc">MyGame.BossFightStoryteller</span><span class="p" data-group-id="1145609989-1">)</span><span class="w">
+
+</span><span class="c1"># Get current tick for synchronization</span><span class="w">
+</span><span class="n">current_tick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">current_tick</span><span class="p" data-group-id="1145609989-2">(</span><span class="p" data-group-id="1145609989-2">)</span><span class="w">
+
+</span><span class="c1"># Debug storyteller state</span><span class="w">
+</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">get_state</span><span class="p" data-group-id="1145609989-3">(</span><span class="p" data-group-id="1145609989-3">)</span></code></pre><h2 id="module-integration-philosophy" class="section-heading"><a href="#module-integration-philosophy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Integration Philosophy</span></h2><p>The Director is intentionally lightweight. It does NOT:</p><ul><li>Subscribe to PubSub topics</li><li>Persist events to timelines</li><li>Handle clustering</li></ul><p>These concerns belong to your host application. The Director's job is
+purely to decide <strong>when</strong> and <strong>what</strong> events to generate.</p><h2 id="module-synchronous-testing" class="section-heading"><a href="#module-synchronous-testing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Synchronous Testing</span></h2><p>For tests, use <a href="#tick_sync/2"><code class="inline">tick_sync/2</code></a> to get immediate results:</p><pre><code class="makeup elixir" translate="no"><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.Director</span><span class="o">.</span><span class="n">tick_sync</span><span class="p" data-group-id="4579995298-1">(</span><span class="n">world_state</span><span class="p" data-group-id="4579995298-1">)</span><span class="w">
+</span><span class="n">assert</span><span class="w"> </span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:ambush</span></code></pre><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.Storyteller.html"><code class="inline">Operator.Storyteller</code></a> - Behaviour for storyteller modules</li><li><a href="Operator.Director.NullStoryteller.html"><code class="inline">Operator.Director.NullStoryteller</code></a> - No-op storyteller for testing</li><li><a href="Operator.Rationalization.html"><code class="inline">Operator.Rationalization</code></a> - Event annotation</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:storyteller_state/0" data-no-tooltip="" translate="no">storyteller_state()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_storyteller/2" data-no-tooltip="" translate="no">change_storyteller(new_storyteller_module, server \\ __MODULE__)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Change the active storyteller at runtime.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#child_spec/1" data-no-tooltip="" translate="no">child_spec(init_arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a specification to start this module under a supervisor.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#current_tick/1" data-no-tooltip="" translate="no">current_tick(server \\ __MODULE__)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the current tick.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_state/1" data-no-tooltip="" translate="no">get_state(server \\ __MODULE__)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the current state (for debugging).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/1" data-no-tooltip="" translate="no">start_link(opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Start the Director.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tick/2" data-no-tooltip="" translate="no">tick(world_state, server \\ __MODULE__)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Trigger a tick with the given world state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tick_sync/2" data-no-tooltip="" translate="no">tick_sync(world_state, server \\ __MODULE__)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Synchronous tick that returns any generated event.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:storyteller_state/0">
+
+  <div class="detail-header">
+    <a href="#t:storyteller_state/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">storyteller_state()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> storyteller_state() :: {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L137" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Operator.Director{
+  last_event_tick: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  on_event: (<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() -&gt; :ok) | nil,
+  storyteller: <a href="#t:storyteller_state/0">storyteller_state</a>(),
+  tick: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="change_storyteller/2">
+
+    <span id="change_storyteller/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_storyteller/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">change_storyteller(new_storyteller_module, server \\ __MODULE__)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L177" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> change_storyteller(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/GenServer.html#t:server/0">GenServer.server</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Change the active storyteller at runtime.</p>
+  </section>
+</section>
+<section class="detail" id="child_spec/1">
+
+  <div class="detail-header">
+    <a href="#child_spec/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">child_spec(init_arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L121" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns a specification to start this module under a supervisor.</p><p>See <a href="https://hexdocs.pm/elixir/Supervisor.html"><code class="inline">Supervisor</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="current_tick/1">
+
+    <span id="current_tick/0"></span>
+
+  <div class="detail-header">
+    <a href="#current_tick/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">current_tick(server \\ __MODULE__)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L169" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> current_tick(<a href="https://hexdocs.pm/elixir/GenServer.html#t:server/0">GenServer.server</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Get the current tick.</p>
+  </section>
+</section>
+<section class="detail" id="get_state/1">
+
+    <span id="get_state/0"></span>
+
+  <div class="detail-header">
+    <a href="#get_state/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_state(server \\ __MODULE__)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L185" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_state(<a href="https://hexdocs.pm/elixir/GenServer.html#t:server/0">GenServer.server</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Get the current state (for debugging).</p>
+  </section>
+</section>
+<section class="detail" id="start_link/1">
+
+    <span id="start_link/0"></span>
+
+  <div class="detail-header">
+    <a href="#start_link/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L157" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: <a href="https://hexdocs.pm/elixir/GenServer.html#t:on_start/0">GenServer.on_start</a>()</pre>
+
+      </div>
+
+<p>Start the Director.</p><h2 id="start_link/1-options" class="section-heading"><a href="#start_link/1-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:storyteller</code> - Storyteller module (default: NullStoryteller)</li><li><code class="inline">:name</code> - GenServer name (default: Operator.Director)</li><li><code class="inline">:on_event</code> - Callback for generated events</li></ul>
+  </section>
+</section>
+<section class="detail" id="tick/2">
+
+    <span id="tick/1"></span>
+
+  <div class="detail-header">
+    <a href="#tick/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tick(world_state, server \\ __MODULE__)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L195" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> tick(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/GenServer.html#t:server/0">GenServer.server</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Trigger a tick with the given world state.</p><p>Call this from your simulation's tick handler.</p>
+  </section>
+</section>
+<section class="detail" id="tick_sync/2">
+
+    <span id="tick_sync/1"></span>
+
+  <div class="detail-header">
+    <a href="#tick_sync/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tick_sync(world_state, server \\ __MODULE__)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/director/director.ex#L205" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> tick_sync(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/GenServer.html#t:server/0">GenServer.server</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | nil</pre>
+
+      </div>
+
+<p>Synchronous tick that returns any generated event.</p><p>Useful for testing.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

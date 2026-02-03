@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Precondition — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Precondition</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Precondition.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Logical operators for HTN preconditions.</p><p>Inspired by the Decima engine's HTN implementation, this module provides
+logical combinators for preconditions beyond simple conjunction (AND).</p><h2 id="module-supported-operators" class="section-heading"><a href="#module-supported-operators" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Supported Operators</span></h2><ul><li><code class="inline">:all</code> (AND) - All conditions must be true (default behavior)</li><li><code class="inline">:any</code> (OR) - At least one condition must be true</li><li><code class="inline">:first</code> (ALT) - Use first matching condition with preference order</li><li><code class="inline">:not</code> - Negate a condition</li><li><code class="inline">:none</code> - No conditions match (equivalent to not-any)</li><li><code class="inline">:axiom</code> - Reference a registered axiom</li></ul><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><p>Preconditions can be:</p><ul><li>A simple function: <code class="inline">fn facts -&gt; boolean end</code></li><li>A tuple with operator: <code class="inline">{:any, [fn1, fn2, fn3]}</code></li><li>Nested operators: <code class="inline">{:all, [fn1, {:any, [fn2, fn3]}]}</code></li><li>An axiom reference: <code class="inline">{:axiom, :axiom_name}</code> or <code class="inline">{:axiom, :axiom_name, args}</code></li></ul><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Operator.HTN</span><span class="o">.</span><span class="p" data-group-id="3498518802-1">{</span><span class="nc">Facts</span><span class="p">,</span><span class="w"> </span><span class="nc">Precondition</span><span class="p" data-group-id="3498518802-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3498518802-2">(</span><span class="p" data-group-id="3498518802-3">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3498518802-4">%{</span><span class="ss">has_weapon</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3498518802-4">}</span><span class="p" data-group-id="3498518802-3">}</span><span class="p" data-group-id="3498518802-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3498518802-5">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-6">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3498518802-7">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-8">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-9">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_weapon</span><span class="p" data-group-id="3498518802-9">}</span><span class="p" data-group-id="3498518802-8">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-7">end</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3498518802-10">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-11">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-12">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon_nearby</span><span class="p" data-group-id="3498518802-12">}</span><span class="p" data-group-id="3498518802-11">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-10">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3498518802-6">]</span><span class="p" data-group-id="3498518802-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Precondition</span><span class="o">.</span><span class="n">satisfied?</span><span class="p" data-group-id="3498518802-13">(</span><span class="k">cond</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-14">%{</span><span class="p" data-group-id="3498518802-14">}</span><span class="p" data-group-id="3498518802-13">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3498518802-15">(</span><span class="p" data-group-id="3498518802-16">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3498518802-17">%{</span><span class="ss">has_melee_weapon</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3498518802-17">}</span><span class="p" data-group-id="3498518802-16">}</span><span class="p" data-group-id="3498518802-15">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3498518802-18">{</span><span class="ss">:first</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-19">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3498518802-20">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-21">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-22">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_ranged_weapon</span><span class="p" data-group-id="3498518802-22">}</span><span class="p" data-group-id="3498518802-21">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-20">end</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3498518802-23">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-24">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-25">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_melee_weapon</span><span class="p" data-group-id="3498518802-25">}</span><span class="p" data-group-id="3498518802-24">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-23">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3498518802-19">]</span><span class="p" data-group-id="3498518802-18">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Precondition</span><span class="o">.</span><span class="n">satisfied?</span><span class="p" data-group-id="3498518802-26">(</span><span class="k">cond</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-27">%{</span><span class="p" data-group-id="3498518802-27">}</span><span class="p" data-group-id="3498518802-26">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3498518802-28">(</span><span class="p" data-group-id="3498518802-29">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3498518802-30">%{</span><span class="ss">in_combat</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="3498518802-30">}</span><span class="p" data-group-id="3498518802-29">}</span><span class="p" data-group-id="3498518802-28">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3498518802-31">{</span><span class="ss">:not</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3498518802-32">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3498518802-33">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-34">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:in_combat</span><span class="p" data-group-id="3498518802-34">}</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="3498518802-33">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-32">end</span><span class="p" data-group-id="3498518802-31">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Precondition</span><span class="o">.</span><span class="n">satisfied?</span><span class="p" data-group-id="3498518802-35">(</span><span class="k">cond</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-36">%{</span><span class="p" data-group-id="3498518802-36">}</span><span class="p" data-group-id="3498518802-35">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">facts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">from_perception</span><span class="p" data-group-id="3498518802-37">(</span><span class="p" data-group-id="3498518802-38">%{</span><span class="ss">self</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3498518802-39">%{</span><span class="ss">has_cover</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">has_grenade</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3498518802-39">}</span><span class="p" data-group-id="3498518802-38">}</span><span class="p" data-group-id="3498518802-37">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">cond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3498518802-40">{</span><span class="ss">:all</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-41">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3498518802-42">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-43">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-44">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_cover</span><span class="p" data-group-id="3498518802-44">}</span><span class="p" data-group-id="3498518802-43">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-42">end</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3498518802-45">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-46">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="k" data-group-id="3498518802-47">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-48">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-49">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_weapon</span><span class="p" data-group-id="3498518802-49">}</span><span class="p" data-group-id="3498518802-48">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-47">end</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="k" data-group-id="3498518802-50">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="3498518802-51">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-52">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_grenade</span><span class="p" data-group-id="3498518802-52">}</span><span class="p" data-group-id="3498518802-51">)</span><span class="w"> </span><span class="k" data-group-id="3498518802-50">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3498518802-46">]</span><span class="p" data-group-id="3498518802-45">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3498518802-41">]</span><span class="p" data-group-id="3498518802-40">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Precondition</span><span class="o">.</span><span class="n">satisfied?</span><span class="p" data-group-id="3498518802-53">(</span><span class="k">cond</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498518802-54">%{</span><span class="p" data-group-id="3498518802-54">}</span><span class="p" data-group-id="3498518802-53">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:condition/0" data-no-tooltip="" translate="no">condition()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:operator/0" data-no-tooltip="" translate="no">operator()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#all_satisfied?/3" data-no-tooltip="" translate="no">all_satisfied?(conditions, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Evaluate a list of preconditions with AND semantics.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#evaluate/3" data-no-tooltip="" translate="no">evaluate(condition, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Evaluate a precondition against facts and traits.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#find_all_matches/3" data-no-tooltip="" translate="no">find_all_matches(conditions, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Find all matching alternatives.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#find_first_match/3" data-no-tooltip="" translate="no">find_first_match(conditions, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Find the first matching alternative in an ALT list.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#satisfied?/3" data-no-tooltip="" translate="no">satisfied?(condition, facts, traits)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Simple boolean evaluation of a precondition.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:condition/0">
+
+  <div class="detail-header">
+    <a href="#t:condition/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">condition()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L64" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> condition() ::
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">function</a>() | {<a href="#t:operator/0">operator</a>(), [<a href="#t:condition/0">condition</a>()]} | {<a href="#t:operator/0">operator</a>(), <a href="#t:condition/0">condition</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:operator/0">
+
+  <div class="detail-header">
+    <a href="#t:operator/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">operator()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L65" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> operator() :: :all | :any | :first | :not | :none</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="all_satisfied?/3">
+
+  <div class="detail-header">
+    <a href="#all_satisfied?/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">all_satisfied?(conditions, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L93" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> all_satisfied?([<a href="#t:condition/0">condition</a>()], <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Evaluate a list of preconditions with AND semantics.</p><p>This is the default behavior matching Task.preconditions_satisfied?/3.</p>
+  </section>
+</section>
+<section class="detail" id="evaluate/3">
+
+  <div class="detail-header">
+    <a href="#evaluate/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">evaluate(condition, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L74" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> evaluate(<a href="#t:condition/0">condition</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | nil}</pre>
+
+      </div>
+
+<p>Evaluate a precondition against facts and traits.</p><p>Returns <code class="inline">{true, bindings}</code> on success or <code class="inline">{false, nil}</code> on failure.
+Bindings are currently unused but reserved for future unification support.</p>
+  </section>
+</section>
+<section class="detail" id="find_all_matches/3">
+
+  <div class="detail-header">
+    <a href="#find_all_matches/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">find_all_matches(conditions, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L182" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> find_all_matches([<a href="#t:condition/0">condition</a>()], <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: [
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()
+]</pre>
+
+      </div>
+
+<p>Find all matching alternatives.</p><p>Returns a list of indices for all conditions that match.
+Useful for OR semantics where you want to know all valid options.</p>
+  </section>
+</section>
+<section class="detail" id="find_first_match/3">
+
+  <div class="detail-header">
+    <a href="#find_first_match/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">find_first_match(conditions, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L165" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> find_first_match([<a href="#t:condition/0">condition</a>()], <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()} | :none</pre>
+
+      </div>
+
+<p>Find the first matching alternative in an ALT list.</p><p>Unlike <code class="inline">:first</code> which just returns true/false, this returns
+<code class="inline">{:ok, index}</code> with the index of the first matching condition,
+or <code class="inline">:none</code> if nothing matches.</p><p>Useful for branch selection in decomposition.</p>
+  </section>
+</section>
+<section class="detail" id="satisfied?/3">
+
+  <div class="detail-header">
+    <a href="#satisfied?/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">satisfied?(condition, facts, traits)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/precondition.ex#L83" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> satisfied?(<a href="#t:condition/0">condition</a>(), <a href="Operator.HTN.Facts.html#t:t/0">Operator.HTN.Facts.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Simple boolean evaluation of a precondition.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

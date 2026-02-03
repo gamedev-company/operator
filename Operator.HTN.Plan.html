@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.Plan — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>Plan</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.Plan.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Represents a generated plan from HTN expansion.</p><p>A Plan is the output of the HTN planning process - a sequence of primitive
+tasks that, when executed in order, should achieve the original goal.</p><h2 id="module-plan-structure" class="section-heading"><a href="#module-plan-structure" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Plan Structure</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9643599098-1">%</span><span class="nc" data-group-id="9643599098-1">Plan</span><span class="p" data-group-id="9643599098-1">{</span><span class="w">
+  </span><span class="ss">goal</span><span class="p">:</span><span class="w"> </span><span class="ss">:acquire_data</span><span class="p">,</span><span class="w">
+  </span><span class="ss">tasks</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9643599098-2">[</span><span class="w">
+    </span><span class="p" data-group-id="9643599098-3">{</span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9643599098-4">[</span><span class="ss">:server_room</span><span class="p" data-group-id="9643599098-4">]</span><span class="p" data-group-id="9643599098-3">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9643599098-5">{</span><span class="ss">:hack_terminal</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9643599098-6">[</span><span class="s">&quot;mainframe&quot;</span><span class="p" data-group-id="9643599098-6">]</span><span class="p" data-group-id="9643599098-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9643599098-7">{</span><span class="ss">:download</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9643599098-8">[</span><span class="ss">:target_file</span><span class="p" data-group-id="9643599098-8">]</span><span class="p" data-group-id="9643599098-7">}</span><span class="w">
+  </span><span class="p" data-group-id="9643599098-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">validity</span><span class="p">:</span><span class="w"> </span><span class="ss">:active</span><span class="p">,</span><span class="w">
+  </span><span class="ss">created_at</span><span class="p">:</span><span class="w"> </span><span class="mi">1699999999</span><span class="p">,</span><span class="w">
+  </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9643599098-9">%{</span><span class="ss">estimated_cost</span><span class="p">:</span><span class="w"> </span><span class="mf">15.0</span><span class="p" data-group-id="9643599098-9">}</span><span class="w">
+</span><span class="p" data-group-id="9643599098-1">}</span></code></pre><h2 id="module-plan-lifecycle" class="section-heading"><a href="#module-plan-lifecycle" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Plan Lifecycle</span></h2><p>Plans have a validity state that tracks their lifecycle:</p><ul><li><code class="inline">:active</code> - Plan is valid and can be executed</li><li><code class="inline">:invalid</code> - Plan is no longer valid (world changed)</li><li><code class="inline">:completed</code> - All tasks have been executed</li></ul><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><h3 id="module-creating-plans" class="section-heading"><a href="#module-creating-plans" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Creating Plans</span></h3><p>Plans are typically created by the Engine or Planner:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="5373404832-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">plan</span><span class="p" data-group-id="5373404832-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Planner</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="5373404832-2">(</span><span class="ss">:my_goal</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p" data-group-id="5373404832-2">)</span></code></pre><h3 id="module-executing-plans" class="section-heading"><a href="#module-executing-plans" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Executing Plans</span></h3><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">next_task</span><span class="p" data-group-id="0394743256-1">(</span><span class="n">plan</span><span class="p" data-group-id="0394743256-1">)</span><span class="w"> </span><span class="k" data-group-id="0394743256-2">do</span><span class="w">
+  </span><span class="p" data-group-id="0394743256-3">{</span><span class="p" data-group-id="0394743256-4">{</span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0394743256-5">[</span><span class="n">location</span><span class="p" data-group-id="0394743256-5">]</span><span class="p" data-group-id="0394743256-4">}</span><span class="p">,</span><span class="w"> </span><span class="n">remaining_plan</span><span class="p" data-group-id="0394743256-3">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">execute_move</span><span class="p" data-group-id="0394743256-6">(</span><span class="n">location</span><span class="p" data-group-id="0394743256-6">)</span><span class="w">
+    </span><span class="c1"># Continue with remaining_plan</span><span class="w">
+
+  </span><span class="ss">:empty</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Plan</span><span class="o">.</span><span class="n">complete</span><span class="p" data-group-id="0394743256-7">(</span><span class="n">plan</span><span class="p" data-group-id="0394743256-7">)</span><span class="w">
+</span><span class="k" data-group-id="0394743256-2">end</span></code></pre><h3 id="module-invalidation" class="section-heading"><a href="#module-invalidation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Invalidation</span></h3><p>Plans should be invalidated when the world changes in ways that affect
+preconditions:</p><pre><code class="makeup elixir" translate="no"><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">invalidate</span><span class="p" data-group-id="6545280165-1">(</span><span class="n">plan</span><span class="p" data-group-id="6545280165-1">)</span><span class="w">
+</span><span class="c1"># plan.validity is now :invalid</span></code></pre><h2 id="module-metadata" class="section-heading"><a href="#module-metadata" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Metadata</span></h2><p>Plans can carry arbitrary metadata for debugging, cost tracking, or
+integration with external systems:</p><pre><code class="makeup elixir" translate="no"><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">add_metadata</span><span class="p" data-group-id="9992636583-1">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:source</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GoalSelector&quot;</span><span class="p" data-group-id="9992636583-1">)</span><span class="w">
+</span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">add_metadata</span><span class="p" data-group-id="9992636583-2">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:planning_time_ms</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="9992636583-2">)</span></code></pre><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.Engine.html"><code class="inline">Operator.HTN.Engine</code></a> - Generates plans</li><li><a href="Operator.HTN.Planner.html"><code class="inline">Operator.HTN.Planner</code></a> - High-level planning API</li><li><a href="Operator.HTN.Task.html"><code class="inline">Operator.HTN.Task</code></a> - Individual task definitions</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The Plan struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:task_tuple/0" data-no-tooltip="" translate="no">task_tuple()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A task tuple with name and arguments.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:validity/0" data-no-tooltip="" translate="no">validity()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Plan validity states.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_metadata/3" data-no-tooltip="" translate="no">add_metadata(plan, key, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add metadata to a plan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#complete/1" data-no-tooltip="" translate="no">complete(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Mark a plan as completed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_metadata/3" data-no-tooltip="" translate="no">get_metadata(plan, key, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get metadata value from a plan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#has_tasks?/1" data-no-tooltip="" translate="no">has_tasks?(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if the plan has remaining tasks.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#invalidate/1" data-no-tooltip="" translate="no">invalidate(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Mark a plan as invalid.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/3" data-no-tooltip="" translate="no">new(goal, tasks, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a new plan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#next_task/1" data-no-tooltip="" translate="no">next_task(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the next task to execute.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#task_count/1" data-no-tooltip="" translate="no">task_count(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get the number of remaining tasks.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#valid?/1" data-no-tooltip="" translate="no">valid?(plan)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if plan is still valid for execution.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L115" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Operator.HTN.Plan{
+  created_at: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  goal: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  metadata: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  tasks: [<a href="#t:task_tuple/0">task_tuple</a>()],
+  validity: <a href="#t:validity/0">validity</a>()
+}</pre>
+
+      </div>
+
+<p>The Plan struct.</p><h2 id="t:t/0-fields" class="section-heading"><a href="#t:t/0-fields" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fields</span></h2><ul><li><code class="inline">:goal</code> - The goal this plan achieves</li><li><code class="inline">:tasks</code> - List of primitive task tuples</li><li><code class="inline">:validity</code> - Current plan validity</li><li><code class="inline">:created_at</code> - Unix timestamp of creation</li><li><code class="inline">:metadata</code> - Arbitrary metadata map</li></ul>
+  </section>
+</section>
+<section class="detail" id="t:task_tuple/0">
+
+  <div class="detail-header">
+    <a href="#t:task_tuple/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_tuple()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L101" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> task_tuple() :: {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()}</pre>
+
+      </div>
+
+<p>A task tuple with name and arguments.</p><h2 id="t:task_tuple/0-examples" class="section-heading"><a href="#t:task_tuple/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9871890403-1">{</span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9871890403-2">[</span><span class="ss">:lobby</span><span class="p" data-group-id="9871890403-2">]</span><span class="p" data-group-id="9871890403-1">}</span><span class="w">
+</span><span class="p" data-group-id="9871890403-3">{</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9871890403-4">[</span><span class="ss">:enemy_1</span><span class="p">,</span><span class="w"> </span><span class="ss">:melee</span><span class="p" data-group-id="9871890403-4">]</span><span class="p" data-group-id="9871890403-3">}</span><span class="w">
+</span><span class="p" data-group-id="9871890403-5">{</span><span class="ss">:wait</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9871890403-6">[</span><span class="mi">5000</span><span class="p" data-group-id="9871890403-6">]</span><span class="p" data-group-id="9871890403-5">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="t:validity/0">
+
+  <div class="detail-header">
+    <a href="#t:validity/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">validity()</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L89" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> validity() :: :active | :invalid | :completed</pre>
+
+      </div>
+
+<p>Plan validity states.</p><ul><li><code class="inline">:active</code> - Plan is valid and executable</li><li><code class="inline">:invalid</code> - Plan preconditions no longer hold</li><li><code class="inline">:completed</code> - All tasks have been executed</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="add_metadata/3">
+
+  <div class="detail-header">
+    <a href="#add_metadata/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_metadata(plan, key, value)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L279" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> add_metadata(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Add metadata to a plan.</p><h2 id="add_metadata/3-examples" class="section-heading"><a href="#add_metadata/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1280061699-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1280061699-2">[</span><span class="p" data-group-id="1280061699-2">]</span><span class="p" data-group-id="1280061699-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">add_metadata</span><span class="p" data-group-id="1280061699-3">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:source</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;manual&quot;</span><span class="p" data-group-id="1280061699-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">source</span><span class="w">
+</span><span class="s">&quot;manual&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="complete/1">
+
+  <div class="detail-header">
+    <a href="#complete/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">complete(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L212" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> complete(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Mark a plan as completed.</p><h2 id="complete/1-examples" class="section-heading"><a href="#complete/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0309299887-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0309299887-2">[</span><span class="p" data-group-id="0309299887-2">]</span><span class="p" data-group-id="0309299887-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">completed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">complete</span><span class="p" data-group-id="0309299887-3">(</span><span class="n">plan</span><span class="p" data-group-id="0309299887-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">completed</span><span class="o">.</span><span class="n">validity</span><span class="w">
+</span><span class="ss">:completed</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_metadata/3">
+
+    <span id="get_metadata/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_metadata/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_metadata(plan, key, default \\ nil)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L298" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_metadata(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+
+      </div>
+
+<p>Get metadata value from a plan.</p><h2 id="get_metadata/3-examples" class="section-heading"><a href="#get_metadata/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6850146932-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6850146932-2">[</span><span class="p" data-group-id="6850146932-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6850146932-3">%{</span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="6850146932-3">}</span><span class="p" data-group-id="6850146932-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">get_metadata</span><span class="p" data-group-id="6850146932-4">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:priority</span><span class="p" data-group-id="6850146932-4">)</span><span class="w">
+</span><span class="mi">5</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6850146932-5">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6850146932-6">[</span><span class="p" data-group-id="6850146932-6">]</span><span class="p">,</span><span class="w"> </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6850146932-7">%{</span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="6850146932-7">}</span><span class="p" data-group-id="6850146932-5">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">get_metadata</span><span class="p" data-group-id="6850146932-8">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="ss">:missing</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="6850146932-8">)</span><span class="w">
+</span><span class="ss">:default</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="has_tasks?/1">
+
+  <div class="detail-header">
+    <a href="#has_tasks?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">has_tasks?(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> has_tasks?(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Check if the plan has remaining tasks.</p><h2 id="has_tasks?/1-examples" class="section-heading"><a href="#has_tasks?/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5809196062-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809196062-2">[</span><span class="p" data-group-id="5809196062-3">{</span><span class="ss">:task</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809196062-4">[</span><span class="p" data-group-id="5809196062-4">]</span><span class="p" data-group-id="5809196062-3">}</span><span class="p" data-group-id="5809196062-2">]</span><span class="p" data-group-id="5809196062-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="5809196062-5">(</span><span class="n">plan</span><span class="p" data-group-id="5809196062-5">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">empty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5809196062-6">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809196062-7">[</span><span class="p" data-group-id="5809196062-7">]</span><span class="p" data-group-id="5809196062-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">has_tasks?</span><span class="p" data-group-id="5809196062-8">(</span><span class="n">empty</span><span class="p" data-group-id="5809196062-8">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="invalidate/1">
+
+  <div class="detail-header">
+    <a href="#invalidate/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">invalidate(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> invalidate(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Mark a plan as invalid.</p><p>Use this when world state changes in a way that invalidates plan
+preconditions.</p><h2 id="invalidate/1-examples" class="section-heading"><a href="#invalidate/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5012937001-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5012937001-2">[</span><span class="p" data-group-id="5012937001-3">{</span><span class="ss">:task</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5012937001-4">[</span><span class="p" data-group-id="5012937001-4">]</span><span class="p" data-group-id="5012937001-3">}</span><span class="p" data-group-id="5012937001-2">]</span><span class="p" data-group-id="5012937001-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">invalid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">invalidate</span><span class="p" data-group-id="5012937001-5">(</span><span class="n">plan</span><span class="p" data-group-id="5012937001-5">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">invalid</span><span class="o">.</span><span class="n">validity</span><span class="w">
+</span><span class="ss">:invalid</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/3">
+
+    <span id="new/2"></span>
+
+  <div class="detail-header">
+    <a href="#new/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(goal, tasks, opts \\ [])</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L148" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), [<a href="#t:task_tuple/0">task_tuple</a>()], <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Create a new plan.</p><h2 id="new/3-parameters" class="section-heading"><a href="#new/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">goal</code> - The goal atom this plan achieves</li><li><code class="inline">tasks</code> - List of <code class="inline">{task_name, args}</code> tuples</li><li><code class="inline">opts</code> - Optional keyword list:<ul><li><code class="inline">:metadata</code> - Initial metadata map</li><li><code class="inline">:validity</code> - Initial validity (default: <code class="inline">:active</code>)</li></ul></li></ul><h2 id="new/3-examples" class="section-heading"><a href="#new/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8705439466-1">(</span><span class="ss">:patrol</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-2">[</span><span class="p" data-group-id="8705439466-3">{</span><span class="ss">:walk_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-4">[</span><span class="ss">:waypoint_1</span><span class="p" data-group-id="8705439466-4">]</span><span class="p" data-group-id="8705439466-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-5">{</span><span class="ss">:scan</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-6">[</span><span class="p" data-group-id="8705439466-6">]</span><span class="p" data-group-id="8705439466-5">}</span><span class="p" data-group-id="8705439466-2">]</span><span class="p" data-group-id="8705439466-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="o">.</span><span class="n">goal</span><span class="w">
+</span><span class="ss">:patrol</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="o">.</span><span class="n">validity</span><span class="w">
+</span><span class="ss">:active</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8705439466-7">(</span><span class="ss">:attack</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-8">[</span><span class="p" data-group-id="8705439466-9">{</span><span class="ss">:strike</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8705439466-10">[</span><span class="p" data-group-id="8705439466-10">]</span><span class="p" data-group-id="8705439466-9">}</span><span class="p" data-group-id="8705439466-8">]</span><span class="p">,</span><span class="w"> </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8705439466-11">%{</span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="ss">:high</span><span class="p" data-group-id="8705439466-11">}</span><span class="p" data-group-id="8705439466-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">priority</span><span class="w">
+</span><span class="ss">:high</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="next_task/1">
+
+  <div class="detail-header">
+    <a href="#next_task/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">next_task(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> next_task(<a href="#t:t/0">t</a>()) :: {<a href="#t:task_tuple/0">task_tuple</a>(), <a href="#t:t/0">t</a>()} | :empty</pre>
+
+      </div>
+
+<p>Get the next task to execute.</p><p>Returns <code class="inline">{task_tuple, remaining_plan}</code> or <code class="inline">:empty</code> if no tasks remain.</p><h2 id="next_task/1-examples" class="section-heading"><a href="#next_task/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1131987338-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-2">[</span><span class="p" data-group-id="1131987338-3">{</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-4">[</span><span class="p" data-group-id="1131987338-4">]</span><span class="p" data-group-id="1131987338-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-5">{</span><span class="ss">:b</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-6">[</span><span class="mi">1</span><span class="p" data-group-id="1131987338-6">]</span><span class="p" data-group-id="1131987338-5">}</span><span class="p" data-group-id="1131987338-2">]</span><span class="p" data-group-id="1131987338-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="1131987338-7">{</span><span class="p" data-group-id="1131987338-8">{</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-9">[</span><span class="p" data-group-id="1131987338-9">]</span><span class="p" data-group-id="1131987338-8">}</span><span class="p">,</span><span class="w"> </span><span class="n">remaining</span><span class="p" data-group-id="1131987338-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">next_task</span><span class="p" data-group-id="1131987338-10">(</span><span class="n">plan</span><span class="p" data-group-id="1131987338-10">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">remaining</span><span class="o">.</span><span class="n">tasks</span><span class="w">
+</span><span class="p" data-group-id="1131987338-11">[</span><span class="p" data-group-id="1131987338-12">{</span><span class="ss">:b</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-13">[</span><span class="mi">1</span><span class="p" data-group-id="1131987338-13">]</span><span class="p" data-group-id="1131987338-12">}</span><span class="p" data-group-id="1131987338-11">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">empty_plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1131987338-14">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1131987338-15">[</span><span class="p" data-group-id="1131987338-15">]</span><span class="p" data-group-id="1131987338-14">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">next_task</span><span class="p" data-group-id="1131987338-16">(</span><span class="n">empty_plan</span><span class="p" data-group-id="1131987338-16">)</span><span class="w">
+</span><span class="ss">:empty</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="task_count/1">
+
+  <div class="detail-header">
+    <a href="#task_count/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_count(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> task_count(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Get the number of remaining tasks.</p><h2 id="task_count/1-examples" class="section-heading"><a href="#task_count/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6593633466-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-2">[</span><span class="p" data-group-id="6593633466-3">{</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-4">[</span><span class="p" data-group-id="6593633466-4">]</span><span class="p" data-group-id="6593633466-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-5">{</span><span class="ss">:b</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-6">[</span><span class="p" data-group-id="6593633466-6">]</span><span class="p" data-group-id="6593633466-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-7">{</span><span class="ss">:c</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6593633466-8">[</span><span class="p" data-group-id="6593633466-8">]</span><span class="p" data-group-id="6593633466-7">}</span><span class="p" data-group-id="6593633466-2">]</span><span class="p" data-group-id="6593633466-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">task_count</span><span class="p" data-group-id="6593633466-9">(</span><span class="n">plan</span><span class="p" data-group-id="6593633466-9">)</span><span class="w">
+</span><span class="mi">3</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="valid?/1">
+
+  <div class="detail-header">
+    <a href="#valid?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">valid?(plan)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/plan.ex#L251" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> valid?(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Check if plan is still valid for execution.</p><h2 id="valid?/1-examples" class="section-heading"><a href="#valid?/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4399434900-1">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4399434900-2">[</span><span class="p" data-group-id="4399434900-2">]</span><span class="p" data-group-id="4399434900-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">valid?</span><span class="p" data-group-id="4399434900-3">(</span><span class="n">plan</span><span class="p" data-group-id="4399434900-3">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">plan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4399434900-4">(</span><span class="ss">:test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4399434900-5">[</span><span class="p" data-group-id="4399434900-5">]</span><span class="p" data-group-id="4399434900-4">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">invalid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Plan</span><span class="o">.</span><span class="n">invalidate</span><span class="p" data-group-id="4399434900-6">(</span><span class="n">plan</span><span class="p" data-group-id="4399434900-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Plan</span><span class="o">.</span><span class="n">valid?</span><span class="p" data-group-id="4399434900-7">(</span><span class="n">invalid</span><span class="p" data-group-id="4399434900-7">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

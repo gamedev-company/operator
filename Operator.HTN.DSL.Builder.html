@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>Operator.HTN.DSL.Builder — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Operator.<wbr>HTN.<wbr>DSL.<wbr>Builder</span> 
+      <small class="app-vsn" translate="no">(Operator v0.1.0)</small>
+
+    </h1>
+
+<a href="Operator.HTN.DSL.Builder.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/dsl/builder.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Builds runtime structures from DSL AST.</p><p>This module transforms the compile-time AST captured by <a href="Operator.HTN.DSL.html"><code class="inline">Operator.HTN.DSL</code></a>
+macros into data structures that can be stored in the compiled module. It's
+the bridge between Elixir's macro system and Operator's runtime planning.</p><h2 id="module-why-this-module-exists" class="section-heading"><a href="#module-why-this-module-exists" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Why This Module Exists</span></h2><p>When you write DSL code like:</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:attack</span><span class="w"> </span><span class="k" data-group-id="7803555480-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="7803555480-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7803555480-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7803555480-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:armed</span><span class="p" data-group-id="7803555480-4">}</span><span class="p" data-group-id="7803555480-3">)</span><span class="w"> </span><span class="k" data-group-id="7803555480-2">end</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="7803555480-5">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:aim</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:fire</span><span class="w">
+  </span><span class="k" data-group-id="7803555480-5">end</span><span class="w">
+</span><span class="k" data-group-id="7803555480-1">end</span></code></pre><p>The <code class="inline">goal</code> macro captures this as AST (Abstract Syntax Tree). But we can't
+just store raw AST - we need structured data that the planner can work with
+efficiently at runtime.</p><p>This module handles that transformation:</p><ol><li><strong>Parses</strong> the captured AST blocks</li><li><strong>Extracts</strong> preconditions, decompose functions, costs, metadata</li><li><strong>Builds</strong> <code class="inline">%Task{}</code> structs and goal maps</li><li><strong>Preserves</strong> function AST for runtime compilation</li></ol><h2 id="module-ast-preservation" class="section-heading"><a href="#module-ast-preservation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">AST Preservation</span></h2><p>Anonymous functions cannot be escaped with <a href="https://hexdocs.pm/elixir/Macro.html#escape/1"><code class="inline">Macro.escape/1</code></a> and stored
+directly in module attributes. Instead, we store them as quoted AST and
+compile them at runtime when needed (see <a href="Operator.HTN.Executor.html"><code class="inline">Operator.HTN.Executor</code></a>).</p><p>This is why you'll see patterns like:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4816190879-1">%</span><span class="nc" data-group-id="4816190879-1">Task</span><span class="p" data-group-id="4816190879-1">{</span><span class="w">
+  </span><span class="ss">preconditions</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4816190879-2">[</span><span class="p" data-group-id="4816190879-3">{</span><span class="ss">:fn</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="c">_clauses</span><span class="p" data-group-id="4816190879-3">}</span><span class="p" data-group-id="4816190879-2">]</span><span class="p">,</span><span class="w">  </span><span class="c1"># Stored as AST</span><span class="w">
+  </span><span class="ss">decompose</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4816190879-4">{</span><span class="ss">:fn</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="c">_clauses</span><span class="p" data-group-id="4816190879-4">}</span><span class="w">          </span><span class="c1"># Stored as AST</span><span class="w">
+</span><span class="p" data-group-id="4816190879-1">}</span></code></pre><h2 id="module-internal-module" class="section-heading"><a href="#module-internal-module" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal Module</span></h2><p>This module is considered internal to the DSL implementation. Users should
+interact with <a href="Operator.HTN.DSL.html"><code class="inline">Operator.HTN.DSL</code></a> macros rather than calling these functions
+directly.</p><h2 id="module-see-also" class="section-heading"><a href="#module-see-also" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">See Also</span></h2><ul><li><a href="Operator.HTN.DSL.html"><code class="inline">Operator.HTN.DSL</code></a> - The public macro interface</li><li><a href="Operator.HTN.Task.html"><code class="inline">Operator.HTN.Task</code></a> - The runtime task structure</li><li><a href="Operator.HTN.Registry.html"><code class="inline">Operator.HTN.Registry</code></a> - Where built structures are stored</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_axiom/1" data-no-tooltip="" translate="no">build_axiom(arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build an axiom map from captured DSL AST.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_goal/1" data-no-tooltip="" translate="no">build_goal(arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build a goal map from captured DSL AST.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_primitive/1" data-no-tooltip="" translate="no">build_primitive(arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build a primitive Task struct from captured DSL AST.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_task/1" data-no-tooltip="" translate="no">build_task(arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build a Task struct from captured DSL AST.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="build_axiom/1">
+
+  <div class="detail-header">
+    <a href="#build_axiom/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_axiom(arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/dsl/builder.ex#L291" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_axiom({<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Build an axiom map from captured DSL AST.</p><p>Transforms the AST captured by the <code class="inline">axiom</code> macro into a map structure.
+Axioms are reusable query patterns that can be referenced in preconditions.</p><h2 id="build_axiom/1-parameters" class="section-heading"><a href="#build_axiom/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">{name, query_fn_ast}</code> - Tuple of axiom name and the query function AST</li></ul><h2 id="build_axiom/1-returns" class="section-heading"><a href="#build_axiom/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A map with:</p><ul><li><code class="inline">:name</code> - Axiom identifier atom</li><li><code class="inline">:query_fn</code> - The query function AST</li></ul><h2 id="build_axiom/1-axiom-functions" class="section-heading"><a href="#build_axiom/1-axiom-functions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Axiom Functions</span></h2><p>Axiom functions have the signature:</p><pre><code class="makeup elixir" translate="no"><span class="k" data-group-id="7649275395-1">fn</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">boolean</span><span class="w"> </span><span class="k" data-group-id="7649275395-1">end</span></code></pre><p>Where <code class="inline">args</code> is a keyword list of arguments passed when the axiom is
+invoked in a precondition.</p><h2 id="build_axiom/1-example" class="section-heading"><a href="#build_axiom/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><p>Given this DSL input:</p><pre><code class="makeup elixir" translate="no"><span class="n">axiom</span><span class="w"> </span><span class="ss">:enemy_in_range</span><span class="w"> </span><span class="k" data-group-id="7476269366-1">do</span><span class="w">
+  </span><span class="k" data-group-id="7476269366-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">max_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7476269366-3">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="ss">:range</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7476269366-3">)</span><span class="w">
+    </span><span class="n">enemy_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7476269366-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7476269366-5">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemy_distance</span><span class="p" data-group-id="7476269366-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">999</span><span class="p" data-group-id="7476269366-4">)</span><span class="w">
+    </span><span class="n">enemy_dist</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">max_range</span><span class="w">
+  </span><span class="k" data-group-id="7476269366-2">end</span><span class="w">
+</span><span class="k" data-group-id="7476269366-1">end</span></code></pre><p>Used in preconditions as:</p><pre><code class="makeup elixir" translate="no"><span class="n">precond</span><span class="w"> </span><span class="p" data-group-id="1462308880-1">{</span><span class="ss">:axiom</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemy_in_range</span><span class="p">,</span><span class="w"> </span><span class="ss">range</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="1462308880-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="build_goal/1">
+
+  <div class="detail-header">
+    <a href="#build_goal/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_goal(arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/dsl/builder.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_goal({<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Build a goal map from captured DSL AST.</p><p>Transforms the AST captured by the <code class="inline">goal</code> macro into a map structure
+suitable for storage in the Registry.</p><h2 id="build_goal/1-parameters" class="section-heading"><a href="#build_goal/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">{name, block}</code> - Tuple of goal name atom and the captured block AST</li></ul><h2 id="build_goal/1-returns" class="section-heading"><a href="#build_goal/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A map with the following keys:</p><ul><li><code class="inline">:name</code> - Goal identifier atom</li><li><code class="inline">:precond</code> - Precondition function AST, or <code class="inline">nil</code> if none specified</li><li><code class="inline">:decompose</code> - List of <code class="inline">{task_name, args}</code> tuples from the decompose block</li><li><code class="inline">:metadata</code> - Map of user-defined metadata</li></ul><h2 id="build_goal/1-example-transformation" class="section-heading"><a href="#build_goal/1-example-transformation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example Transformation</span></h2><p>Given this DSL input:</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:infiltrate</span><span class="w"> </span><span class="k" data-group-id="1997697789-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="1997697789-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1997697789-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1997697789-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:stealthy</span><span class="p" data-group-id="1997697789-4">}</span><span class="p" data-group-id="1997697789-3">)</span><span class="w"> </span><span class="k" data-group-id="1997697789-2">end</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="1997697789-5">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:sneak_to</span><span class="p">,</span><span class="w"> </span><span class="ss">:entrance</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:pick_lock</span><span class="w">
+  </span><span class="k" data-group-id="1997697789-5">end</span><span class="w">
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">domain</span><span class="p">:</span><span class="w"> </span><span class="ss">:stealth</span><span class="p">,</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
+</span><span class="k" data-group-id="1997697789-1">end</span></code></pre><p>This function produces:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1225971286-1">%{</span><span class="w">
+  </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="ss">:infiltrate</span><span class="p">,</span><span class="w">
+  </span><span class="ss">precond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1225971286-2">{</span><span class="ss">:fn</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="1225971286-2">}</span><span class="p">,</span><span class="w">  </span><span class="c1"># AST for the precondition</span><span class="w">
+  </span><span class="ss">decompose</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1225971286-3">[</span><span class="p" data-group-id="1225971286-4">{</span><span class="ss">:sneak_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1225971286-5">[</span><span class="ss">:entrance</span><span class="p" data-group-id="1225971286-5">]</span><span class="p" data-group-id="1225971286-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1225971286-6">{</span><span class="ss">:pick_lock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1225971286-7">[</span><span class="p" data-group-id="1225971286-7">]</span><span class="p" data-group-id="1225971286-6">}</span><span class="p" data-group-id="1225971286-3">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1225971286-8">%{</span><span class="ss">domain</span><span class="p">:</span><span class="w"> </span><span class="ss">:stealth</span><span class="p">,</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="1225971286-8">}</span><span class="w">
+</span><span class="p" data-group-id="1225971286-1">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="build_primitive/1">
+
+  <div class="detail-header">
+    <a href="#build_primitive/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_primitive(arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/dsl/builder.ex#L233" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_primitive({<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}) :: <a href="Operator.HTN.Task.html#t:t/0">Operator.HTN.Task.t</a>()</pre>
+
+      </div>
+
+<p>Build a primitive Task struct from captured DSL AST.</p><p>Transforms the AST captured by the <code class="inline">primitive</code> macro into a <code class="inline">%Task{}</code>
+struct. Primitives are the executable leaf nodes of the HTN tree - they
+don't decompose further but instead have a <code class="inline">run</code> function.</p><h2 id="build_primitive/1-parameters" class="section-heading"><a href="#build_primitive/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">{name, args, block}</code> - Tuple containing:<ul><li><code class="inline">name</code> - Primitive identifier atom</li><li><code class="inline">args</code> - List of argument variable names</li><li><code class="inline">block</code> - The captured block AST</li></ul></li></ul><h2 id="build_primitive/1-returns" class="section-heading"><a href="#build_primitive/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A <code class="inline">%Task{}</code> struct with:</p><ul><li><code class="inline">:name</code> - Primitive identifier</li><li><code class="inline">:type</code> - Always <code class="inline">:primitive</code></li><li><code class="inline">:preconditions</code> - Empty list (primitives use runtime checks)</li><li><code class="inline">:decompose</code> - <code class="inline">nil</code> (primitives don't decompose)</li><li><code class="inline">:cost</code> - Fixed at 1.0</li><li><code class="inline">:metadata</code> - Map containing:<ul><li><code class="inline">:args</code> - Argument names from definition</li><li><code class="inline">:run</code> - The execution function AST</li><li>Any user-defined metadata</li></ul></li></ul><h2 id="build_primitive/1-run-function" class="section-heading"><a href="#build_primitive/1-run-function" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Run Function</span></h2><p>The <code class="inline">run</code> function AST is stored in metadata and compiled at execution
+time by <a href="Operator.HTN.Executor.html"><code class="inline">Operator.HTN.Executor</code></a>. The function signature is:</p><pre><code class="makeup elixir" translate="no"><span class="k" data-group-id="7277077653-1">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="7277077653-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">updated_actor</span><span class="p" data-group-id="7277077653-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="7277077653-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="7277077653-3">}</span><span class="w"> </span><span class="k" data-group-id="7277077653-1">end</span></code></pre><h2 id="build_primitive/1-example" class="section-heading"><a href="#build_primitive/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><p>Given this DSL input:</p><pre><code class="makeup elixir" translate="no"><span class="n">primitive</span><span class="w"> </span><span class="ss">:fire_weapon</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="k" data-group-id="2980205892-1">do</span><span class="w">
+  </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="2980205892-2">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2980205892-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2980205892-4">%{</span><span class="n">actor</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">ammo</span><span class="p">:</span><span class="w"> </span><span class="n">actor</span><span class="o">.</span><span class="n">ammo</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2980205892-4">}</span><span class="p" data-group-id="2980205892-3">}</span><span class="w">
+  </span><span class="k" data-group-id="2980205892-2">end</span><span class="w">
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">animation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shoot&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">sound</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gunfire.wav&quot;</span><span class="w">
+</span><span class="k" data-group-id="2980205892-1">end</span></code></pre><p>This function produces a Task with metadata containing both the run
+function AST and the user metadata.</p>
+  </section>
+</section>
+<section class="detail" id="build_task/1">
+
+  <div class="detail-header">
+    <a href="#build_task/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_task(arg)</h1>
+
+
+        <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/lib/operator/htn/dsl/builder.ex#L168" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_task({<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}) :: <a href="Operator.HTN.Task.html#t:t/0">Operator.HTN.Task.t</a>()</pre>
+
+      </div>
+
+<p>Build a Task struct from captured DSL AST.</p><p>Transforms the AST captured by the <code class="inline">task</code> macro into a <code class="inline">%Task{}</code> struct.
+Tasks defined via DSL are always <code class="inline">:abstract</code> type (they decompose into
+other tasks or primitives).</p><h2 id="build_task/1-parameters" class="section-heading"><a href="#build_task/1-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">{name, args, block}</code> - Tuple containing:<ul><li><code class="inline">name</code> - Task identifier atom</li><li><code class="inline">args</code> - List of argument variable names from the task definition</li><li><code class="inline">block</code> - The captured block AST</li></ul></li></ul><h2 id="build_task/1-returns" class="section-heading"><a href="#build_task/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A <code class="inline">%Task{}</code> struct with:</p><ul><li><code class="inline">:name</code> - Task identifier</li><li><code class="inline">:type</code> - Always <code class="inline">:abstract</code> for DSL tasks</li><li><code class="inline">:preconditions</code> - List of precondition function ASTs</li><li><code class="inline">:decompose</code> - Either <code class="inline">{:static_tasks, list}</code> or function AST</li><li><code class="inline">:cost</code> - Numeric cost value (default: 1.0)</li><li><code class="inline">:metadata</code> - Map including <code class="inline">:args</code> and user metadata</li></ul><h2 id="build_task/1-decomposition-modes" class="section-heading"><a href="#build_task/1-decomposition-modes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Decomposition Modes</span></h2><p>Tasks can decompose in two ways:</p><p><strong>Static decomposition</strong> (compile-time known sequence):</p><pre><code class="makeup elixir" translate="no"><span class="n">task</span><span class="w"> </span><span class="ss">:prepare_attack</span><span class="w"> </span><span class="k" data-group-id="3064193821-1">do</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="3064193821-2">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:draw_weapon</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:aim</span><span class="w">
+  </span><span class="k" data-group-id="3064193821-2">end</span><span class="w">
+</span><span class="k" data-group-id="3064193821-1">end</span></code></pre><p>Stored as: <code class="inline">{:static_tasks, [{:draw_weapon, []}, {:aim, []}]}</code></p><p><strong>Dynamic decomposition</strong> (runtime decision):</p><pre><code class="makeup elixir" translate="no"><span class="n">task</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="k" data-group-id="6513066905-1">do</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="6513066905-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="6513066905-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6513066905-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:position</span><span class="p" data-group-id="6513066905-4">}</span><span class="p" data-group-id="6513066905-3">)</span><span class="w">
+    </span><span class="p" data-group-id="6513066905-5">[</span><span class="p" data-group-id="6513066905-6">{</span><span class="ss">:pathfind</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6513066905-7">[</span><span class="n">current</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="p" data-group-id="6513066905-7">]</span><span class="p" data-group-id="6513066905-6">}</span><span class="p" data-group-id="6513066905-5">]</span><span class="w">
+  </span><span class="k" data-group-id="6513066905-2">end</span><span class="w">
+</span><span class="k" data-group-id="6513066905-1">end</span></code></pre><p>Stored as: <code class="inline">{:fn, _, _}</code> (raw AST for runtime compilation)</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

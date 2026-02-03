@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.1">
+    <meta name="project" content="Operator v0.1.0">
+
+
+    <title>HTN DSL Reference — Operator v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
+
+    <script defer src="dist/sidebar_items-339CBAC6.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+Operator
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Operator</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>HTN DSL Reference</h1>
+
+<a href="dsl_reference.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+      <a href="https://github.com/gamedev-company/operator/blob/v0.1.0/guides/dsl_reference.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p>This is a full reference to the HTN DSL macros.</p><h2 id="use-operator-htn-dsl" class="section-heading"><a href="#use-operator-htn-dsl" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">use Operator.HTN.DSL</code></span></h2><p>The entry point for HTN definitions.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyGame.Behavior</span><span class="w"> </span><span class="k" data-group-id="4928409785-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Operator.HTN.DSL</span><span class="w">
+</span><span class="k" data-group-id="4928409785-1">end</span></code></pre><p>Use <code class="inline">auto_register: false</code> if you want manual control of Registry registration.</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">Operator.HTN.DSL</span><span class="p">,</span><span class="w"> </span><span class="ss">auto_register</span><span class="p">:</span><span class="w"> </span><span class="no">false</span></code></pre><h2 id="goal" class="section-heading"><a href="#goal" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">goal</code></span></h2><p>Goals are top-level objectives. They decompose into tasks.</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:patrol</span><span class="w"> </span><span class="k" data-group-id="1631027597-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="1631027597-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1631027597-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1631027597-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:energy</span><span class="p" data-group-id="1631027597-4">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1631027597-3">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="k" data-group-id="1631027597-2">end</span><span class="w">
+
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="1631027597-5">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="ss">:waypoint_1</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:look_around</span><span class="w">
+  </span><span class="k" data-group-id="1631027597-5">end</span><span class="w">
+
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">domain</span><span class="p">:</span><span class="w"> </span><span class="ss">:routine</span><span class="w">
+</span><span class="k" data-group-id="1631027597-1">end</span></code></pre><h2 id="task" class="section-heading"><a href="#task" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">task</code></span></h2><p>Tasks are abstract steps that can decompose into other tasks or primitives.</p><pre><code class="makeup elixir" translate="no"><span class="n">task</span><span class="w"> </span><span class="ss">:travel_to</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="k" data-group-id="8165239551-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="8165239551-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="8165239551-3">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8165239551-4">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:can_move</span><span class="p" data-group-id="8165239551-4">}</span><span class="p" data-group-id="8165239551-3">)</span><span class="w">
+  </span><span class="k" data-group-id="8165239551-2">end</span><span class="w">
+
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="8165239551-5">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">has_vehicle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="8165239551-6">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8165239551-7">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:vehicle</span><span class="p" data-group-id="8165239551-7">}</span><span class="p" data-group-id="8165239551-6">)</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="n">has_vehicle</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8165239551-8">[</span><span class="p" data-group-id="8165239551-9">{</span><span class="ss">:drive_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8165239551-10">[</span><span class="n">destination</span><span class="p" data-group-id="8165239551-10">]</span><span class="p" data-group-id="8165239551-9">}</span><span class="p" data-group-id="8165239551-8">]</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8165239551-11">[</span><span class="p" data-group-id="8165239551-12">{</span><span class="ss">:walk_to</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8165239551-13">[</span><span class="n">destination</span><span class="p" data-group-id="8165239551-13">]</span><span class="p" data-group-id="8165239551-12">}</span><span class="p" data-group-id="8165239551-11">]</span><span class="w">
+  </span><span class="k" data-group-id="8165239551-5">end</span><span class="w">
+
+  </span><span class="n">cost</span><span class="w"> </span><span class="mf">2.0</span><span class="w">
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="ss">:movement</span><span class="w">
+</span><span class="k" data-group-id="8165239551-1">end</span></code></pre><h2 id="primitive" class="section-heading"><a href="#primitive" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">primitive</code></span></h2><p>Primitives are executable actions. They must define <code class="inline">run</code>.</p><pre><code class="makeup elixir" translate="no"><span class="n">primitive</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="k" data-group-id="2813816145-1">do</span><span class="w">
+  </span><span class="n">run</span><span class="w"> </span><span class="k" data-group-id="2813816145-2">fn</span><span class="w"> </span><span class="n">actor</span><span class="p">,</span><span class="w"> </span><span class="c">_facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2813816145-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2813816145-4">%{</span><span class="n">actor</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="n">destination</span><span class="p" data-group-id="2813816145-4">}</span><span class="p" data-group-id="2813816145-3">}</span><span class="w">
+  </span><span class="k" data-group-id="2813816145-2">end</span><span class="w">
+
+  </span><span class="n">effects</span><span class="w"> </span><span class="p" data-group-id="2813816145-5">[</span><span class="w">
+    </span><span class="nc">Operator.HTN.Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2813816145-6">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2813816145-7">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:position</span><span class="p" data-group-id="2813816145-7">}</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="p" data-group-id="2813816145-6">)</span><span class="w">
+  </span><span class="p" data-group-id="2813816145-5">]</span><span class="w">
+
+  </span><span class="n">metadata</span><span class="w"> </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="ss">:movement</span><span class="w">
+</span><span class="k" data-group-id="2813816145-1">end</span></code></pre><h2 id="axiom" class="section-heading"><a href="#axiom" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">axiom</code></span></h2><p>Axioms are reusable precondition helpers.</p><pre><code class="makeup elixir" translate="no"><span class="n">axiom</span><span class="w"> </span><span class="ss">:enemy_in_range</span><span class="w"> </span><span class="k" data-group-id="0051273025-1">do</span><span class="w">
+  </span><span class="k" data-group-id="0051273025-2">fn</span><span class="w"> </span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">max_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="0051273025-3">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="ss">:range</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="0051273025-3">)</span><span class="w">
+    </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="0051273025-4">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0051273025-5">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemy_distance</span><span class="p" data-group-id="0051273025-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">999</span><span class="p" data-group-id="0051273025-4">)</span><span class="w">
+    </span><span class="n">dist</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">max_range</span><span class="w">
+  </span><span class="k" data-group-id="0051273025-2">end</span><span class="w">
+</span><span class="k" data-group-id="0051273025-1">end</span></code></pre><p>Use them in preconditions.</p><pre><code class="makeup elixir" translate="no"><span class="n">goal</span><span class="w"> </span><span class="ss">:ranged_attack</span><span class="w"> </span><span class="k" data-group-id="7224866827-1">do</span><span class="w">
+  </span><span class="n">precond</span><span class="w"> </span><span class="p" data-group-id="7224866827-2">{</span><span class="ss">:axiom</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemy_in_range</span><span class="p">,</span><span class="w"> </span><span class="ss">range</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7224866827-2">}</span><span class="w">
+  </span><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="7224866827-3">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:aim</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="ss">:fire</span><span class="w">
+  </span><span class="k" data-group-id="7224866827-3">end</span><span class="w">
+</span><span class="k" data-group-id="7224866827-1">end</span></code></pre><h2 id="precond" class="section-heading"><a href="#precond" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">precond</code></span></h2><p>Preconditions control eligibility. You can use anonymous functions or logical
+operators. Preconditions are stored as a list of conditions and evaluated at
+runtime via <a href="Operator.HTN.Precondition.html"><code class="inline">Operator.HTN.Precondition</code></a>.</p><pre><code class="makeup elixir" translate="no"><span class="n">precond</span><span class="w"> </span><span class="k" data-group-id="6166307453-1">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="6166307453-2">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6166307453-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:weapon</span><span class="p" data-group-id="6166307453-3">}</span><span class="p" data-group-id="6166307453-2">)</span><span class="w">
+</span><span class="k" data-group-id="6166307453-1">end</span></code></pre><p>Logical operators:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="5124404273-1">{</span><span class="ss">:all</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5124404273-2">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="5124404273-2">]</span><span class="p" data-group-id="5124404273-1">}</span><span class="w">
+</span><span class="p" data-group-id="5124404273-3">{</span><span class="ss">:any</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5124404273-4">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="5124404273-4">]</span><span class="p" data-group-id="5124404273-3">}</span><span class="w">
+</span><span class="p" data-group-id="5124404273-5">{</span><span class="ss">:not</span><span class="p">,</span><span class="w"> </span><span class="n">fn1</span><span class="p" data-group-id="5124404273-5">}</span><span class="w">
+</span><span class="p" data-group-id="5124404273-6">{</span><span class="ss">:none</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5124404273-7">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="5124404273-7">]</span><span class="p" data-group-id="5124404273-6">}</span><span class="w">
+</span><span class="p" data-group-id="5124404273-8">{</span><span class="ss">:first</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5124404273-9">[</span><span class="n">fn1</span><span class="p">,</span><span class="w"> </span><span class="n">fn2</span><span class="p" data-group-id="5124404273-9">]</span><span class="p" data-group-id="5124404273-8">}</span><span class="w">
+</span><span class="p" data-group-id="5124404273-10">{</span><span class="ss">:axiom</span><span class="p">,</span><span class="w"> </span><span class="ss">:enemy_in_range</span><span class="p">,</span><span class="w"> </span><span class="ss">range</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5124404273-10">}</span><span class="w">
+
+</span><span class="nc">To</span><span class="w"> </span><span class="n">evaluate</span><span class="w"> </span><span class="n">goal</span><span class="w"> </span><span class="n">preconditions</span><span class="w"> </span><span class="ss">manually</span><span class="p">:</span><span class="w">
+</span></code></pre><p>goal = Operator.HTN.Registry.get_goal(:patrol)
+Operator.HTN.Precondition.all_satisfied?(goal.precond, facts, traits)</p><pre><code class="makeup elixir" translate="no"></code></pre><h2 id="decompose" class="section-heading"><a href="#decompose" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">decompose</code></span></h2><p>Decomposition can be a static block or a function.</p><pre><code class="makeup elixir" translate="no"><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="3856575253-1">do</span><span class="w">
+  </span><span class="n">task</span><span class="w"> </span><span class="ss">:move_to</span><span class="p">,</span><span class="w"> </span><span class="ss">:door</span><span class="w">
+  </span><span class="n">task</span><span class="w"> </span><span class="ss">:open_door</span><span class="w">
+</span><span class="k" data-group-id="3856575253-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="n">decompose</span><span class="w"> </span><span class="k" data-group-id="4374750288-1">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">has?</span><span class="p" data-group-id="4374750288-2">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4374750288-3">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:has_key</span><span class="p" data-group-id="4374750288-3">}</span><span class="p" data-group-id="4374750288-2">)</span><span class="w"> </span><span class="k" data-group-id="4374750288-4">do</span><span class="w">
+    </span><span class="p" data-group-id="4374750288-5">[</span><span class="p" data-group-id="4374750288-6">{</span><span class="ss">:unlock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4374750288-7">[</span><span class="p" data-group-id="4374750288-7">]</span><span class="p" data-group-id="4374750288-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4374750288-8">{</span><span class="ss">:enter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4374750288-9">[</span><span class="p" data-group-id="4374750288-9">]</span><span class="p" data-group-id="4374750288-8">}</span><span class="p" data-group-id="4374750288-5">]</span><span class="w">
+  </span><span class="k" data-group-id="4374750288-4">else</span><span class="w">
+    </span><span class="p" data-group-id="4374750288-10">[</span><span class="p" data-group-id="4374750288-11">{</span><span class="ss">:find_key</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4374750288-12">[</span><span class="p" data-group-id="4374750288-12">]</span><span class="p" data-group-id="4374750288-11">}</span><span class="p" data-group-id="4374750288-10">]</span><span class="w">
+  </span><span class="k" data-group-id="4374750288-4">end</span><span class="w">
+</span><span class="k" data-group-id="4374750288-1">end</span></code></pre><h2 id="cost" class="section-heading"><a href="#cost" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">cost</code></span></h2><p>Costs influence plan selection when multiple options are valid.</p><pre><code class="makeup elixir" translate="no"><span class="n">cost</span><span class="w"> </span><span class="mf">1.0</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="n">cost</span><span class="w"> </span><span class="k" data-group-id="5275668005-1">fn</span><span class="w"> </span><span class="n">facts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">danger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Operator.HTN.Facts</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5275668005-2">(</span><span class="n">facts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5275668005-3">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:danger</span><span class="p" data-group-id="5275668005-3">}</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="5275668005-2">)</span><span class="w">
+  </span><span class="mf">5.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">danger</span><span class="w">
+</span><span class="k" data-group-id="5275668005-1">end</span></code></pre><h2 id="effects" class="section-heading"><a href="#effects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">effects</code></span></h2><p>Effects describe how world state changes.</p><pre><code class="makeup elixir" translate="no"><span class="n">effects</span><span class="w"> </span><span class="p" data-group-id="7058711536-1">[</span><span class="w">
+  </span><span class="nc">Operator.HTN.Effect</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7058711536-2">(</span><span class="ss">:plan_and_execute</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7058711536-3">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:door_unlocked</span><span class="p" data-group-id="7058711536-3">}</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7058711536-2">)</span><span class="w">
+</span><span class="p" data-group-id="7058711536-1">]</span></code></pre><p>Effect types:</p><ul><li><code class="inline">:plan_only</code></li><li><code class="inline">:plan_and_execute</code></li><li><code class="inline">:permanent</code></li></ul><h2 id="metadata" class="section-heading"><a href="#metadata" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text"><code class="inline">metadata</code></span></h2><p>Attach arbitrary metadata for goal selection and analytics.</p><pre><code class="makeup elixir" translate="no"><span class="n">metadata</span><span class="w"> </span><span class="ss">priority</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="ss">domain</span><span class="p">:</span><span class="w"> </span><span class="ss">:combat</span><span class="p">,</span><span class="w"> </span><span class="ss">required_traits</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2420865478-1">[</span><span class="ss">:aggressive</span><span class="p" data-group-id="2420865478-1">]</span></code></pre><p>You can also declare required fact keys for validation and diagnostics:</p><pre><code class="makeup elixir" translate="no"><span class="n">metadata</span><span class="w"> </span><span class="ss">requires_facts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5511904086-1">[</span><span class="p" data-group-id="5511904086-2">{</span><span class="ss">:self</span><span class="p">,</span><span class="w"> </span><span class="ss">:energy</span><span class="p" data-group-id="5511904086-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5511904086-3">{</span><span class="ss">:world</span><span class="p">,</span><span class="w"> </span><span class="ss">:threat_level</span><span class="p" data-group-id="5511904086-3">}</span><span class="p" data-group-id="5511904086-1">]</span></code></pre><h2 id="dsl-gotchas" class="section-heading"><a href="#dsl-gotchas" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">DSL Gotchas</span></h2><ul><li><code class="inline">precond</code> and <code class="inline">decompose</code> run at runtime, not compile time.</li><li>Use fully qualified module names in those functions.</li><li>Keep side effects out of preconditions.</li></ul>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="debugging.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Debugging
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="director.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Director
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/operator/0.1.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/operator/0.1.0">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/operator/0.1.0/show/guides/dsl_reference.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="Operator.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

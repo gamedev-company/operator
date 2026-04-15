@@ -104,6 +104,7 @@ defmodule Operator.HTN.Registry do
 
   @registry_key {__MODULE__, :registry}
   @modules_key {__MODULE__, :modules}
+  @stale_key {__MODULE__, :stale}
 
   @typedoc """
   The registry map containing all HTN definitions.
@@ -137,6 +138,11 @@ defmodule Operator.HTN.Registry do
   """
   @spec all() :: registry()
   def all do
+    if :persistent_term.get(@stale_key, false) do
+      :persistent_term.erase(@stale_key)
+      refresh()
+    end
+
     :persistent_term.get(@registry_key, empty_registry())
   end
 
@@ -165,8 +171,10 @@ defmodule Operator.HTN.Registry do
       #=> [:attack, :defend, :flee]
 
   """
-  @spec register(module()) :: :ok
-  def register(module) when is_atom(module) do
+  @spec register(module(), keyword()) :: :ok
+  def register(module, opts \\ [])
+
+  def register(module, opts) when is_atom(module) do
     if function_exported?(module, :__htn__, 0) do
       modules =
         @modules_key
@@ -174,7 +182,15 @@ defmodule Operator.HTN.Registry do
         |> MapSet.put(module)
 
       :persistent_term.put(@modules_key, modules)
-      refresh(modules)
+
+      if Keyword.get(opts, :defer_refresh, false) do
+        # Defer refresh — Code.eval_quoted during compilation leaks module atoms
+        # into the BEAM namespace and crashes subsequent dependency compilation.
+        # Mark stale so all/0 triggers refresh on first runtime read.
+        :persistent_term.put(@stale_key, true)
+      else
+        refresh(modules)
+      end
     else
       :ok
     end
@@ -651,4 +667,5 @@ defmodule Operator.HTN.Registry do
   catch
     _, _ -> quoted
   end
+
 end

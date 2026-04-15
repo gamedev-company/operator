@@ -491,7 +491,11 @@ defmodule Operator.HTN.DSL do
 
   @doc false
   def __register_module__(env, _bytecode) do
-    Operator.HTN.Registry.register(env.module)
+    # defer_refresh: true prevents Code.eval_quoted during compilation,
+    # which would leak module atoms into the BEAM namespace and crash
+    # subsequent dependency compilation. The registry refreshes lazily
+    # on first read at runtime.
+    Operator.HTN.Registry.register(env.module, defer_refresh: true)
   rescue
     _ -> :ok
   end
